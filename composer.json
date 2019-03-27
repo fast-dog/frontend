@@ -1,0 +1,38 @@
+{
+  "name": "fast_dog/frontend",
+  "description": "Frontend FastDog CMS",
+  "type": "project",
+  "keywords": [
+    "FastDog CMS",
+    "Laravel"
+  ],
+  "homepage": "http://fastdog.ru/",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Andrey Martynov",
+      "email": "d.g.dev482@gmail.com"
+    }
+  ],
+  "require": {
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "psr-4": {
+      "FastDog\\Core\\": "src"
+    }
+  },
+  "minimum-stability": "dev",
+  "extra": {
+    "laravel": {
+      "dont-discover": [
+        "*"
+      ]
+    }
+  },
+  "scripts": {
+    "post-root-package-install": [
+    ]
+  }
+}
