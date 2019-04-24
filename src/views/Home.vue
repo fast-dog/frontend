@@ -12,8 +12,8 @@
         }
     })
     export default class Home extends Vue {
-        mounted(): void {
-            document.body.classList.add('login');
+        static mounted(): void {
+
         }
     }
 </script>

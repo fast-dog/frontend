@@ -1,3 +1,6 @@
+import {CrudService} from '@/services/CrudService';
+import {MenuService} from '@/services/MenuService';
+import {Util} from '@/Util';
 
 
 declare let CKEDITOR: any;
@@ -42,33 +45,33 @@ const getters = {
 
 // actions
 const actions = {
-    // setUser({commit, state}) {
-    //     CrudService.get('/user', {}).then((response: any) => {
-    //         if (response.data.success) {
-    //             commit('setUser', {user: response.data.items[0]});
-    //         }
-    //     }, (response) => {
-    //         console.log(response)
-    //     })
-    // },
-    // setMainMenu({commit, state}) {
-    //     MenuService.menu().then((response: any) => {
-    //         commit('setMainMenu', {items: response.data.items});
-    //         commit('setUser', {user: response.data.user});
-    //         commit('setCkeditorConfig', response.data.ckeditor_config);
-    //         commit('setCkeditorTemplates', response.data.ckeditor_templates);
-    //         if (response.data.notifications) {
-    //             commit('setNotification', {
-    //                 total: response.data.notifications.total,
-    //                 items: response.data.notifications.items,
-    //                 messages_total: response.data.notifications.messages_total,
-    //                 messages_items: response.data.notifications.messages_items,
-    //             });
-    //         }
-    //     }, (response) => {
-    //         Util.errorHandler(response)
-    //     });
-    // },
+    setUser({commit, state}) {
+        CrudService.get('/user', {}).then((response: any) => {
+            if (response.data.success) {
+                commit('setUser', {user: response.data.items[0]});
+            }
+        }, (response) => {
+            console.log(response)
+        })
+    },
+    setMainMenu({commit, state}) {
+        MenuService.menu().then((response: any) => {
+            commit('setMainMenu', {items: response.data.items});
+            commit('setUser', {user: response.data.user});
+            commit('setCkeditorConfig', response.data.ckeditor_config);
+            commit('setCkeditorTemplates', response.data.ckeditor_templates);
+            if (response.data.notifications) {
+                commit('setNotification', {
+                    total: response.data.notifications.total,
+                    items: response.data.notifications.items,
+                    messages_total: response.data.notifications.messages_total,
+                    messages_items: response.data.notifications.messages_items,
+                });
+            }
+        }, (response) => {
+            Util.errorHandler(response)
+        });
+    },
     setMainContext({commit, state}, payload) {
         commit('setMainContext', payload);
     },
