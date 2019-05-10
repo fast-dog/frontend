@@ -12,7 +12,7 @@ use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
  * @version 0.1.0
  * @author Андрей Мартынов <d.g.dev482@gmail.com>
  */
-class FrontendServiceProvider
+class FrontendServiceProvider extends LaravelServiceProvider
 {
     const NAME = 'frontend';
 
