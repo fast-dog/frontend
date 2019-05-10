@@ -41,14 +41,7 @@ class FrontendServiceProvider extends LaravelServiceProvider
      */
     private function handleViews(): void
     {
-        $this->loadViewsFrom(__DIR__ . DIRECTORY_SEPARATOR . '..' .
-            DIRECTORY_SEPARATOR . 'views' . DIRECTORY_SEPARATOR, self::NAME);
-
         $this->publishes([__DIR__ . DIRECTORY_SEPARATOR . '..' .
         DIRECTORY_SEPARATOR . 'dist' . DIRECTORY_SEPARATOR => base_path('resources/views/vendor/fast_dog/' . self::NAME)]);
-
-        $this->publishes([
-            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'assets' => public_path('vendor/fast_dog'),
-        ], 'public');
     }
 }

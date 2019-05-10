@@ -24,5 +24,5 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 
 ### Publish Laravel assest
 ```
-php artisan fast_dog/frontend:publish --tag=public --force
+php artisan vendor:publish --tag=public --force
 ```
