@@ -174,27 +174,27 @@ const mutations = {
                 group: 'size'
             }
         ];
-        payload.config.forEach(function (item, idx) {
-            if (item.type) {
-                let configItem: any = {
-                    name: item.name,
-                    element: item.tag,
-                    attributes: {},
-                    styles: {}
-                };
-                if (item.type == 'attributes') {
-                    configItem.attributes[item.attributes.name] = item.attributes.value;
-                } else if (item.type == 'styles') {
-                    configItem.styles[item.attributes.name] = item.attributes.value;
-                }
-                config.push(configItem);
-            }
-        });
-
-        state.ckeditor_config = config;
+        // payload.config.forEach(function (item, idx) {
+        //     if (item.type) {
+        //         let configItem: any = {
+        //             name: item.name,
+        //             element: item.tag,
+        //             attributes: {},
+        //             styles: {}
+        //         };
+        //         if (item.type == 'attributes') {
+        //             configItem.attributes[item.attributes.name] = item.attributes.value;
+        //         } else if (item.type == 'styles') {
+        //             configItem.styles[item.attributes.name] = item.attributes.value;
+        //         }
+        //         config.push(configItem);
+        //     }
+        // });
+        //
+        // state.ckeditor_config = config;
     },
     setCkeditorTemplates(state, payload) {
-        state.ckeditor_templates = payload.config;
+      //  state.ckeditor_templates = payload.config;
     },
     setUser(state, payload) {
         state.user = payload.user;
