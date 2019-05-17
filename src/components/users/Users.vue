@@ -1,16 +1,24 @@
 <template>
-<h1>User cmp</h1>
+    <div>
+        <h1>User cmp</h1>
+        <data-table
+                :setting="{li:'op'}"
+                v-bind:option="{title:'Пользователи'}"></data-table>
+    </div>
 </template>
 
 <script lang="ts">
     import axios from 'axios'
     import {Component, Provide, Vue, Watch} from 'vue-property-decorator'
+    import Table from '@/components/table/Table.vue';
 
     declare let $: any;
 
     @Component({
         name: 'users',
-        components: {}
+        components: {
+            'data-table': Table
+        }
     })
 
     export default class Users extends Vue {
