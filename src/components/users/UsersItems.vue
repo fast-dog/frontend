@@ -1,5 +1,7 @@
 <template>
-    <router-view></router-view>
+    <div>
+        <DataTable v-bind:option="{title:'Пользователи',url:'users'}"></DataTable>
+    </div>
 </template>
 
 <script lang="ts">
@@ -10,19 +12,19 @@
     declare let $: any;
 
     @Component({
-        name: 'users',
+        name: 'users_items',
         components: {
-            'data-table': DataTable
+            'DataTable': DataTable
         }
     })
 
-    export default class Users extends Vue {
+    export default class UsersItems extends Vue {
 
         @Provide()
         items: any [] = [];
 
         mounted(): void {
-
+            console.log('ok');
         }
     }
 

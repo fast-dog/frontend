@@ -2,3 +2,46 @@
 @import "~gentelella/vendors/font-awesome/css/font-awesome.min.css";
 @import "~gentelella/vendors/nprogress/nprogress.css";
 @import "~gentelella/build/css/custom.min.css";
+@import "~animate.scss/vendor/assets/stylesheets/animate.scss";
+@import "~animate.scss/vendor/assets/stylesheets/animate/fadeIn.scss";
+@import "~animate.scss/vendor/assets/stylesheets/animate/fadeInDown.scss";
+@import "~animate.scss/vendor/assets/stylesheets/animate/fadeInUp.scss";
+@import "~animate.scss/vendor/assets/stylesheets/animate/fadeInLeft.scss";
+
+
+.splash-screen {
+  width: 100%;
+  text-align: center;
+  padding-top: 150px;
+  opacity: 0.4;
+  //i {
+  //  border: 3px solid #676a6c;
+  //  border-radius: 300px;
+  //  padding: 50px;
+  //}
+}
+
+.profile_img {
+  width: 70%;
+  background: #fff;
+  margin-left: 15%;
+  z-index: 1000;
+  position: inherit;
+  margin-top: 20px;
+  border: 1px solid rgba(52, 73, 94, 0.44);
+  padding: 4px;
+}
+
+.nav_title {
+  height: 120px !important;
+
+  .site_title {
+    height: 120px !important;
+  }
+}
+
+.nav-sm {
+  .nav_title {
+    height: 60px !important;
+  }
+}

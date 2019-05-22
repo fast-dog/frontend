@@ -1,99 +1,3 @@
-<script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import SideMenu from '@/components/SideMenu.vue';
-
-    declare let $: any;
-
-    /**
-     * Resize function without multiple trigger
-     *
-     * Usage:
-     * $(window).smartresize(function(){
-     *     // code here
-     * });
-     */
-    (function ($, sr) {
-        // debouncing function from John Hann
-        // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
-        var debounce = function (func, threshold?, execAsap?) {
-            var timeout;
-
-            return function debounced() {
-                var obj = this, args = arguments;
-
-                function delayed() {
-                    if (!execAsap)
-                        func.apply(obj, args);
-                    timeout = null;
-                }
-
-                if (timeout)
-                    clearTimeout(timeout);
-                else if (execAsap)
-                    func.apply(obj, args);
-
-                timeout = setTimeout(delayed, threshold || 100);
-            };
-        };
-
-        // smartresize
-        $.fn[sr] = function (fn) {
-            return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr);
-        };
-
-    })($, 'smartresize');
-
-    /**
-     * Gentelella scripts
-     */
-
-    @Component({
-        components: {
-            'SideMenu': SideMenu
-        }
-    })
-    export default class App extends Vue {
-
-        static baseUrl() {
-
-        }
-
-        mounted(): void {
-            document.body.classList.add('nav-md', 'footer_fixed');
-
-            $('.collapse-link').on('click', function () {
-                var $BOX_PANEL = $(this).closest('.x_panel'),
-                    $ICON = $(this).find('i'),
-                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
-
-                // fix for some div with hardcoded fix class
-                if ($BOX_PANEL.attr('style')) {
-                    $BOX_CONTENT.slideToggle(200, function () {
-                        $BOX_PANEL.removeAttr('style');
-                    });
-                } else {
-                    $BOX_CONTENT.slideToggle(200);
-                    $BOX_PANEL.css('height', 'auto');
-                }
-
-                $ICON.toggleClass('fa-chevron-up fa-chevron-down');
-            });
-
-            $('.close-link').click(function () {
-                var $BOX_PANEL = $(this).closest('.x_panel');
-
-                $BOX_PANEL.remove();
-            });
-
-            // $('[data-toggle="tooltip"]').tooltip({
-            //     container: 'body'
-            // });
-        }
-    }
-</script>
-<style lang="sass">
-    @import "./scss/main"
-</style>
 <template>
     <div id="app">
         <div class="container body">
@@ -102,11 +6,10 @@
                     <div class="left_col scroll-view">
                         <div class="navbar nav_title" style="border: 0;">
                             <a href="/" class="site_title">
-                                <i class="fa fa-paw"></i> <span>Gentelella Alela!</span></a>
+                                <img :src="getLogo()" alt="..." class="img-preview profile_img">
+                            </a>
                         </div>
-
                         <div class="clearfix"></div>
-
                         <!-- menu profile quick info -->
                         <div class="profile clearfix" v-if="$store.getters.getUser">
                             <div class="profile_pic">
@@ -243,35 +146,34 @@
 
                 <!-- page content -->
                 <div class="right_col" role="main">
-                    <div class="">
-
-                        <div class="page-title">
+                    <div>
+                        <div class="page-title animated fadeIn" v-if="$store.getters.getBreadcrumbs.page_title.length > 0">
                             <div class="title_left">
-                                <h3>Inbox Design
-                                    <small>Some examples to get you started</small>
-                                </h3>
-                            </div>
-
-                            <div class="title_right">
-                                <div class="col-md-5 col-sm-5 col-xs-12 form-group pull-right top_search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control" placeholder="Search for...">
-                                        <span class="input-group-btn">
-                      <button class="btn btn-default" type="button">Go!</button>
-                    </span>
-                                    </div>
-                                </div>
+                                <h3>{{$store.getters.getBreadcrumbs.page_title}}</h3>
                             </div>
                         </div>
-
                         <div class="clearfix"></div>
-
-                        <div class="row">
+                        <div aria-label="breadcrumb" class="animated fadeIn"
+                             v-if="$store.getters.getBreadcrumbs.items.length > 0">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item" v-for="link in $store.getters.getBreadcrumbs.items">
+                                    <router-link :to="{path:link.url}" v-html="link.name" v-if="link.url !== false"></router-link>
+                                    <strong v-if="link.url === false" v-html="link.name"></strong>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="row" v-if="isHome()">
                             <div class="col-md-12">
-                                <router-view>loading...</router-view>
+                                <h2>is home</h2>
                             </div>
                         </div>
-
+                        <div class="row" v-if="!isHome()">
+                            <div class="col-md-12">
+                                <SplashScreen></SplashScreen>
+                                <router-view></router-view>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <!-- /page content -->
@@ -288,3 +190,143 @@
         </div>
     </div>
 </template>
+<script lang="ts">
+    import {Component, Vue, Watch} from 'vue-property-decorator';
+    import SideMenu from '@/components/SideMenu.vue';
+    import SplashScreen from '@/components/SplashScreen.vue';
+
+
+    declare let $: any;
+
+    /**
+     * Resize function without multiple trigger
+     *
+     * Usage:
+     * $(window).smartresize(function(){
+     *     // code here
+     * });
+     */
+    (function ($, sr) {
+        // debouncing function from John Hann
+        // http://unscriptable.com/index.php/2009/03/20/debouncing-javascript-methods/
+        var debounce = function (func, threshold?, execAsap?) {
+            var timeout;
+
+            return function debounced() {
+                var obj = this, args = arguments;
+
+                function delayed() {
+                    if (!execAsap)
+                        func.apply(obj, args);
+                    timeout = null;
+                }
+
+                if (timeout)
+                    clearTimeout(timeout);
+                else if (execAsap)
+                    func.apply(obj, args);
+
+                timeout = setTimeout(delayed, threshold || 100);
+            };
+        };
+
+        // smartresize
+        $.fn[sr] = function (fn) {
+            return fn ? this.bind('resize', debounce(fn)) : this.trigger(sr);
+        };
+
+    })($, 'smartresize');
+
+    /**
+     * Gentelella scripts
+     */
+
+    @Component({
+        components: {
+            'SideMenu': SideMenu,
+            'SplashScreen': SplashScreen
+        }
+    })
+    export default class App extends Vue {
+
+        @Watch('$route.path')
+        onChangeRouterPath(path, oldPath) {
+            let me = this;
+            me.documentUp();
+            if (path === '/') {
+                me.$store.dispatch('setBreadcrumbs', {
+                    items: [{
+                        name: 'Главная',
+                        url: false
+                    }],
+                    page_title: 'FastDog CMS'
+                })
+            }
+        }
+
+        documentUp(): void {
+            $('html, body').animate({
+                scrollTop: 0
+            }, 800);
+        }
+
+        static baseUrl() {
+            return window.location.protocol + '//' + window.location.hostname;
+        }
+
+        getLogo(): string {
+            return window.location.protocol + '//' + window.location.hostname + '/vendor/fast_dog/frontend/img/logo.png';
+        }
+
+        isHome(): boolean {
+            return this.$route.name == 'home';
+        }
+
+        mounted(): void {
+            let me = this;
+
+            me.$store.dispatch('setBreadcrumbs', {
+                items: [{
+                    name: 'Главная',
+                    url: false
+                }],
+                page_title: 'FastDog CMS'
+            });
+
+            document.body.classList.add('nav-md', 'footer_fixed');
+
+            $('.collapse-link').on('click', function () {
+                var $BOX_PANEL = $(this).closest('.x_panel'),
+                    $ICON = $(this).find('i'),
+                    $BOX_CONTENT = $BOX_PANEL.find('.x_content');
+
+                // fix for some div with hardcoded fix class
+                if ($BOX_PANEL.attr('style')) {
+                    $BOX_CONTENT.slideToggle(200, function () {
+                        $BOX_PANEL.removeAttr('style');
+                    });
+                } else {
+                    $BOX_CONTENT.slideToggle(200);
+                    $BOX_PANEL.css('height', 'auto');
+                }
+
+                $ICON.toggleClass('fa-chevron-up fa-chevron-down');
+            });
+
+            $('.close-link').click(function () {
+                var $BOX_PANEL = $(this).closest('.x_panel');
+
+                $BOX_PANEL.remove();
+            });
+
+            // $('[data-toggle="tooltip"]').tooltip({
+            //     container: 'body'
+            // });
+
+        }
+    }
+</script>
+<style lang="sass">
+    @import "./scss/main"
+
+</style>

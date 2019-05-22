@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 
 import createLogger from '../logger';
 import main from './modules/main';
-// import table from './modules/table';
+import table from './modules/table';
 // import form from './modules/form';
 // import catalog from './modules/catalog';
 
@@ -18,7 +18,7 @@ export default new Vuex.Store({
     strict: debug,
     modules: {
         main: main,
-        // table: table,
+        table: table,
         // form: form,
         // catalog: catalog
     },

@@ -23,7 +23,6 @@
     <!-- /sidebar menu -->
 </template>
 <script lang="ts">
-    import axios from 'axios'
     import {Component, Provide, Vue, Watch} from 'vue-property-decorator'
 
     declare let $: any;
