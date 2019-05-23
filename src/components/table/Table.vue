@@ -2,22 +2,17 @@
     <div class="animated fadeInUp" v-if="$store.getters.getSplashScreen === false">
         <div class="x_panel">
             <div class="x_title" v-if="option.title !== '' || option.tools === true">
-                <h2 v-if="option.title !== ''">{{option.title}}</h2>
-                <ul class="nav navbar-right panel_toolbox" v-if="option.tools">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
-                        <ul class="dropdown-menu" role="menu">
-                            <li><a href="#">Settings 1</a>
-                            </li>
-                            <li><a href="#">Settings 2</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                    </li>
-                </ul>
+                <button v-for="button in actionButtons" class="btn btn-responsive"
+                        v-bind:class="button.cls"
+                        data-style="zoom-in"
+                        :title="button.text"
+                        data-placement="bottom"
+                        data-toggle="tooltip"
+                        v-if="button.visible == null || button.visible == true"
+                        v-on:click="button.action($event)">
+                    <i class="fa" v-bind:class="button.icon"></i>
+                    {{button.text}}
+                </button>
                 <div class="clearfix"></div>
             </div>
             <div class="x_content">
@@ -30,21 +25,38 @@
                                     <div class="alert alert-info" v-html="message_help"></div>
                                 </td>
                             </tr>
-                            <tr>
-                                <th v-for="col in $store.getters.getTableCols">
-                                    {{col.name}}
+                            <tr class="fixed">
+                                <th v-for="column in $store.getters.getTableCols"
+                                    :class="column.class"
+                                    v-on:click="sort($event,column)"
+                                    :style="{width: (column.width)?column.width+'px':'auto'}">
+                                    {{column.name}}
                                 </th>
                             </tr>
                             </thead>
                         </slot>
                         <slot name="tbody">
                             <tbody>
-                            <slot name="tr">
-                                <tr v-for="(item, index) in $store.getters.getTableItems">
-                                    <td v-for="column in cols"
+                            <slot name="tr" v-for="(item, index) in $store.getters.getTableItems">
+                                <tr>
+                                    <td v-for="column in $store.getters.getTableCols"
                                         :class="column.class"
                                         :style="{width: (column.width) ? column.width + 'px' : 'auto'}">
-                                        {{item[column.key]}}
+                                      <span class="_link-block">
+                                          <router-link
+                                                  v-if="column.link != null"
+                                                  :to="{name:column.link,params:{id:item.id}}"
+                                                  v-html="getItemData(item,column.key)">
+                                          </router-link>
+                                          <router-link
+                                                  v-if="(item.link != null && item.blank == null)"
+                                                  :to="{path:item.link,params:{id:item.id}}"
+                                                  v-html="getItemData(item,column.key)">
+                                          </router-link>
+                                          <span v-if="(column.link == null && item.link  == null)"
+                                                v-html="getItemData(item,column.key)">
+                                          </span>
+                                      </span>
                                     </td>
                                 </tr>
                             </slot>
@@ -165,6 +177,12 @@
          */
         @Provide()
         actionButtons: any = [];
+
+        /**
+         * Массив возможных состояний, иногда передается с сервера для более персонализированного поиска
+         */
+        @Provide()
+        state: any = [];
 
         /**
          * Флаг отображения дополнительных кнопок управления в таблице
@@ -309,9 +327,9 @@
             });
 
             if (parent.status) {
-                me.$set(me, 'status', parent.status);
+                me.$set(me, 'state', parent.state);
             } else {
-                me.$set(me, 'status', me.$store.getters.getCrudStateList);
+                me.$set(me, 'state', me.$store.getters.getCrudStateList);
             }
             if (parent.extend_buttons) {
                 parent.extend_buttons.forEach(function (element, idx) {
@@ -322,7 +340,7 @@
             }
 
             me.loadPage({
-                url:  me.url,
+                url: me.url,
                 data: {
                     page: (me.$route.params.page) ? me.$route.params.page : 1,
                     filter: {},
@@ -351,7 +369,7 @@
 
                 CrudService.postPage(data.url, data.data).then((response: any) => {
                     me.$set(me, 'process', false);
-
+                    console.log(response.data);
                     if (response.data.success) {
                         if (response.data.breadcrumbs !== undefined) {
                             me.$store.dispatch('setBreadcrumbs', {
@@ -374,8 +392,8 @@
 
                         switch (me.tableData.data.view) {
                             case 'table':
-                                me.$set(me, 'pages', (response.data.pages !== undefined) ? response.data.pages : 1);
-                                me.$set(me, 'current_page', (response.data.current_page !== undefined) ? parseInt(response.data.current_page) : 1);
+                                // me.$set(me, 'pages', (response.data.pages !== undefined) ? response.data.pages : 1);
+                                // me.$set(me, 'current_page', (response.data.current_page !== undefined) ? parseInt(response.data.current_page) : 1);
                                 me.$store.dispatch('setTableItems', {
                                     items: response.data.items,
                                     cols: response.data.cols
@@ -387,50 +405,10 @@
                         }
                         callback(response);
                         Util.showSuccess('Команда выполнена успешно');
-                        setTimeout(function () {
-                            me.$set(me, 'animationCls', false);
-                        }, 700);
                         me.$nextTick(function () {
-                            switch (me.tableData.data.view) {
-                                case 'table':
-                                    if (me.headerInit === false) {
-                                        me.initScrollHeader();
-                                        me.headerInit = true;
-                                    }
-                                    // if ((me.access !== undefined) && me.access.reorder) {
-                                    //     me.initListSortable();
-                                    // }
-                                    // $('.chosen-select-filter').trigger('chosen:updated');
-                                    break;
-                                case 'tree':
-                                    // me.headerInit = false;
-                                    // if (me.access.reorder) {
-                                    //     me.tree_plugins.push('dnd');
-                                    // }
-                                    // if (me.tree == null) {
-                                    //     me.initTree({
-                                    //         reorder_url: parent.reorder_url + '-tree',
-                                    //         edit_route_name: parent.create_route,
-                                    //         delete_callback: function () {
-                                    //             Util.deleteDialog({
-                                    //                 title: '', text: '',
-                                    //                 callback: function () {
-                                    //                     me.itemUpdate({
-                                    //                         ids: [],
-                                    //                         field: 'deleted',
-                                    //                         value: 1
-                                    //                     });
-                                    //                 }
-                                    //             })
-                                    //         },
-                                    //         state_callback: function () {
-                                    //
-                                    //         }
-                                    //     });
-                                    // } else {
-                                    //     me.updateTree();
-                                    // }
-                                    break;
+                            if (me.headerInit === false) {
+                                me.initScrollHeader();
+                                me.headerInit = true;
                             }
                             if (me.show_buttons) {
                                 me.buttonCmd({
@@ -457,9 +435,6 @@
                             Util.initTooltip();
                         })
                     } else {
-                        if (response.data['404'] == true) {// todo: fix my
-                            me.$set(me, 'is_error', true);
-                        }
                         me.$store.dispatch('setBreadcrumbs', {
                             items: [{
                                 url: false, name: ''
@@ -470,15 +445,14 @@
                     }
                 }).catch((response) => {
                     me.$set(me, 'process', false);
+
                     me.$store.dispatch('setBreadcrumbs', {
                         items: [{
-                            url: false, name: ''
+                            url: false,
+                            name: ''
                         }],
                         page_title: FdTranslator._('Ошибка выполнения запроса')
                     });
-                    if (response.data && response.data['404'] == true) {
-                        me.$set(me, 'is_error', true);
-                    }
                     Util.errorHandler(response);
                 });
             }

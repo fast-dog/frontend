@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index'
 import {Util} from '@/Util';
+import './../node_modules/gentelella/vendors/bootstrap/js/tooltip.js';
 
 Vue.config.productionTip = false;
 
