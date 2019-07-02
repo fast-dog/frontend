@@ -1,19 +1,24 @@
 <template>
-    <div class="animated fadeInUp" v-if="$store.getters.getSplashScreen === false">
+    <div v-if="$store.getters.getSplashScreen === false">
         <div class="x_panel">
-            <div class="x_title" v-if="option.title !== '' || option.tools === true">
-                <button v-for="button in actionButtons" class="btn btn-responsive"
-                        v-bind:class="button.cls"
-                        data-style="zoom-in"
-                        :title="button.text"
-                        data-placement="bottom"
-                        data-toggle="tooltip"
-                        v-if="button.visible == null || button.visible === true"
-                        v-on:click="button.action($event)">
-                    <i class="fa" v-bind:class="button.icon"></i>
-                    {{button.text}}
-                </button>
-                <div class="clearfix"></div>
+            <div v-if="option.title !== '' || option.tools === true">
+                <div class="control-btn">
+                    <button v-for="button in actionButtons" class="btn btn-responsive"
+                            v-bind:class="button.cls"
+                            data-style="zoom-in"
+                            :title="button.text"
+                            data-placement="bottom"
+                            data-toggle="tooltip"
+                            v-if="button.visible == null || button.visible === true"
+                            v-on:click="button.action($event)">
+                        <i class="fa" v-bind:class="button.icon"></i>
+                        {{button.text}}
+                    </button>
+                    <button class="btn btn-sm btn-success pull-right btn-responsive" v-if="option.help === true" type="button"
+                            v-on:click="helpStatic()">
+                        <i class="fa fa-life-bouy"></i>
+                    </button>
+                </div>
             </div>
             <div class="x_content">
                 <div class="table-responsive">
@@ -26,7 +31,23 @@
                                     <div class="alert alert-info" v-html="message_help"></div>
                                 </td>
                             </tr>
-                            <tr class="fixed">
+                            <tr class="fixed" style="display: none;">
+                                <th :style="{width:50+'px'}" class="text-center" v-if="checked === true">
+                                    <div class="form-check abc-checkbox">
+                                        <input class="form-check-input" id="check-all_hidden" type="checkbox"
+                                               v-on:change="checkAll($event)">
+                                        <label class="form-check-label" for="check-all_hidden"
+                                               style="cursor:default;"></label>
+                                    </div>
+                                </th>
+                                <th v-for="column in $store.getters.getTableCols"
+                                    :class="column.class"
+                                    v-on:click="sort($event,column)"
+                                    :style="{width: (column.width)?column.width+'px':'auto'}">
+                                    {{column.name}}
+                                </th>
+                            </tr>
+                            <tr>
                                 <th :style="{width:50+'px'}" class="text-center" v-if="checked === true">
                                     <div class="form-check abc-checkbox">
                                         <input class="form-check-input" id="check-all" type="checkbox"
@@ -179,13 +200,17 @@
             default: {
                 title: '',
                 tools: false,
-                url: '/'
+                url: '/',
+                help: false,
+                help_name: ''
             }
         })
         option: {
             title: string,
             tools: boolean,
-            url: '/'
+            url: '/',
+            help: boolean,
+            help_name: string
         };
 
         @Provide()
@@ -385,6 +410,7 @@
                         visible: true,
                         action: function ($event) {
                             me.$store.commit('setSplashScreen', true);
+                            me.headerInit = false;
                             me.loadPage(me.tableData, me.tableCallback);
                         }
                     },
@@ -514,6 +540,7 @@
                         callback(response);
                         Util.showSuccess('Команда выполнена успешно');
                         me.$nextTick(function () {
+                            console.log(me.headerInit);
                             if (me.headerInit === false) {
                                 me.initScrollHeader();
                                 me.headerInit = true;
@@ -572,7 +599,7 @@
                 tr = $('tr.fixed', table);
             if (tr.length == 0) {
                 return;
-            }console.log($(tr).next().length)
+            }
 
             if ($(tr).next().length) {
                 let origOffsetY = $(tr).next().offset().top,
@@ -584,13 +611,14 @@
                 $(fixTable).css({
                     width: $(table).outerWidth(),
                     display: 'none',
-                    top: 60,
-                    left: tableOffset.left,
+                    top: 0,
+                    // left: tableOffset.left,
                     position: 'fixed',
                     zIndex: 2500
                 });
+
                 buttonBar.css({
-                    top: 60,
+                    top: 40,
                     zIndex: 2510,
                     // left: (tableOffset.left + (($(table).outerWidth() / 2) - (buttonBarWidth / 2))) + 'px'
                 });
@@ -603,7 +631,7 @@
                     })
                 });
                 $(document).scroll(function () {
-                    let y = ($(window).scrollTop() + 60);
+                    let y = ($(window).scrollTop());
                     if (y > origOffsetY) {
                         fixTable.show();
                         cloneTr.show();
@@ -615,6 +643,14 @@
                             });
                         $('button > span', buttonBar).hide();
                         me.headerCls.fadeIn = true;
+                    } else {
+                        fixTable.hide();
+                        cloneTr.hide();
+                        buttonBar
+                            .removeClass('btn-group')
+                            .css({
+                                position: 'inherit',
+                            });
                     }
                 });
             }
@@ -637,6 +673,7 @@
             }
             me.tableData.data.page = page;
             if (!parent.skip_load_page) {
+                me.headerInit = false;
                 me.loadPage(me.tableData, me.tableCallback);
             }
         }
@@ -732,6 +769,10 @@
                     break;
             }
             this.loadPage(this.tableData, this.tableCallback);
+        }
+
+        helpStatic(): void {
+            Util.help(this.option.help_name, this)
         }
     }
 </script>
