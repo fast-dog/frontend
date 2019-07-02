@@ -8,7 +8,7 @@
                         :title="button.text"
                         data-placement="bottom"
                         data-toggle="tooltip"
-                        v-if="button.visible == null || button.visible == true"
+                        v-if="button.visible == null || button.visible === true"
                         v-on:click="button.action($event)">
                     <i class="fa" v-bind:class="button.icon"></i>
                     {{button.text}}
@@ -17,7 +17,8 @@
             </div>
             <div class="x_content">
                 <div class="table-responsive">
-                    <table class="table table-hover">
+                    <table class="table table-hover"
+                           v-bind:class="{'opacity-03':process}">
                         <slot name="thead">
                             <thead>
                             <tr v-if="message_help !== ''">
@@ -26,6 +27,14 @@
                                 </td>
                             </tr>
                             <tr class="fixed">
+                                <th :style="{width:50+'px'}" class="text-center" v-if="checked === true">
+                                    <div class="form-check abc-checkbox">
+                                        <input class="form-check-input" id="check-all" type="checkbox"
+                                               v-on:change="checkAll($event)">
+                                        <label class="form-check-label" for="check-all"
+                                               style="cursor:default;"></label>
+                                    </div>
+                                </th>
                                 <th v-for="column in $store.getters.getTableCols"
                                     :class="column.class"
                                     v-on:click="sort($event,column)"
@@ -39,6 +48,14 @@
                             <tbody>
                             <slot name="tr" v-for="(item, index) in $store.getters.getTableItems">
                                 <tr>
+                                    <td class="text-center" v-if="checked === true">
+                                        <div class="form-check abc-checkbox">
+                                            <input class="form-check-input" type="checkbox"
+                                                   :checked="item.checked" :id="'record-'+item.id"
+                                                   v-on:change="checkItem(item,$event)">
+                                            <label class="form-check-label" style="cursor:default;" :for="'record-'+item.id"></label>
+                                        </div>
+                                    </td>
                                     <td v-for="column in $store.getters.getTableCols"
                                         :class="column.class"
                                         :style="{width: (column.width) ? column.width + 'px' : 'auto'}">
@@ -62,6 +79,75 @@
                             </slot>
                             </tbody>
                         </slot>
+                        <tfoot>
+                        <tr>
+                            <td :colspan="total_col">
+                                <div class="col-sm-12">
+                                    <div class="col-md-2">
+                                        <div class="form-group" style="margin-top: 20px;">
+                                            <select v-model="limit"
+                                                    name="limit" class="chosen-select-filter form-control"
+                                                    tabindex="2">
+                                                <option v-for="item in tableLimit"
+                                                        v-bind:value="item.id">
+                                                    {{item.name}}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <ul class="pagination pull-right">
+                                        <li class="footable-page-arrow"
+                                            v-bind:class="{ 'disabled': (current_page === 1)}"
+                                            v-on:click="paginate($event,1)"
+                                            v-if="pages > 1">
+                                            <a href="#">«</a>
+                                        </li>
+                                        <li class="footable-page-arrow"
+                                            v-bind:class="{ 'disabled': (current_page === 1)}"
+                                            v-on:click="paginate($event,current_page-1)"
+                                            v-if="pages > 1">
+                                            <a href="#">‹</a>
+                                        </li>
+                                        <li class="footable-page" v-if="(current_page - 2) > 0">
+                                            <a href="#" v-on:click="paginate($event,current_page - 2)">
+                                                {{current_page - 2}}
+                                            </a>
+                                        </li>
+                                        <li class="footable-page" v-if="(current_page - 1) > 0">
+                                            <a href="#" v-on:click="paginate($event,current_page - 1)">
+                                                {{current_page - 1}}
+                                            </a>
+                                        </li>
+                                        <li class="active">
+                                            <span>{{current_page}}</span>
+                                        </li>
+                                        <li class="footable-page" v-if="(current_page + 1) <= pages">
+                                            <a href="#" v-on:click="paginate($event,current_page + 1)">
+                                                {{current_page + 1}}
+                                            </a>
+                                        </li>
+                                        <li class="footable-page" v-if="(current_page + 2) < pages">
+                                            <a href="#" v-on:click="paginate($event,current_page + 2)">
+                                                {{current_page + 2}}
+                                            </a>
+                                        </li>
+                                        <li class="footable-page-arrow"
+                                            v-bind:class="{ 'disabled': (current_page === pages)}"
+                                            v-if="pages > 1">
+                                            <a href="#" v-on:click="paginate($event,current_page+1)">›</a>
+                                        </li>
+                                        <li class="footable-page-arrow"
+                                            v-bind:class="{ 'disabled': (current_page === pages)}"
+                                            v-if="pages > 1">
+                                            <a href="#" v-on:click="paginate($event, pages)"
+                                               data-toggle="tooltip">»</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </td>
+                        </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
@@ -71,10 +157,13 @@
 </template>
 
 <script lang="ts">
-    import {Component, Provide, Prop, Vue, Watch} from 'vue-property-decorator'
-    import {CrudService} from '@/services/CrudService';
+
+    import Vue from 'vue';
     import {FdTranslator} from '@/FdTranslator';
     import {Util} from '@/Util';
+    import {CrudService} from '@/services/CrudService';
+    import Component from 'vue-class-component';
+    import {Prop, Provide, Watch} from 'vue-property-decorator';
 
     declare let ADMIN_ACCESS: string;
     declare let $: any;
@@ -196,6 +285,25 @@
         @Provide()
         tableCallback: any = null;
 
+        /**
+         * Массив вариантов кол-ва записей на страницу, 25\50\100 и т.д.
+         */
+        @Provide()
+        tableLimit: any = [];
+
+        /**
+         * Текущая страница
+         */
+        @Provide()
+        current_page: number = 1;
+
+        /**
+         * Кол-во страниц
+         */
+        @Provide()
+        pages: number = 1;
+
+
         @Watch('$store.getters.getTableCols')
         onChangeTableCols(newCols, oldCols) {
             let me = this;
@@ -208,6 +316,12 @@
         mounted(): void {
             let me = this, parent: any = me.$parent;
             me.url = [window.location.protocol + '//' + window.location.hostname, ADMIN_ACCESS, me.option.url].join('/');
+
+            me.$set(me, 'tableLimit', [
+                {id: 25, name: 25},
+                {id: 50, name: 50},
+                {id: 100, name: 100}
+            ]);
 
             me.$store.commit('setSplashScreen', true);
 
@@ -270,6 +384,7 @@
                         cls: 'btn-sm btn-default animated fadeIn',
                         visible: true,
                         action: function ($event) {
+                            me.$store.commit('setSplashScreen', true);
                             me.loadPage(me.tableData, me.tableCallback);
                         }
                     },
@@ -298,7 +413,6 @@
                             } else {
                                 Util.showWarning(FdTranslator._('Не выбраны записи в таблице'));
                             }
-
                         }
                     }
                 ];
@@ -369,7 +483,7 @@
 
                 CrudService.postPage(data.url, data.data).then((response: any) => {
                     me.$set(me, 'process', false);
-                    console.log(response.data);
+
                     if (response.data.success) {
                         if (response.data.breadcrumbs !== undefined) {
                             me.$store.dispatch('setBreadcrumbs', {
@@ -390,19 +504,13 @@
                             me.$set(me, 'status', response.data.status);
                         }
 
-                        switch (me.tableData.data.view) {
-                            case 'table':
-                                // me.$set(me, 'pages', (response.data.pages !== undefined) ? response.data.pages : 1);
-                                // me.$set(me, 'current_page', (response.data.current_page !== undefined) ? parseInt(response.data.current_page) : 1);
-                                me.$store.dispatch('setTableItems', {
-                                    items: response.data.items,
-                                    cols: response.data.cols
-                                });
-                                break;
-                            case 'tree':
-                                me.$set(me, 'items', response.data.items);
-                                break;
-                        }
+                        me.$set(me, 'pages', (response.data.pages !== undefined) ? response.data.pages : 1);
+                        me.$set(me, 'current_page', (response.data.current_page !== undefined) ? parseInt(response.data.current_page) : 1);
+                        me.$store.dispatch('setTableItems', {
+                            items: response.data.items,
+                            cols: response.data.cols
+                        });
+
                         callback(response);
                         Util.showSuccess('Команда выполнена успешно');
                         me.$nextTick(function () {
@@ -433,29 +541,29 @@
                                 });
                             }
                             Util.initTooltip();
+                            Util.documentUp();
                         })
                     } else {
-                        me.$store.dispatch('setBreadcrumbs', {
-                            items: [{
-                                url: false, name: ''
-                            }],
-                            page_title: FdTranslator._('Ошибка выполнения запроса')
-                        });
-                        Util.errorHandler(response)
+                        me.errorLoadPage(response);
                     }
                 }).catch((response) => {
-                    me.$set(me, 'process', false);
-
-                    me.$store.dispatch('setBreadcrumbs', {
-                        items: [{
-                            url: false,
-                            name: ''
-                        }],
-                        page_title: FdTranslator._('Ошибка выполнения запроса')
-                    });
-                    Util.errorHandler(response);
+                    me.errorLoadPage(response);
                 });
             }
+        }
+
+        errorLoadPage(response): void {
+            let me = this;
+            me.$set(me, 'process', false);
+
+            me.$store.dispatch('setBreadcrumbs', {
+                items: [{
+                    url: false,
+                    name: ''
+                }],
+                page_title: FdTranslator._('Ошибка выполнения запроса')
+            });
+            Util.errorHandler(response);
         }
 
         initScrollHeader(): void {
@@ -464,7 +572,7 @@
                 tr = $('tr.fixed', table);
             if (tr.length == 0) {
                 return;
-            }
+            }console.log($(tr).next().length)
 
             if ($(tr).next().length) {
                 let origOffsetY = $(tr).next().offset().top,
@@ -495,32 +603,19 @@
                     })
                 });
                 $(document).scroll(function () {
-                    if (me.tableData.data.view !== 'tree') {
-                        let y = ($(window).scrollTop() + 60);
-                        if (y > origOffsetY) {
-                            fixTable.show();
-                            cloneTr.show();
-                            buttonBar
-                                .addClass('btn-group')
-                                .css({
-                                    position: 'fixed',
-                                    left: (tableOffset.left + (($(table).outerWidth() / 2) - ((buttonBar).outerWidth() / 2))) + 'px'
-                                });
-                            $('button > span', buttonBar).hide();
-                            me.headerCls.fadeIn = true;
-                        } else {
-                            me.headerCls.fadeIn = false;
-                            me.headerCls.fadeDown = true;
-                            buttonBar
-                                .removeClass('btn-group')
-                                .css({
-                                    position: 'static'
-                                });
-                            fixTable.hide();
-                            $('button > span', buttonBar).show();
-                        }
+                    let y = ($(window).scrollTop() + 60);
+                    if (y > origOffsetY) {
+                        fixTable.show();
+                        cloneTr.show();
+                        buttonBar
+                            .addClass('btn-group')
+                            .css({
+                                position: 'fixed',
+                                left: (tableOffset.left + (($(table).outerWidth() / 2) - ((buttonBar).outerWidth() / 2))) + 'px'
+                            });
+                        $('button > span', buttonBar).hide();
+                        me.headerCls.fadeIn = true;
                     }
-
                 });
             }
         }
@@ -530,7 +625,9 @@
             me.$set(me, 'actionButtons', Util.buttonCmd(me.actionButtons, data));
         }
 
-        paginate(page: any) {
+        paginate(event: Event, page: any) {
+            event.preventDefault();
+
             let me = this, parent: any = me.$parent;
             if (parent.page_route) {
                 me.$router.push({
@@ -612,9 +709,35 @@
                 Util.errorHandler(response)
             });
         }
+
+        sort($event: Event, column: any): void {
+            $event.preventDefault();
+        }
+
+        sortTable(event): void {
+            let dir = $(event.srcElement).data('direction'),
+                field = $(event.srcElement).data('field');
+            dir = (dir == '' || dir == 'asc') ? 'desc' : 'asc';
+            $('.sorting').removeClass('sorting_asc').removeClass('sorting_desc');
+            this.tableData.data.order_by = field;
+            this.tableData.data.direction = dir;
+            switch (dir) {
+                case 'asc':
+                    $(event.srcElement).removeClass('sorting_desc')
+                        .addClass('sorting_asc').data('direction', dir);
+                    break;
+                case 'desc':
+                    $(event.srcElement).removeClass('sorting_asc')
+                        .addClass('sorting_desc').data('direction', dir);
+                    break;
+            }
+            this.loadPage(this.tableData, this.tableCallback);
+        }
     }
 </script>
 
 <style scoped>
-
+    .opacity-03 {
+        opacity: 0.3;
+    }
 </style>

@@ -19,7 +19,8 @@
     "vue-property-decorator": "^8.0.0",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1",
-    "animate.scss": "^0.0.6"
+    "animate.scss": "^0.0.6",
+    "awesome-bootstrap-checkbox": "^1.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.5.5",

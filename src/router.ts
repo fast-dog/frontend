@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Users from '@/components/users/Users.vue';
 import UsersItems from '@/components/users/UsersItems.vue';
+import UsersItem from '@/components/users/UsersItem.vue';
 
 declare let window: any;
 
@@ -22,7 +23,7 @@ if (token) {
 Vue.use(Router);
 
 export default new Router({
-   // mode: 'history',
+    // mode: 'history',
     base: process.env.BASE_URL,
     routes: [
         {
@@ -36,7 +37,13 @@ export default new Router({
             children: [
                 {
                     path: 'items',
+                    name: 'users',
                     component: UsersItems
+                },
+                {
+                    path: 'item/:id',
+                    name: 'user_profile',
+                    component: UsersItem
                 }
             ]
         }

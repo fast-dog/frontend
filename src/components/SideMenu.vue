@@ -51,7 +51,7 @@
             let me = this;
             me.$store.dispatch('setMainMenu');
             // /Sidebar
-            document.body.classList.add('nav-md', 'footer_fixed');
+            document.body.classList.add('nav-md');
 
         }
 

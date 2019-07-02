@@ -16,7 +16,7 @@ declare let CKEDITOR: any;
 export class Util extends Vue {
 
     @Prop()
-    static ckEditorStyleConfig: any;
+    ckEditorStyleConfig: any;
 
     static get httpRoot(): string {
         return window.location.protocol + '//' + window.location.hostname + '/' + ADMIN_ACCESS + '/'
@@ -35,23 +35,23 @@ export class Util extends Vue {
     static errorHandler(error: any): void {
         let text = [];
         if (error.response) {
-        switch (error.response.status) {
-            case 401:
+            switch (error.response.status) {
+                case 401:
 
-                break;
-            case 422:
-                for (let name in error.response.data.errors) {
-                    for (let i in error.response.data.errors[name]) {
-                        text.push(error.response.data.errors[name][i]);
+                    break;
+                case 422:
+                    for (let name in error.response.data.errors) {
+                        for (let i in error.response.data.errors[name]) {
+                            text.push(error.response.data.errors[name][i]);
+                        }
                     }
-                }
-                break;
-        }
-        if (text.length) {
-            this.showWarning(text.join('<br />'));
-        } else {
-            this.showError(FdTranslator._('При выполнение запроса произошла ошибка, попробуйте повторить позже.'));
-        }
+                    break;
+            }
+            if (text.length) {
+                this.showWarning(text.join('<br />'));
+            } else {
+                this.showError(FdTranslator._('При выполнение запроса произошла ошибка, попробуйте повторить позже.'));
+            }
         } else {
             this.showError(FdTranslator._('При выполнение запроса произошла ошибка, попробуйте повторить позже.'));
         }
@@ -79,10 +79,9 @@ export class Util extends Vue {
         // Toastr.success(msg);
     }
 
-
     static ckEditorInstanceConfig(): any {
         return {
-            stylesSet: Util.ckEditorStyleConfig,
+            // stylesSet: Util.getckEditorStyleConfig(),
             extraPlugins: 'justify,embed,autoembed,div,codemirror,colorbutton',
             div_wrapTable: true,
             basePath: '/',
@@ -455,5 +454,11 @@ export class Util extends Vue {
             sort: 100,
             data: selectedFile
         }
+    }
+
+    static documentUp(): void {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 800);
     }
 }

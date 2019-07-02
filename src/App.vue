@@ -194,6 +194,8 @@
     import {Component, Vue, Watch} from 'vue-property-decorator';
     import SideMenu from '@/components/SideMenu.vue';
     import SplashScreen from '@/components/SplashScreen.vue';
+    import {Util} from '@/Util';
+    //import {Component} from 'vue-property-decorator';
 
 
     declare let $: any;
@@ -265,9 +267,7 @@
         }
 
         documentUp(): void {
-            $('html, body').animate({
-                scrollTop: 0
-            }, 800);
+            Util.documentUp();
         }
 
         static baseUrl() {
@@ -293,7 +293,7 @@
                 page_title: 'FastDog CMS'
             });
 
-            document.body.classList.add('nav-md', 'footer_fixed');
+            document.body.classList.add('nav-md');
 
             $('.collapse-link').on('click', function () {
                 var $BOX_PANEL = $(this).closest('.x_panel'),
