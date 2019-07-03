@@ -422,6 +422,7 @@
                         action: function ($event) {
                             let ids = [],
                                 selected = me.$store.getters.getSelectedItems;
+
                             if (selected.length) {
                                 Util.deleteDialog({
                                     title: '', text: '',

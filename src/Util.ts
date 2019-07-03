@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import * as VueRouter from 'vue-router';
+import * as Toastr from 'toastr';
+import * as BootstrapDialog from 'bootstrap3-dialog';
 
 import {Prop} from 'vue-property-decorator';
 import {CrudService} from '@/services/CrudService';
@@ -59,24 +61,24 @@ export class Util extends Vue {
     }
 
     static showError(msg: string): void {
-        // Toastr.options = {
-        //     'positionClass': 'toast-bottom-left'
-        // };
-        // Toastr.error(msg)
+        Toastr.options = {
+            'positionClass': 'toast-bottom-left'
+        };
+        Toastr.error(msg)
     }
 
     static showWarning(msg: string): void {
-        // Toastr.options = {
-        //     'positionClass': 'toast-bottom-left'
-        // };
-        // Toastr.warning(msg);
+        Toastr.options = {
+            'positionClass': 'toast-bottom-left'
+        };
+        Toastr.warning(msg);
     }
 
     static showSuccess(msg: string): void {
-        // Toastr.options = {
-        //     'positionClass': 'toast-bottom-left'
-        // };
-        // Toastr.success(msg);
+        Toastr.options = {
+            'positionClass': 'toast-bottom-left'
+        };
+        Toastr.success(msg);
     }
 
     static ckEditorInstanceConfig(): any {
@@ -95,28 +97,28 @@ export class Util extends Vue {
         callback: any,
         text_ok?: string
     }): void {
-        // BootstrapDialog.show({
-        //     title: (data.title != '') ? data.title : FdTranslator._('Подтверждение команды'),
-        //     message: (data.text != '') ? data.text : FdTranslator._('Вы действительно хотите удалить запись?'),
-        //     buttons: [{
-        //         id: 'btn-ok',
-        //         label: (data.text_ok) ? data.text_ok : FdTranslator._('Да, удалить'),
-        //         cssClass: 'btn-sm btn-danger',
-        //         autospin: false,
-        //         action: function (dialogRef) {
-        //             data.callback();
-        //             dialogRef.close();
-        //         }
-        //     }, {
-        //         id: 'btn-cancel',
-        //         label: FdTranslator._('Нет'),
-        //         cssClass: 'btn-sm btn-default',
-        //         autospin: false,
-        //         action: function (dialogRef) {
-        //             dialogRef.close();
-        //         }
-        //     }]
-        // });
+        BootstrapDialog.show({
+            title: (data.title != '') ? data.title : FdTranslator._('Подтверждение команды'),
+            message: (data.text != '') ? data.text : FdTranslator._('Вы действительно хотите удалить запись?'),
+            buttons: [{
+                id: 'btn-ok',
+                label: (data.text_ok) ? data.text_ok : FdTranslator._('Да, удалить'),
+                cssClass: 'btn-sm btn-danger',
+                autospin: false,
+                action: function (dialogRef) {
+                    data.callback();
+                    dialogRef.close();
+                }
+            }, {
+                id: 'btn-cancel',
+                label: FdTranslator._('Нет'),
+                cssClass: 'btn-sm btn-default',
+                autospin: false,
+                action: function (dialogRef) {
+                    dialogRef.close();
+                }
+            }]
+        });
     }
 
     static initFixedTableHeader() {
