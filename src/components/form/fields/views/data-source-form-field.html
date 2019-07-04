@@ -1,0 +1,17 @@
+<div>
+    <multiselect
+        :value="property.value"
+        track-by="name"
+        label="name"
+        open-direction="bottom"
+        :options="property.default_value"
+            :multiple="property.multiple"
+        :searchable="true"
+        :loading="isLoading"
+        :internal-search="false"
+        @input="updatedSelectModel"
+        @remove="removedSelectModel"
+        @search-change="asyncFind">
+    </multiselect>
+
+</div>

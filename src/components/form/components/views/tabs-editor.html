@@ -1,0 +1,90 @@
+<div>
+    <div class="tabs-container tooltip-container">
+        <button class="btn btn-primary btn-xs"
+                :title="'Добавить новый таб'|_"
+                data-placement="top"
+                data-toggle="tooltip"
+                v-on:click="addTab($event)"
+                style="position: absolute; top: 2px; right: 2px;">
+            <i class="fa fa-plus-circle"></i>
+        </button>
+        <ul class="nav nav-tabs">
+            <li v-for="(tab,idx) in tabs" :class="{'active': isActiveTab(tab)}" v-if="tab.show">
+                <a data-toggle="tab" :href="'#' + tab.id" :data-id="tab.id">
+                    {{tab.name|_}}
+                </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div :id="tab.id" v-for="(tab,idx) in tabs" class="tab-pane" :class="{'active': isActiveTab(tab)}" v-if="tab.show">
+                <div class="panel-body">
+                    <div class="tabs-container">
+                        <button class="btn btn-danger btn-xs"
+                                :title="'Удалить таб'|_"
+                                data-placement="top"
+                                data-toggle="tooltip"
+                                v-on:click="removeTab($event,tab)"
+                                style="position: absolute; top: 2px; right: 2px;">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                        <ul class="nav nav-tabs">
+                            <li class="active">
+                                <a data-toggle="tab" :href="'#general-tabs-' + tab.id">
+                                    {{'Основные параметры'|_}}
+                                </a>
+                            </li>
+                            <li>
+                                <a data-toggle="tab" :href="'#media-tabs-' + tab.id">
+                                    {{'Медиа материалы'|_}}
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" :id="'general-tabs-' + tab.id">
+                                <div class="panel-body">
+                                    <text-form-field
+                                            :id="'name-tab-' + tab.id"
+                                            :name="'id'"
+                                            :field="'name'"
+                                            :label="'Заголовок'|_"
+                                            :model="tab"
+                                            :form_group="true"
+                                            :readonly="false"
+                                            :css_class="'col-sm-12'"
+                                            :help_string="''"></text-form-field>
+                                    <select-form-field
+                                            :label="'Тип галереи'"
+                                            :model="tab"
+                                            :id="'gallery_type'"
+                                            :required="false"
+                                            :multiple="false"
+                                            :readonly="false"
+                                            :css_class="'col-sm-12'"
+                                            :form_group="true"
+                                            :option_group="false"
+                                            :data="gallery_mode"
+                                            :placeholder="''"
+                                            :field="'gallery_mode'">
+                                    </select-form-field>
+                                    <text-editor-form-field
+                                            :id="'content-tab-' + tab.id"
+                                            :name="'content'"
+                                            :field="'content'"
+                                            :label="'Текст'|_"
+                                            :form_group="true"
+                                            :height="300"
+                                            :model="tab"></text-editor-form-field>
+                                </div>
+                            </div>
+                            <div class="tab-pane" :id="'media-tabs-' + tab.id">
+                                <div class="panel-body">
+                                    <media :item="tab" :presentation="false"></media>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

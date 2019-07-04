@@ -1,0 +1,26 @@
+<div :class="(form_group)?'form-group':''">
+    <div :class="css_class" style="padding-left: 0">
+        <label class="control-label col-sm-12" style="text-align: left !important;">{{label|_}}
+            <strong class="text-danger text-bold" v-if="required">*</strong>
+        </label>
+        <div class="col-sm-6">
+            <div class="input-group">
+                <input type="text" :placeholder="placeholder"
+                       :id="set_id" v-model="set_model"
+                       class="form-control">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-primary"
+                            :data-toggle="'tooltip'"
+                            :title="'Изменить форматирование в текущем поле'|_"
+                            v-on:click="changeMask = (changeMask)?false:true">
+                        <span class="fa fa-gears"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <input type="text" v-if="changeMask" v-model="set_mask"
+                   class="form-control">
+        </div>
+    </div>
+</div>

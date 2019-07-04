@@ -1,0 +1,35 @@
+<div :class="(form_group)?'form-group':''">
+    <div :class="css_class">
+        <label class="control-label">
+            {{label|_}}
+            <strong class="text-danger text-bold" v-if="required">*</strong>
+        </label>
+        <textarea v-model="set_model"
+                  :style="{height: height + 'px'}"
+                  class="form-control col-sm-12" :id="set_id" value=""></textarea>
+        <div class="btn-group pull-right">
+            <button class="btn btn-sm"
+                    style="margin: 2px 0 !important ;"
+                    v-bind:class="{'btn-default':mode_html == 'html', 'btn-success': mode_html == 'editor'}"
+                    v-on:click="switchModeHtml('editor')"
+                    data-toggle="tooltip"
+                    type="button">
+                <i class="fa fa-file-word-o"></i>
+                {{'Текстовый редактор'|_}}
+            </button>
+            <button class="btn btn-sm"
+                    v-bind:class="{'btn-default':mode_html == 'editor', 'btn-success': mode_html == 'html'}"
+                    style="margin: 2px 0 !important;"
+                    v-on:click="switchModeHtml('html')"
+                    data-toggle="tooltip"
+                    type="button">
+                <i class="fa fa-file-code-o"></i>
+                {{'Исходный код'|_}}
+            </button>
+        </div>
+        <span class="help-block m-b-none" v-if="help_string !=''">
+            <i class="fa fa-exclamation"></i>
+            {{help_string|_}}
+        </span>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<div class="tooltip-container">
+    <div class="push-right col-sm-12 m-b-sm" v-if="tourSteps && presentation == true">
+        <presentation :steps="tourSteps"></presentation>
+    </div>
+    <div class="col-sm-12" v-if="set_item">
+        <div class="form-group " v-for="(mediaItem,idx) in set_item.media">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control"
+                           v-bind:readonly="mediaItem.type=='file'"
+                           v-model="mediaItem.value"
+                           :placeholder="'Выбор файла'|_">
+                    <span class="input-group-btn">
+                    <button type="button"
+                            :id="(idx == 0) ? 'presentation-media-one' : null"
+                            v-if="mediaItem.type == 'file'"
+                            v-on:click="openFinder(mediaItem)"
+                            v-bind:data-href="mediaItem.value"
+                            :title="'Выбрать файлы'|_"
+                            data-toggle="tooltip"
+                            data-placement="left"
+                            class="btn btn-primary preview">
+                        <i class="fa fa-folder-o" :title="'Выбрать файлы'|_"></i>
+                    </button>
+                    <button type="button" class="btn btn-danger"
+                            data-toggle="tooltip"
+                            data-placement="right"
+                            :title="'Удалить файл'|_"
+                            :id="(idx == 0) ? 'presentation-media-four' : null"
+                            v-on:click="deleteItem(mediaItem);">
+                       <i class="fa fa-trash"></i>
+                   </button>
+                </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <input type="text" class="form-control"
+                       :id="(idx == 0) ? 'presentation-media-two' : null"
+                       v-model="mediaItem.description"
+                       :placeholder="'Описание'|_">
+            </div>
+            <div class="col-md-2">
+                <input type="number" class="form-control"
+                       v-model="mediaItem.sort"
+                       :id="(idx == 0) ? 'presentation-media-three' : null"
+                       :placeholder="'Сортировка'|_">
+            </div>
+        </div>
+    </div>
+</div>

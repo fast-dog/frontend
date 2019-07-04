@@ -1,0 +1,43 @@
+<div v-if="set_model">
+    <div class="alert alert-info" v-if="set_model.translate.length > 0">
+        {{'После изменения локализации шаблона рекомендуется очистить кэш и удалить скомпилированные шаблоны.'|_}}
+    </div>
+    <div class="alert alert-info" v-if="set_model.translate.length == 0">
+        {{'В шаблоне не используются переменные локализации.'|_}}
+    </div>
+    <table class="table table-striped tooltip-container dataTable sorted_table"
+           v-if="set_model.translate.length > 0">
+        <thead>
+        <tr>
+            <td class="col-md-6">{{'Термин'|_}}</td>
+            <td class="col-md-6">{{'Перевод'|_}}</td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div class="fixed-scroll"
+                     data-top="56"
+                     style="padding-top: 0; padding-bottom: 0; min-height: 20px;">
+                    <button class="ladda-button btn btn-success btn-xs"
+                            v-on:click="saveTranslate($event)"
+                            data-style="zoom-in">
+                        <i class="fa fa-language"></i>
+                        {{'Сохранить'|_}}
+                    </button>
+                </div>
+            </td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="property in set_model.translate">
+            <td>
+                <input type="text" v-model="property.key" readonly
+                       class="form-control">
+            </td>
+            <td>
+                <input type="text" v-model="property.value"
+                       class="form-control">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>

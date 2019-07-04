@@ -1,0 +1,14 @@
+<div :class="{'has-error': errors.has(name), 'form-group':(form_group)}">
+    <div :class="css_class">
+        <label class="control-label">{{label|_}}
+            <strong class="text-danger text-bold" v-if="required">*</strong>
+        </label>
+        <input type="text" v-model="set_model"
+               :id="set_id"
+               :name="field"
+               :readonly="readonly != ''"
+               v-validate="validate"
+               :placeholder="placeholder"
+               class="form-control">
+    </div>
+</div>

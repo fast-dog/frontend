@@ -1,7 +1,11 @@
 <template>
     <div>
         <DataTable
-                v-bind:option="{title:'Пользователи',url:'users', help:true, help_name:'user_items'}"></DataTable>
+                v-bind:option="{
+                title:'Пользователи',
+                url:'users',
+                help:true,
+                help_name:'user_items'}"></DataTable>
     </div>
 </template>
 

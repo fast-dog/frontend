@@ -1,0 +1,16 @@
+<div :class="{'has-error': errors.has(name), 'has-error': errors.has(scope+'.'+name), 'form-group':(form_group)}">
+    <div :class="css_class">
+        <label class="control-label">{{label|_}}
+            <strong class="text-danger text-bold" v-if="required">*</strong>
+        </label>
+        <input type="text" :id="id" :placeholder="placeholder"
+               :readonly="readonly != ''"
+               v-validate="validate"
+               :name="name"
+               v-model="set_model" class="form-control">
+        <span class="help-block m-b-none" v-if="help_string !=''">
+            <i class="fa fa-exclamation"></i>
+            {{help_string|_}}
+        </span>
+    </div>
+</div>

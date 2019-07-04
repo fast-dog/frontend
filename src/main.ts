@@ -5,6 +5,8 @@ import store from './store/index'
 import {Util} from '@/Util';
 import './../node_modules/gentelella/vendors/bootstrap/js/tooltip.js';
 
+let axios = require('axios');
+
 Vue.config.productionTip = false;
 
 router.beforeEach((to, from, next) => {
@@ -31,5 +33,11 @@ router.beforeEach((to, from, next) => {
 new Vue({
     router,
     store,
-    render: h => h(App)
+    render: h => h(App),
+    methods: {
+
+    },
+    created() {
+
+    }
 }).$mount('#app');

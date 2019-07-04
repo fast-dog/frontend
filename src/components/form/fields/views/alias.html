@@ -1,0 +1,18 @@
+<div :class="(form_group) ? 'form-group' : '' ">
+    <div :class="css_class">
+        <label class="control-label">{{label|_}}</label>
+        <div style="position: relative" v-if="item && item.id >= 0">
+            <input type="text" class="form-control" v-model="item.alias"
+                   v-bind:readonly="readonly == true">
+            <span class="pull-right">
+                <button type="button"
+                        :class="{'btn-danger': (readonly == true),'btn-primary': (readonly == false)}"
+                        v-on:click="changeAlias" class="btn btn-xs"
+                        style="position: absolute; top: 6px; right: 20px;">
+                    {{'Изменить'|_}}
+                                            <i data-style="zoom-in"
+                                               class="fa" :class="{'fa-lock':(readonly == true),'fa-unlock-alt': (readonly == false)}"></i></button>
+            </span>
+        </div>
+    </div>
+</div>

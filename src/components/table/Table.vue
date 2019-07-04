@@ -191,7 +191,42 @@
 
     @Component({
         name: 'DataTable',
-        components: {}
+        components: {},
+        filters: {
+            'json': function (value) {
+                return JSON.stringify(value, null, 2)
+            },
+            _: function (value) {
+                return FdTranslator._(value);
+            }
+        },
+        directives: {
+            'click-outside': {
+                bind: function (el, binding, vNode) {
+                    if (typeof binding.value !== 'function') {
+                        const compName = vNode.context.name;
+                        let warn = `[Vue-click-outside:] provided expression '${binding.expression}' is not a function, but has to be`
+                        if (compName) {
+                            warn += `Found in component '${compName}'`
+                        }
+                        console.warn(warn)
+                    }
+                    const bubble = binding.modifiers.bubble;
+                    const handler = (e) => {
+                        if (bubble || (!el.contains(e.target) && el !== e.target)) {
+                            binding.value(e)
+                        }
+                    };
+                    el.__vueClickOutside__ = handler;
+                    document.addEventListener('click', handler)
+                },
+                unbind: function (el: any, binding) {
+                    // Remove Event Listeners
+                    document.removeEventListener('click', el.__vueClickOutside__);
+                    el.__vueClickOutside__ = null
+                }
+            }
+        }
     })
 
     export default class DataTable extends Vue {
@@ -328,6 +363,14 @@
         @Provide()
         pages: number = 1;
 
+        @Watch('limit')
+        onTableFilterLimitChange(newValue, oldValue) {
+            if (newValue) {
+                let me = this;
+                me.$set(me, 'tableData.data.limit', newValue);
+                me.update();
+            }
+        }
 
         @Watch('$store.getters.getTableCols')
         onChangeTableCols(newCols, oldCols) {
@@ -737,7 +780,7 @@
 
         itemUpdate(item: any): void {
             let me = this;
-            CrudService.post(Util.httpRoot + me.url + '/self-update', item).then((response: any) => {
+            CrudService.post(me.url + '/update', item).then((response: any) => {
                 if (response.data.success) {
                     me.update();
                 } else {

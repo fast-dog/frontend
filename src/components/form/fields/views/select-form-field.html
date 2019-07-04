@@ -1,0 +1,25 @@
+<div :class="(form_group)?'form-group':''">
+    <div :class="css_class">
+        <label class="control-label" v-if="label">{{label}}
+            <strong class="text-danger text-bold" v-if="required">*</strong>
+        </label>
+        <multiselect v-if="option_group == false && set_data"
+                     track-by="id"
+                     label="name"
+                     v-model="set_model"
+                     open-direction="bottom"
+                     :options="set_data"
+                     :multiple="multiple">
+        </multiselect>
+        <multiselect v-if="option_group == true && set_data"
+                     track-by="id"
+                     label="name"
+                     group-label="name"
+                     v-model="set_model"
+                     group-values="items"
+                     open-direction="bottom"
+                     :options="set_data"
+                     :multiple="multiple">
+        </multiselect>
+    </div>
+</div>
