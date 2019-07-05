@@ -584,7 +584,7 @@
                         callback(response);
                         Util.showSuccess('Команда выполнена успешно');
                         me.$nextTick(function () {
-                            console.log(me.headerInit);
+
                             if (me.headerInit === false) {
                                 me.initScrollHeader();
                                 me.headerInit = true;
@@ -658,7 +658,8 @@
                     top: 0,
                     // left: tableOffset.left,
                     position: 'fixed',
-                    zIndex: 2500
+                    zIndex: 2500,
+                    background: 'white'
                 });
 
                 buttonBar.css({
@@ -668,17 +669,20 @@
                 });
 
                 $(fixTable).children('thead').append(cloneTr);
-                $(table).after().append(fixTable);
+                $('.x_panel').append(fixTable);
                 $(window).resize(function () {
                     fixTable.css({
                         width: $(table).outerWidth(),
                     })
                 });
+
+
                 $(document).scroll(function () {
                     let y = ($(window).scrollTop());
                     if (y > origOffsetY) {
                         fixTable.show();
                         cloneTr.show();
+                        console.log(fixTable, cloneTr);
                         buttonBar
                             .addClass('btn-group')
                             .css({
