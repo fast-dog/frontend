@@ -1,20 +1,22 @@
 <template>
-
+    <form-manager :model="item"></form-manager>
 </template>
 
 <script lang="ts">
-    import axios from 'axios'
-    import {Component, Provide, Vue, Watch} from 'vue-property-decorator'
+    import Vue from 'vue';
+    import {Component, Provide, Watch} from 'vue-property-decorator'
     import {Util} from '@/Util';
     import {UsersService} from '@/services/UsersService';
     import {FdTranslator} from '@/FdTranslator';
-
+    import FormBuilder from '@/components/form/FormBuilder.vue';
 
     declare let $: any;
 
     @Component({
         name: 'user_items',
-        components: {}
+        components: {
+            'form-manager': FormBuilder
+        }
     })
 
     export default class UsersItem extends Vue {
@@ -23,6 +25,7 @@
         item: any = null;
 
         mounted(): any {
+
             this.getUser();
         }
 

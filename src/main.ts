@@ -3,7 +3,13 @@ import App from './App.vue'
 import router from './router'
 import store from './store/index'
 import {Util} from '@/Util';
+import VeeValidate from 'vee-validate';
+import Multiselect from 'vue-multiselect'
 import './../node_modules/gentelella/vendors/bootstrap/js/tooltip.js';
+
+Vue.component('multiselect', Multiselect);
+Vue.use(VeeValidate);
+
 
 let axios = require('axios');
 

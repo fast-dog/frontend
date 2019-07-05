@@ -2,8 +2,10 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import createLogger from '../logger';
-import main from './modules/main';
-import table from './modules/table';
+import form from '@/store/modules/form';
+import table from '@/store/modules/table';
+import main from '@/store/modules/main';
+import catalog from '@/store/modules/catalog';
 // import form from './modules/form';
 // import catalog from './modules/catalog';
 
@@ -19,8 +21,8 @@ export default new Vuex.Store({
     modules: {
         main: main,
         table: table,
-        // form: form,
-        // catalog: catalog
+        form: form,
+        catalog: catalog
     },
     plugins: debug ? [createLogger()] : []
 })
