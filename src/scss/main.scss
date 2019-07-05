@@ -1,17 +1,18 @@
 @import "~gentelella/vendors/bootstrap/dist/css/bootstrap.min.css";
 @import "~gentelella/vendors/font-awesome/css/font-awesome.min.css";
 @import "~gentelella/vendors/nprogress/nprogress.css";
-@import "~gentelella/build/css/custom.min.css";
 @import "~animate.scss/vendor/assets/stylesheets/animate.scss";
 @import "~animate.scss/vendor/assets/stylesheets/animate/fadeIn.scss";
 @import "~animate.scss/vendor/assets/stylesheets/animate/fadeInDown.scss";
 @import "~animate.scss/vendor/assets/stylesheets/animate/fadeInUp.scss";
 @import "~animate.scss/vendor/assets/stylesheets/animate/fadeInLeft.scss";
+@import "~animate.scss/vendor/assets/stylesheets/animate/fadeInRight.scss";
 @import "~awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css";
 @import "~toastr/toastr";
 @import '~vue-multiselect/dist/vue-multiselect.min.css';
 @import "~bootstrap-datepicker/dist/css/bootstrap-datepicker.css";
 @import "~ladda/css/ladda";
+@import "~gentelella/build/css/custom.min.css";
 
 .splash-screen {
   width: 100%;
@@ -36,16 +37,18 @@
   padding: 4px;
 }
 
-.nav_title {
-  height: 120px !important;
+//.nav_title {
+//  height: 120px !important;
+//
+//  .site_title {
+//    height: 120px !important;
+//  }
+//}
+//
+//.nav-sm {
+//  .nav_title {
+//    height: 60px !important;
+//  }
+//}
 
-  .site_title {
-    height: 120px !important;
-  }
-}
 
-.nav-sm {
-  .nav_title {
-    height: 60px !important;
-  }
-}

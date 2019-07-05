@@ -184,7 +184,7 @@ export class Util extends Vue {
         function scroll() {
             if (origOffsetY > 0) {
                 if ($(window).scrollTop() > origOffsetY) {
-
+                    width = $(menu).outerWidth(false);
                     $(menu).each(function (idx, menu) {
                         let marginTop = parseInt($(menu).data('top'));
                         if (isNaN(marginTop)) {
@@ -192,9 +192,10 @@ export class Util extends Vue {
                         }
                         $(menu).css({
                             position: 'fixed',
-                            top: 60 + marginTop,
+                            top: marginTop,
                             zIndex: 2000,
-                            // width: width + 'px'
+                            background: 'white',
+                            width: width + 'px'
                         });
                     });
 

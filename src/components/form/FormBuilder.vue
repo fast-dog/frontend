@@ -190,7 +190,6 @@
 
         getActiveTab(id: string, def: boolean): boolean {
             this.openTab = Util.getLocalVar('open-tab', null);
-            // console.log(this.openTab, this.openTab != 'null');
             if (this.openTab != null && this.openTab != 'null') {
                 return (id == this.openTab);
             } else {

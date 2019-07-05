@@ -1,5 +1,74 @@
 <template>
     <div v-if="$store.getters.getSplashScreen === false">
+
+        <div class="x_panel data_preview animated fadeInRight" v-if="show_modal">
+            <div class="x_title">
+                <h2><i class="fa fa-bars"></i> #4568 </h2>
+                <div class="navbar-right">
+                    <a class="close-link" href="#" v-on:click.prevent="closeModal($event)">
+                        <i class="fa fa-times-circle-o"></i>
+                    </a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td><strong>Изображение</strong></td>
+                        <td>
+                            <img style="max-width: 200px; display: block; margin: 0 auto;"
+                                 class="img-responsive"
+                                 src="https://sun3-4.userapi.com/c852036/v852036404/16a572/pvANqq08kdQ.jpg" alt="">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Текстовое поле</strong></td>
+                        <td>Значение 1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Текстовое поле</strong></td>
+                        <td>Значение 2</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Текстовое поле</strong></td>
+                        <td>Значение 3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Прикрепленный файл</strong></td>
+                        <td>
+                            <p class="url">
+                                <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Адрес доставки</strong>
+                        </td>
+                        <td>
+                            <address>
+                                <strong>Iron Admin, Inc.</strong>
+                                <br>Россия, Геленджик, Стрежевая 11
+                                <br>Phone: +7 (804) 123-9876
+                                <br>Email: ironadmin.com
+                            </address>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div style="width: 100%; height: 220px"
+                                 data-action="map" id="address-map"
+                                 data-geocode="Россия, Геленджик, Стрежевая 11"></div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="col-xs-12" style="position: fixed; bottom: 10px; padding-right: 20px;">
+                    <button class="btn btn-default pull-right btn-sm" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
+                </div>
+            </div>
+        </div>
         <div class="x_panel">
             <div v-if="option.title !== '' || option.tools === true">
                 <div class="control-btn">
@@ -20,15 +89,20 @@
                     </button>
                 </div>
             </div>
-            <div class="x_content">
+            <div class="x_content" style="padding: 0 !important;">
                 <div class="table-responsive">
-                    <table class="table table-hover"
+                    <table class="table table-striped table-hover"
                            v-bind:class="{'opacity-03':process}">
                         <slot name="thead">
                             <thead>
                             <tr v-if="message_help !== ''">
                                 <td v-bind:colspan="total_col">
                                     <div class="alert alert-info" v-html="message_help"></div>
+                                </td>
+                            </tr>
+                            <tr v-if="search_active === true">
+                                <td v-bind:colspan="total_col" style="padding: 0 !important;">
+                                    <filters></filters>
                                 </td>
                             </tr>
                             <tr class="fixed" style="display: none;">
@@ -56,11 +130,18 @@
                                                style="cursor:default;"></label>
                                     </div>
                                 </th>
-                                <th v-for="column in $store.getters.getTableCols"
+                                <th v-for="(column, index) in $store.getters.getTableCols"
                                     :class="column.class"
                                     v-on:click="sort($event,column)"
                                     :style="{width: (column.width)?column.width+'px':'auto'}">
-                                    {{column.name}}
+                                    <span v-if="index !== ($store.getters.getTableCols.length-1)">
+                                         {{column.name}}
+                                    </span>
+                                    <div v-else class="_select_rows">
+                                        <button class="btn btn-dark btn-xs">
+                                            <i class="fa fa-plus-circle"></i>
+                                        </button>
+                                    </div>
                                 </th>
                             </tr>
                             </thead>
@@ -91,9 +172,13 @@
                                                   :to="{path:item.link,params:{id:item.id}}"
                                                   v-html="getItemData(item,column.key)">
                                           </router-link>
-                                          <span v-if="(column.link == null && item.link  == null)"
+                                          <span v-if="(column.link == null && item.link  == null) && !column.modal"
                                                 v-html="getItemData(item,column.key)">
                                           </span>
+                                          <a href="#" class="text-danger" v-if="column.modal"
+                                             v-html="getItemData(item,column.key)"
+                                             v-on:click.prevent="showModal($event,item)">
+                                          </a>
                                       </span>
                                     </td>
                                 </tr>
@@ -174,7 +259,6 @@
             </div>
         </div>
     </div>
-
 </template>
 
 <script lang="ts">
@@ -185,46 +269,23 @@
     import {CrudService} from '@/services/CrudService';
     import Component from 'vue-class-component';
     import {Prop, Provide, Watch} from 'vue-property-decorator';
+    import Filters from '@/components/table/Filters.vue';
+    import ymaps from 'ymaps';
 
     declare let ADMIN_ACCESS: string;
     declare let $: any;
 
     @Component({
         name: 'DataTable',
-        components: {},
+        components: {
+            'filters': Filters
+        },
         filters: {
             'json': function (value) {
                 return JSON.stringify(value, null, 2)
             },
             _: function (value) {
                 return FdTranslator._(value);
-            }
-        },
-        directives: {
-            'click-outside': {
-                bind: function (el, binding, vNode) {
-                    if (typeof binding.value !== 'function') {
-                        const compName = vNode.context.name;
-                        let warn = `[Vue-click-outside:] provided expression '${binding.expression}' is not a function, but has to be`
-                        if (compName) {
-                            warn += `Found in component '${compName}'`
-                        }
-                        console.warn(warn)
-                    }
-                    const bubble = binding.modifiers.bubble;
-                    const handler = (e) => {
-                        if (bubble || (!el.contains(e.target) && el !== e.target)) {
-                            binding.value(e)
-                        }
-                    };
-                    el.__vueClickOutside__ = handler;
-                    document.addEventListener('click', handler)
-                },
-                unbind: function (el: any, binding) {
-                    // Remove Event Listeners
-                    document.removeEventListener('click', el.__vueClickOutside__);
-                    el.__vueClickOutside__ = null
-                }
             }
         }
     })
@@ -274,6 +335,9 @@
 
         @Provide()
         checked: boolean = true;
+
+        @Provide()
+        show_modal: boolean = false;
 
         @Provide()
         tableData: {
@@ -326,6 +390,12 @@
          */
         @Provide()
         actionButtons: any = [];
+
+        /**
+         * Флаг доступности использования фильтров
+         */
+        @Prop({default: true})
+        search_active: boolean;
 
         /**
          * Массив возможных состояний, иногда передается с сервера для более персонализированного поиска
@@ -539,6 +609,8 @@
                     me.message_help = response.data.message;
                 }
             });
+
+            me.$store.dispatch('setTableUpdate', me.update);
         }
 
         loadPage(data: any, callback: any = null) {
@@ -682,7 +754,6 @@
                     if (y > origOffsetY) {
                         fixTable.show();
                         cloneTr.show();
-                        console.log(fixTable, cloneTr);
                         buttonBar
                             .addClass('btn-group')
                             .css({
@@ -822,11 +893,61 @@
         helpStatic(): void {
             Util.help(this.option.help_name, this)
         }
+
+
+        showModal($event, item) {
+            let me = this;
+            me.show_modal = true;
+            me.$nextTick(function () {
+                ymaps
+                    .load('https://api-maps.yandex.ru/2.1/?ns=csymaps&lang=ru_RU')
+                    .then(maps => {
+                        const map = new maps.Map('address-map', {
+                            center: [-8.369326, 115.166023],
+                            zoom: 15
+                        });
+
+                        var myGeocoder = maps.geocode($('#address-map').data('geocode'));
+
+                        myGeocoder.then(function (res) {
+                            map.geoObjects.add(res.geoObjects);
+                            // Выведем в консоль данные, полученные в результате геокодирования объекта.
+                            map.setCenter(res.geoObjects.get(0).geometry.getCoordinates());
+                        }, function (err) {
+                            // Обработка ошибки.
+                            console.log(err)
+                        });
+
+
+                    })
+                    .catch(error => console.log('Failed to load Yandex Maps', error));
+            })
+
+
+        }
+
+        closeModal($event) {
+            this.show_modal = false;
+        }
     }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
     .opacity-03 {
         opacity: 0.3;
+    }
+
+    .data_preview {
+        width: 500px;
+        position: fixed;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 2510;
+        margin: 0;
+
+        .close-link {
+            font-size: 20px;
+        }
     }
 </style>
