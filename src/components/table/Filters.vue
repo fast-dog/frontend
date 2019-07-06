@@ -12,7 +12,7 @@
                             :class="{'btn-success':$store.getters.getApplyFilters.length > 0 && apply === true,
                             'btn-default':$store.getters.getApplyFilters.length===0 && apply === false}"
                             v-on:click="applyFilters($event)" data-style="zoom-in">
-                        <i class="fa fa-filter"></i>
+                        <i class="fa fa-check"></i>
                     </button>
                 </span>
             </div>
@@ -40,13 +40,9 @@
 
     import Vue from 'vue';
     import {FdTranslator} from '@/FdTranslator';
-    import {Util} from '@/Util';
-    import {CrudService} from '@/services/CrudService';
     import Component from 'vue-class-component';
     import {Prop, Provide, Watch} from 'vue-property-decorator';
-    import * as moment from 'moment';
 
-    declare let ADMIN_ACCESS: string;
     declare let $: any;
 
     @Component({
@@ -63,6 +59,7 @@
     })
 
     export default class Filters extends Vue {
+
         @Provide()
         item: any = null;
 
@@ -108,7 +105,6 @@
             }
             me.timeout = setTimeout(function () {
                 let value = $($event.target).val();
-
                 if (value !== '') {
                     me.$store.dispatch('setFilterValue', {
                         name: name,
@@ -116,7 +112,6 @@
                     })
                 }
             }, 400);
-
         }
 
         clear(name: string, $event: Event, reload ?: boolean): void {
@@ -197,6 +192,7 @@
                 position: absolute;
                 top: -5px;
                 color: #ED5565;
+                display: none;
             }
         }
 

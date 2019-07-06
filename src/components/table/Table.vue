@@ -22,7 +22,8 @@
                 </div>
             </div>
             <div class="x_content" style="padding: 0 !important;">
-                <div class="table-responsive">
+                <div class="table-responsive "
+                     :class="{'col-md-9':$store.getters.getExternalFilters}">
                     <table class="table table-striped table-hover"
                            v-bind:class="{'opacity-03':process}">
                         <slot name="thead">
@@ -32,8 +33,19 @@
                                     <div class="alert alert-info" v-html="message_help"></div>
                                 </td>
                             </tr>
-                            <tr v-if="search_active === true">
+                            <tr v-if="search_active === true && 1 === 0">
                                 <td v-bind:colspan="total_col" style="padding: 0 !important;">
+                                    <div class="col-md-4 pull-right text-right"
+                                         v-if="$store.getters.getFilters.length > 1">
+                                        <a href="#"
+                                           v-on:click.prevent="closeExternalFilters"
+                                           class="open-filter">
+                                            <i class="fa"
+                                               :class="{'fa-caret-square-o-left':!$store.getters.getExternalFilters,
+                                            'fa-caret-square-o-right':$store.getters.getExternalFilters}"
+                                            ></i>
+                                        </a>
+                                    </div>
                                     <filters></filters>
                                 </td>
                             </tr>
@@ -66,14 +78,7 @@
                                     :class="column.class"
                                     v-on:click="sort($event,column)"
                                     :style="{width: (column.width)?column.width+'px':'auto'}">
-                                    <span v-if="index !== ($store.getters.getTableCols.length-1)">
-                                         {{column.name}}
-                                    </span>
-                                    <div v-else class="_select_rows">
-                                        <button class="btn btn-dark btn-xs">
-                                            <i class="fa fa-plus-circle"></i>
-                                        </button>
-                                    </div>
+                                    {{column.name}}
                                 </th>
                             </tr>
                             </thead>
@@ -188,6 +193,9 @@
                         </tfoot>
                     </table>
                 </div>
+                <div class="col-md-3" v-if="$store.getters.getExternalFilters">
+                    <filters-side></filters-side>
+                </div>
             </div>
         </div>
     </div>
@@ -203,6 +211,7 @@
     import {Prop, Provide, Watch} from 'vue-property-decorator';
     import Filters from '@/components/table/Filters.vue';
     import DataPreview from '@/components/table/DataPreview.vue';
+    import FiltersSide from '@/components/table/FiltersSide.vue';
 
     declare let ADMIN_ACCESS: string;
     declare let $: any;
@@ -211,7 +220,8 @@
         name: 'DataTable',
         components: {
             'filters': Filters,
-            'preview': DataPreview
+            'preview': DataPreview,
+            'filters-side': FiltersSide
         },
         filters: {
             'json': function (value) {
@@ -829,6 +839,10 @@
             this.$store.dispatch('setPreview', item._modal);
         }
 
+        closeExternalFilters() {
+            this.$store.dispatch('setExternalFilters', (!this.$store.getters.getExternalFilters))
+        }
+
         beforeDestroy(): void {
             let me = this;
             me.$store.dispatch('setPreview', null);
@@ -841,4 +855,7 @@
         opacity: 0.3;
     }
 
+    .open-filter {
+        font-size: 20px;
+    }
 </style>

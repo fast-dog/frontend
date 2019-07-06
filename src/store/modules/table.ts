@@ -69,7 +69,8 @@ const state = {
     ],
     _filters: [],
     applyFilters: [],
-    update: null
+    update: null,
+    externalFilters: true
 };
 
 
@@ -95,7 +96,8 @@ const getters = {
     getFilters: state => state.filters,
     getApplyFilters: state => state.applyFilters,
     getTableUpdate: state => state.update,
-    getPreview: state => state.preview
+    getPreview: state => state.preview,
+    getExternalFilters: state => state.externalFilters
 };
 
 // actions
@@ -145,6 +147,9 @@ const actions = {
     },
     setPreview({commit, state}, payload) {
         commit('setPreview', payload)
+    },
+    setExternalFilters({commit, state}, payload) {
+        commit('setExternalFilters', payload)
     }
 };
 
@@ -166,67 +171,62 @@ const mutations = {
                     }
                 }
             };
-
-
         state._filters.forEach(function (element, idx) {
-                if (payload.name == element.name) {
-                    element.value = payload.value;
-                }
-                if (element.value) {
-                    let prev = idx - 2;
-                    switch (element.type) {
-                        case 'select':
-                            pushOperator(prev, idx);
-                            let tmp = element.data.filter(function (value) {
-                                return (element.multiple) ? (element.value.indexOf(value.id) !== -1) :
-                                    (value.id.toString() == element.value.id.toString());
-                            });
-                            console.log(tmp)
-                            if (tmp.length == 1) {
-                                applyTmp.push({
-                                    type: element.type,
-                                    operator: element.operator,
-                                    name: element.name,
-                                    placeholder: element.placeholder,
-                                    value: tmp[0].name,
-                                    values: tmp[0].id,
-                                });
-                            } else if (tmp.length > 1) {
-                                let tmpName = [], ids = [];
-                                tmp.forEach(function (value) {
-                                    tmpName.push(value.name);
-                                    ids.push(value.id);
-                                });
-                                applyTmp.push({
-                                    type: element.type,
-                                    operator: element.operator,
-                                    name: element.name,
-                                    placeholder: element.placeholder,
-                                    value: tmpName.join(', '),
-                                    values: tmpName.join(','),
-                                });
-                            }
-                            break;
-                        case 'operator':
-                            break;
-                        case 'text':
-                        default:
-                            pushOperator(prev, idx);
+            if (payload.name == element.name) {
+                element.value = payload.value;
+            }
+            if (element.value) {
+                let prev = idx - 2;
+                switch (element.type) {
+                    case 'select':
+                        pushOperator(prev, idx);
+                        let tmp = element.data.filter(function (value) {
+                            return (element.multiple) ? (element.value.indexOf(value.id) !== -1) :
+                                (value.id.toString() == element.value.id.toString());
+                        });
+                        if (tmp.length == 1) {
                             applyTmp.push({
                                 type: element.type,
+                                operator: element.operator,
                                 name: element.name,
                                 placeholder: element.placeholder,
-                                value: element.value,
-                                operator: element.operator,
-                                idx: idx
+                                value: tmp[0].name,
+                                values: tmp[0].id,
                             });
-                            break;
-                    }
+                        } else if (tmp.length > 1) {
+                            let tmpName = [], ids = [];
+                            tmp.forEach(function (value) {
+                                tmpName.push(value.name);
+                                ids.push(value.id);
+                            });
+                            applyTmp.push({
+                                type: element.type,
+                                operator: element.operator,
+                                name: element.name,
+                                placeholder: element.placeholder,
+                                value: tmpName.join(', '),
+                                values: tmpName.join(','),
+                            });
+                        }
+                        break;
+                    case 'operator':
+                        break;
+                    case 'text':
+                    default:
+                        pushOperator(prev, idx);
+                        applyTmp.push({
+                            type: element.type,
+                            name: element.name,
+                            placeholder: element.placeholder,
+                            value: element.value,
+                            operator: element.operator,
+                            idx: idx
+                        });
+                        break;
                 }
             }
-        );
+        });
         state.applyFilters = applyTmp;
-
     },
     setTableItems(state, payload) {
         state.cols = payload.cols;
@@ -251,7 +251,6 @@ const mutations = {
         })
     },
     setFilters(state, payload) {
-        console.log(payload.length);
         if (payload.length > 0) {
             state.filters = payload;
             state._filters = [];
@@ -300,7 +299,13 @@ const mutations = {
         state.update = payload;
     },
     setPreview(state, payload) {
-        state.preview = payload;
+        state.preview = null;
+        setTimeout(function () {
+            state.preview = payload;
+        }, 200)
+    },
+    setExternalFilters(state, payload) {
+        state.externalFilters = payload;
     }
 };
 

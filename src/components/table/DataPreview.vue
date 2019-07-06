@@ -44,7 +44,7 @@
                     </tr>
                     <tr v-if="row.type === 'map'">
                         <td colspan="2">
-                            <div style="width: 400px; height: 200px"
+                            <div style="width: 100%; height: 200px"
                                  data-action="map" :id="'address-map-'+row.name"
                                  v-bind:data-geocode="row.value"></div>
                         </td>
@@ -139,7 +139,7 @@
 <style scoped lang="scss">
 
     .data_preview {
-        width: 500px;
+        width: 450px;
         position: fixed;
         overflow-y: scroll;
         right: 0;
