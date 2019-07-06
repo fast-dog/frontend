@@ -19,10 +19,10 @@
 
 <script lang="ts">
 
-    import {Component, Provide, Watch} from 'vue-property-decorator'
+    import {Component, Prop, Provide, Watch} from 'vue-property-decorator'
     import {FormField} from '@/components/form/fields/FormField';
     import {FdTranslator} from '@/FdTranslator';
-
+    require('jquery.maskedinput/src/jquery.maskedinput.js');
 
     declare let $: any;
 
@@ -37,6 +37,9 @@
     })
 
     export default class TextFormField extends FormField {
+
+        @Prop({default: ''})
+        mask: string;
 
         @Watch('set_model')
         onChangeSetModel(nv, ov) {
@@ -56,6 +59,19 @@
                 me.$set(me, 'set_model', me.model[me.field]);
             } else {
                 me.$set(me, 'set_model', me.model);
+            }
+
+            if(me.mask){
+                me.$nextTick(function () {
+                    $('#' + me.id).mask(me.mask)
+                        .keyup(function () {
+                            me.$store.dispatch('updatedFieldModel', {
+                                model: me.model,
+                                field: me.field,
+                                value: this.value
+                            })
+                        });
+                })
             }
         }
     }

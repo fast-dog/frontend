@@ -828,6 +828,11 @@
         showModal($event, item) {
             this.$store.dispatch('setPreview', item._modal);
         }
+
+        beforeDestroy(): void {
+            let me = this;
+            me.$store.dispatch('setPreview', null);
+        }
     }
 </script>
 

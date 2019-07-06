@@ -6,6 +6,7 @@
                 :name="field.name"
                 :field="field.name"
                 :label="field.label"
+                :mask="field.mask"
                 :model="model"
                 :scope="(field.scope)?field.scope:null"
                 :required="(field.required != undefined) ? field.required : false"
@@ -38,6 +39,7 @@
                 :field="field.name"
                 :label="field.label"
                 :model="model"
+                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
                 :form_group="field.form_group"
                 :required="(field.required != undefined) ? field.required : false"
                 :validate="field.validate"
@@ -51,12 +53,28 @@
                 :field="field.name"
                 :label="field.label"
                 :model="model"
+                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
                 :form_group="field.form_group"
                 :required="(field.required != undefined) ? field.required : false"
                 :validate="field.validate"
                 :readonly="(field.readonly != undefined) ? field.readonly : false"
                 :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
         </password-form-field>
+        <address-form-field
+                v-if="checkFieldTypeWithExpression(field,'address-form-field')"
+                :id="field.id"
+                :name="field.name"
+                :field="field.name"
+                :label="field.label"
+                :token="field.token"
+                :model="model"
+                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+                :form_group="field.form_group"
+                :required="(field.required != undefined) ? field.required : false"
+                :validate="field.validate"
+                :readonly="(field.readonly != undefined) ? field.readonly : false"
+                :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
+        </address-form-field>
     </div>
 </template>
 
@@ -69,6 +87,7 @@
     import SelectFormField from '@/components/form/fields/SelectFormField.vue';
     import DateFormField from '@/components/form/fields/DateFormField.vue';
     import PasswordFormField from '@/components/form/fields/PasswordFormField.vue';
+    import AddressFormField from '@/components/form/fields/AddressFormField.vue';
 
 
     declare let $: any;
@@ -81,6 +100,7 @@
             }
         },
         components: {
+            'address-form-field': AddressFormField,
             'text-form-field': TextFormField,
             // 'text-form-alias': TextAliasFormField,
             'select-form-field': SelectFormField,

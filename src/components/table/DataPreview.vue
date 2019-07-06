@@ -36,12 +36,24 @@
                             <h4 v-html="row.label"></h4>
                         </td>
                     </tr>
+                    <tr v-if="row.type === 'address'">
+                        <td><strong v-html="row.label"></strong></td>
+                        <td class="text-center">
+                            <address v-html="row.value"></address>
+                        </td>
+                    </tr>
+                    <tr v-if="row.type === 'map'">
+                        <td colspan="2">
+                            <div style="width: 400px; height: 200px"
+                                 data-action="map" :id="'address-map-'+row.name"
+                                 v-bind:data-geocode="row.value"></div>
+                        </td>
+                    </tr>
                 </template>
                 </tbody>
             </table>
         </div>
     </div>
-
 </template>
 
 <script lang="ts">
@@ -72,39 +84,50 @@
         @Provide()
         show_modal: boolean = false;
 
+        @Watch('$store.getters.getPreview')
+        onChangePreview(ov, nv) {
+            if (ov) {
+                let me = this;
+                me.$nextTick(function () {
+                    if ($('*[data-action="map"]').length) {
+                        ymaps
+                            .load()
+                            .then(maps => {
+                                $('*[data-action="map"]').each(function (idx, element) {
+
+                                    console.log(element.id)
+
+                                    let map = new maps.Map(element.id, {
+                                        center: [-8.369326, 115.166023],
+                                        zoom: 15
+                                    });
+
+                                    var myGeocoder = maps.geocode($(element).data('geocode'));
+
+                                    myGeocoder.then(function (res) {
+                                        map.geoObjects.add(res.geoObjects);
+                                        // Выведем в консоль данные, полученные в результате геокодирования объекта.
+                                        map.setCenter(res.geoObjects.get(0).geometry.getCoordinates());
+                                    }, function (err) {
+                                        // Обработка ошибки.
+                                        console.log(err)
+                                    });
+                                })
+                            })
+                            .catch(error => console.log('Failed to load Yandex Maps', error));
+                    }
+                })
+
+            }
+        }
+
+
         showModal($event, item) {
             let me = this;
             me.show_modal = true;
             me.$nextTick(function () {
 
-                $('.data_preview').slimScroll({
-                    height: '100%',
-
-                });
-
-                if ($('#address-map').length) {
-                    ymaps
-                        .load()
-                        .then(maps => {
-                            const map = new maps.Map('address-map', {
-                                center: [-8.369326, 115.166023],
-                                zoom: 15
-                            });
-
-                            var myGeocoder = maps.geocode($('#address-map').data('geocode'));
-
-                            myGeocoder.then(function (res) {
-                                map.geoObjects.add(res.geoObjects);
-                                // Выведем в консоль данные, полученные в результате геокодирования объекта.
-                                map.setCenter(res.geoObjects.get(0).geometry.getCoordinates());
-                            }, function (err) {
-                                // Обработка ошибки.
-                                console.log(err)
-                            });
-                        })
-                        .catch(error => console.log('Failed to load Yandex Maps', error));
-                }
-            })
+            });
         }
 
         closeModal($event) {
@@ -118,6 +141,7 @@
     .data_preview {
         width: 500px;
         position: fixed;
+        overflow-y: scroll;
         right: 0;
         top: 0;
         bottom: 0;
