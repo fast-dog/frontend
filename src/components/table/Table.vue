@@ -1,74 +1,6 @@
 <template>
     <div v-if="$store.getters.getSplashScreen === false">
-
-        <div class="x_panel data_preview animated fadeInRight" v-if="show_modal">
-            <div class="x_title">
-                <h2><i class="fa fa-bars"></i> #4568 </h2>
-                <div class="navbar-right">
-                    <a class="close-link" href="#" v-on:click.prevent="closeModal($event)">
-                        <i class="fa fa-times-circle-o"></i>
-                    </a>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-                <table class="table table-striped">
-                    <tbody>
-                    <tr>
-                        <td><strong>Изображение</strong></td>
-                        <td>
-                            <img style="max-width: 200px; display: block; margin: 0 auto;"
-                                 class="img-responsive"
-                                 src="https://sun3-4.userapi.com/c852036/v852036404/16a572/pvANqq08kdQ.jpg" alt="">
-                        </td>
-                    </tr>
-                    <tr>
-                        <td><strong>Текстовое поле</strong></td>
-                        <td>Значение 1</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Текстовое поле</strong></td>
-                        <td>Значение 2</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Текстовое поле</strong></td>
-                        <td>Значение 3</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Прикрепленный файл</strong></td>
-                        <td>
-                            <p class="url">
-                                <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
-                            </p>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <strong>Адрес доставки</strong>
-                        </td>
-                        <td>
-                            <address>
-                                <strong>Iron Admin, Inc.</strong>
-                                <br>Россия, Геленджик, Стрежевая 11
-                                <br>Phone: +7 (804) 123-9876
-                                <br>Email: ironadmin.com
-                            </address>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2">
-                            <div style="width: 100%; height: 220px"
-                                 data-action="map" id="address-map"
-                                 data-geocode="Россия, Геленджик, Стрежевая 11"></div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="col-xs-12" style="position: fixed; bottom: 10px; padding-right: 20px;">
-                    <button class="btn btn-default pull-right btn-sm" onclick="window.print();"><i class="fa fa-print"></i> Print</button>
-                </div>
-            </div>
-        </div>
+        <preview></preview>
         <div class="x_panel">
             <div v-if="option.title !== '' || option.tools === true">
                 <div class="control-btn">
@@ -270,7 +202,7 @@
     import Component from 'vue-class-component';
     import {Prop, Provide, Watch} from 'vue-property-decorator';
     import Filters from '@/components/table/Filters.vue';
-    import ymaps from 'ymaps';
+    import DataPreview from '@/components/table/DataPreview.vue';
 
     declare let ADMIN_ACCESS: string;
     declare let $: any;
@@ -278,7 +210,8 @@
     @Component({
         name: 'DataTable',
         components: {
-            'filters': Filters
+            'filters': Filters,
+            'preview': DataPreview
         },
         filters: {
             'json': function (value) {
@@ -336,8 +269,6 @@
         @Provide()
         checked: boolean = true;
 
-        @Provide()
-        show_modal: boolean = false;
 
         @Provide()
         tableData: {
@@ -894,40 +825,8 @@
             Util.help(this.option.help_name, this)
         }
 
-
         showModal($event, item) {
-            let me = this;
-            me.show_modal = true;
-            me.$nextTick(function () {
-                ymaps
-                    .load('https://api-maps.yandex.ru/2.1/?ns=csymaps&lang=ru_RU')
-                    .then(maps => {
-                        const map = new maps.Map('address-map', {
-                            center: [-8.369326, 115.166023],
-                            zoom: 15
-                        });
-
-                        var myGeocoder = maps.geocode($('#address-map').data('geocode'));
-
-                        myGeocoder.then(function (res) {
-                            map.geoObjects.add(res.geoObjects);
-                            // Выведем в консоль данные, полученные в результате геокодирования объекта.
-                            map.setCenter(res.geoObjects.get(0).geometry.getCoordinates());
-                        }, function (err) {
-                            // Обработка ошибки.
-                            console.log(err)
-                        });
-
-
-                    })
-                    .catch(error => console.log('Failed to load Yandex Maps', error));
-            })
-
-
-        }
-
-        closeModal($event) {
-            this.show_modal = false;
+            this.$store.dispatch('setPreview', item._modal);
         }
     }
 </script>
@@ -937,17 +836,4 @@
         opacity: 0.3;
     }
 
-    .data_preview {
-        width: 500px;
-        position: fixed;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        z-index: 2510;
-        margin: 0;
-
-        .close-link {
-            font-size: 20px;
-        }
-    }
 </style>

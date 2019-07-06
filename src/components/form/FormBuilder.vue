@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="$store.getters.getSplashScreen === false">
         <div :class="{'fadeIn': $store.getters.getSplashScreen == false}">
             <div class="row">
                 <div class="col-lg-12">
@@ -23,7 +23,6 @@
                             </div>
                         </div>
                         <div class="x_content" :style="{minHeight: $store.getters.getTableHeight + 'px'}">
-                            <SplashScreen></SplashScreen>
                             <div class="row animated"
                                  :class="{'fadeIn': $store.getters.getSplashScreen == false,'hidden': $store.getters.getSplashScreen}">
                                 <div class="tabs-container">

@@ -63,7 +63,9 @@
                                         data: me.item,
                                         event: $event,
                                         callback: function (response) {
+                                            if (response.success) {
 
+                                            }
                                         }
                                     })
                                 }

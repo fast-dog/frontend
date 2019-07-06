@@ -6,7 +6,7 @@ import {Util} from '@/Util';
 import VeeValidate from 'vee-validate';
 import Multiselect from 'vue-multiselect'
 import './../node_modules/gentelella/vendors/bootstrap/js/tooltip.js';
-
+require('jquery-slimscroll/jquery.slimscroll.js');
 Vue.component('multiselect', Multiselect);
 Vue.use(VeeValidate);
 

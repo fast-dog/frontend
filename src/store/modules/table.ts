@@ -32,6 +32,7 @@ const state = {
     item: null,
     data_url: '',
     height: 600,
+    preview: null,
     parameters: {
         page: 1,
     },
@@ -94,6 +95,7 @@ const getters = {
     getFilters: state => state.filters,
     getApplyFilters: state => state.applyFilters,
     getTableUpdate: state => state.update,
+    getPreview: state => state.preview
 };
 
 // actions
@@ -140,6 +142,9 @@ const actions = {
     },
     deleteFilters({commit, state}, payload) {
         commit('deleteFilters');
+    },
+    setPreview({commit, state}, payload) {
+        commit('setPreview', payload)
     }
 };
 
@@ -293,6 +298,9 @@ const mutations = {
     },
     setTableUpdate(state, payload) {
         state.update = payload;
+    },
+    setPreview(state, payload) {
+        state.preview = payload;
     }
 };
 

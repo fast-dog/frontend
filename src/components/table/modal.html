@@ -1,0 +1,89 @@
+<div class="x_panel data_preview animated fadeInRight" v-if="show_modal">
+    <div class="x_title">
+        <h2><i class="fa fa-bars"></i> #4568 </h2>
+        <div class="navbar-right">
+            <a class="print-link" href="#" v-on:click.prevent="closeModal($event)">
+                <i class="fa fa-print"></i>
+            </a>
+            <a class="close-link" href="#" v-on:click.prevent="closeModal($event)">
+                <i class="fa fa-times-circle-o"></i>
+            </a>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="x_content">
+        <table class="table table-hover">
+            <tbody>
+            <tr>
+                <td><strong>Изображение</strong></td>
+                <td>
+                    <img style="max-width: 200px; display: block; margin: 0 auto;"
+                         class="img-responsive"
+                         src="https://sun3-4.userapi.com/c852036/v852036404/16a572/pvANqq08kdQ.jpg" alt="">
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Текстовое поле</strong></td>
+                <td>Значение 1</td>
+            </tr>
+
+            <tr>
+                <td><strong>Прикрепленный файл</strong></td>
+                <td>
+                    <p class="url">
+                        <a href="#"><i class="fa fa-paperclip"></i> User Acceptance Test.doc </a>
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Адрес доставки</strong>
+                </td>
+                <td>
+                    <address>
+                        <strong>Iron Admin, Inc.</strong>
+                        <br>Россия, Геленджик, Стрежевая 11
+                        <br>Phone: +7 (804) 123-9876
+                        <br>Email: ironadmin.com
+                    </address>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div style="width: 100%; height: 220px"
+                         data-action="map" id="address-map"
+                         data-geocode="Россия, Геленджик, Стрежевая 11"></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-center">
+                    <h4>Разделитель данных</h4>
+                </td>
+            </tr>
+            <tr>
+                <td><strong>Текстовое поле</strong></td>
+                <td>Значение 2</td>
+            </tr>
+            <tr>
+                <td><strong>Текстовое поле</strong></td>
+                <td>Значение 3</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-right">
+                    <h4>Промежуточные итоги</h4>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-right"><strong>Стоимость товаров:</strong> 12 254$</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-right"><strong>Стоимость доставки:</strong> 1 254$</td>
+            </tr>
+            <tr>
+                <td colspan="2" class="text-right"><strong>Итого:</strong> 13 254$</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

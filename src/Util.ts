@@ -398,7 +398,7 @@ export class Util extends Vue {
         let result = [];
 
         if (window.history.length > 1) {
-            // result.push(Util.buttonBack());
+            result.push(Util.buttonBack());
         }
 
 
