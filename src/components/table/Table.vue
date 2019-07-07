@@ -85,6 +85,15 @@
                         </slot>
                         <slot name="tbody">
                             <tbody>
+                            <slot name="tr-empty" v-if="$store.getters.getTableItems.length == 0">
+                                <tr>
+                                    <td v-bind:colspan="total_col">
+                                        <div class="alert alert-info text-center">
+                                            {{'Нет данных для отображения'|_}}
+                                        </div>
+                                    </td>
+                                </tr>
+                            </slot>
                             <slot name="tr" v-for="(item, index) in $store.getters.getTableItems">
                                 <tr>
                                     <td class="text-center" v-if="checked === true">
@@ -138,7 +147,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <ul class="pagination pull-right">
+                                    <ul class="pagination pull-right" v-if="pages > 1">
                                         <li class="footable-page-arrow"
                                             v-bind:class="{ 'disabled': (current_page === 1)}"
                                             v-on:click="paginate($event,1)"
