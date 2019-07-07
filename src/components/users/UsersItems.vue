@@ -11,7 +11,7 @@
 
 <script lang="ts">
     import axios from 'axios'
-    import {Component, Provide, Vue, Watch} from 'vue-property-decorator'
+    import {Component, Prop, Provide, Vue, Watch} from 'vue-property-decorator'
     import DataTable from '@/components/table/Table.vue';
 
     declare let $: any;
@@ -25,8 +25,12 @@
 
     export default class UsersItems extends Vue {
 
-        @Provide()
-        items: any [] = [];
+
+        @Prop({default: 'users_list_page'})
+        page_route: string;
+
+        @Prop({default: 'user_profile'})
+        create_route: string;
 
         mounted(): void {
             console.log('ok');

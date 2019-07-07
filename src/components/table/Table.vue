@@ -393,7 +393,8 @@
         }
 
         mounted(): void {
-            let me = this, parent: any = me.$parent;
+            let me = this,
+                parent: any = me.$parent;
             me.url = [window.location.protocol + '//' + window.location.hostname, ADMIN_ACCESS, me.option.url].join('/');
 
             me.$set(me, 'tableLimit', [
@@ -415,7 +416,6 @@
                         action: function ($event) {
                             let route = parent.create_route;
                             if (typeof route == 'string') {
-
                                 me.$router.push({
                                     name: parent.create_route, params: {
                                         id: 'new',
@@ -669,7 +669,7 @@
                     width: $(table).outerWidth(),
                     display: 'none',
                     top: 0,
-                    // left: tableOffset.left,
+                    left: tableOffset.left,
                     position: 'fixed',
                     zIndex: 2500,
                     background: 'white'

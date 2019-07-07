@@ -41,6 +41,11 @@ export default new Router({
                     component: UsersItems
                 },
                 {
+                    path: 'items/page/:page',
+                    name: 'users_list_page',
+                    component: UsersItems
+                },
+                {
                     path: 'item/:id',
                     name: 'user_profile',
                     component: UsersItem
