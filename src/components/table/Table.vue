@@ -420,14 +420,14 @@
                     {
                         text: FdTranslator._('Создать'),
                         icon: 'fa-plus',
-                        cls: 'btn-primary btn-sm',
+                        cls: 'btn-success btn-sm',
                         visible: (parent.create_route) ? true : false,
                         action: function ($event) {
                             let route = parent.create_route;
                             if (typeof route == 'string') {
                                 me.$router.push({
                                     name: parent.create_route, params: {
-                                        id: 'new',
+                                        id: '0',
                                         alias: me.$route.params.alias
                                     }
                                 });

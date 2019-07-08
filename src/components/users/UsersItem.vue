@@ -56,7 +56,7 @@
                             {
                                 text: FdTranslator._('Сохранить'),
                                 icon: 'fa-pencil-square-o',
-                                cls: 'btn-primary',
+                                cls: 'btn-success',
                                 action: function ($event) {
                                     me.sendData({
                                         url: me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url,
