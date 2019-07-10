@@ -75,6 +75,18 @@
                 :readonly="(field.readonly != undefined) ? field.readonly : false"
                 :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
         </address-form-field>
+        <text-editor-form-field
+                v-if="checkFieldTypeWithExpression(field,'text-editor-form-field')"
+                :id="field.id"
+                :name="field.name"
+                :field="field.name"
+                :label="field.label"
+                :model="model"
+                :required="(field.required != undefined) ? field.required : false"
+                :validate="field.validate"
+                :readonly="(field.readonly != undefined) ? field.readonly : false"
+                :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
+        </text-editor-form-field>
     </div>
 </template>
 
@@ -88,7 +100,7 @@
     import DateFormField from '@/components/form/fields/DateFormField.vue';
     import PasswordFormField from '@/components/form/fields/PasswordFormField.vue';
     import AddressFormField from '@/components/form/fields/AddressFormField.vue';
-
+    import TextEditorFormField from '@/components/form/fields/TextEditorFormField.vue';
 
     declare let $: any;
 
@@ -107,7 +119,7 @@
             // 'code-editor-form-field': CodeEditorFormField,
             // 'search-form-field': SearchFormField,
             // 'media-form-field': MediaFormField,
-            // 'text-editor-form-field': TextEditorFormField,
+            'text-editor-form-field': TextEditorFormField,
             'date-form-field': DateFormField,
             // 'media': MediaItems,
             // 'seo': Seo,

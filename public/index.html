@@ -8,7 +8,22 @@
     <meta name="csrf-token" content="{csrf_token}">
     <title>frontend FastDog CMS</title>
     <script>
-        var ADMIN_ACCESS = 'admin', language = [], translate_debug = false;
+        var CKEDITOR_BASEPATH = 'http://' + window.location.hostname + '/ckeditor/',
+            selectedFile = null,
+            DOMAIN_CODE = '001',
+            ADMIN_ACCESS = 'admin',
+            language = [],//lang to interface
+            translate_debug = false,//debug translate interface
+            map = null,//ymap instance
+            parameters = {
+                parent_type: 0,
+                parent_id: 0,
+                elfinder: null
+            };
+
+        function elfinderSelectFile(data) {
+            selectedFile = data;
+        }
     </script>
 </head>
 <body>

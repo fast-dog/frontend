@@ -535,6 +535,7 @@
             } else {
                 me.$set(me, 'state', me.$store.getters.getCrudStateList);
             }
+            console.log(parent.extend_buttons)
             if (parent.extend_buttons) {
                 parent.extend_buttons.forEach(function (element, idx) {
                     element.me = me;

@@ -6,7 +6,27 @@ import {Util} from '@/Util';
 import VeeValidate from 'vee-validate';
 import Multiselect from 'vue-multiselect'
 import './../node_modules/gentelella/vendors/bootstrap/js/tooltip.js';
+
 require('jquery-slimscroll/jquery.slimscroll.js');
+
+require('ckeditor/ckeditor.js');
+
+declare let CKEDITOR: any;
+let DOMAIN_CODE: any = '000';
+
+
+CKEDITOR.config.enterMode = CKEDITOR.ENTER_BR;
+CKEDITOR.config.allowedContent = true;
+CKEDITOR.config.basePath = '/';
+CKEDITOR.dtd.$removeEmpty['i'] = false;
+CKEDITOR.dtd.$removeEmpty['span'] = false;
+
+/*
+ * Редакторы
+ */
+CKEDITOR.config.filebrowserBrowseUrl = '/elfinder/ckeditor';
+CKEDITOR.config.contentsCss = ['http://' + window.location.hostname + '/themes/' + DOMAIN_CODE + '/default/assets/editor/style.css'];
+
 Vue.component('multiselect', Multiselect);
 Vue.use(VeeValidate);
 
@@ -40,9 +60,7 @@ new Vue({
     router,
     store,
     render: h => h(App),
-    methods: {
-
-    },
+    methods: {},
     created() {
 
     }

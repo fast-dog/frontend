@@ -5,6 +5,8 @@ import Users from '@/components/users/Users.vue';
 import UsersItems from '@/components/users/UsersItems.vue';
 import UsersItem from '@/components/users/UsersItem.vue';
 import UsersSubscribeItems from '@/components/users/UsersSubscribeItems.vue';
+import UsersMailing from '@/components/users/UsersMailing.vue';
+import UsersMailingItem from '@/components/users/UsersMailingItem.vue';
 
 declare let window: any;
 
@@ -60,6 +62,21 @@ export default new Router({
                     path: 'subscribe/page/:page',
                     name: 'users_subscribe_list_page',
                     component: UsersSubscribeItems
+                },
+                {
+                    path: 'mailing',
+                    name: 'mailing',
+                    component: UsersMailing
+                },
+                {
+                    path: 'mailing/page/:page',
+                    name: 'mailing_page',
+                    component: UsersMailing
+                },
+                {
+                    path: 'mailing/:id',
+                    name: 'mailing_item',
+                    component: UsersMailingItem
                 },
             ]
         }

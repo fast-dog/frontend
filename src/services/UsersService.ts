@@ -16,7 +16,7 @@ export class UsersService {
     }
 
     static getMailing(id: any): AxiosPromise {
-        return axios.get(Util.httpRoot + 'user/mailing/' + id)
+        return axios.get(Util.httpRoot + 'users/mailing/' + id)
     }
 
     static getMailingTemplate(id: any): AxiosPromise {
