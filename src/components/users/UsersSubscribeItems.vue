@@ -2,8 +2,8 @@
     <div>
         <DataTable
                 v-bind:option="{
-                title:'Пользователи',
-                url:'users',
+                title:'Пользователи :: подписки',
+                url:'users/subscribe',
                 help:true,
                 help_name:'user_items'}"></DataTable>
     </div>
@@ -23,14 +23,12 @@
         }
     })
 
-    export default class UsersItems extends Vue {
+    export default class UsersSubscribeItems extends Vue {
 
 
-        @Prop({default: 'users_list_page'})
+        @Prop({default: 'users_subscribe_list_page'})
         page_route: string;
 
-        @Prop({default: 'user_profile'})
-        create_route: string;
 
         mounted(): void {
             console.log('ok');

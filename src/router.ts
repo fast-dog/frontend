@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Users from '@/components/users/Users.vue';
 import UsersItems from '@/components/users/UsersItems.vue';
 import UsersItem from '@/components/users/UsersItem.vue';
+import UsersSubscribeItems from '@/components/users/UsersSubscribeItems.vue';
 
 declare let window: any;
 
@@ -49,7 +50,17 @@ export default new Router({
                     path: 'item/:id',
                     name: 'user_profile',
                     component: UsersItem
-                }
+                },
+                {
+                    path: 'subscribe',
+                    name: 'user_subscribe',
+                    component: UsersSubscribeItems
+                },
+                {
+                    path: 'subscribe/page/:page',
+                    name: 'users_subscribe_list_page',
+                    component: UsersSubscribeItems
+                },
             ]
         }
     ]
