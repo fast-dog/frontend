@@ -87,6 +87,26 @@
                 :readonly="(field.readonly != undefined) ? field.readonly : false"
                 :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
         </text-editor-form-field>
+        <code-editor-form-field
+                v-if="checkFieldTypeWithExpression(field,'code-editor-form-field')"
+                :id="field.id"
+                :name="field.name"
+                :field="field.name"
+                :label="(field.label)?field.label:'HTML оформление'"
+                :model="model"
+                :default_mode="field.default_mode"
+                :event="field.event"
+                :required="(field.required != undefined) ? field.required : false"
+                :validate="field.validate"
+                :form_group="field.form_group"
+                :readonly="(field.readonly != undefined) ? field.readonly : false"
+                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+                :help_string="(field.help != undefined) ? field.help : ''"
+                :placeholder="(field.placeholder)?field.placeholder:''"></code-editor-form-field>
+
+        <sample-properties-table v-if="checkFieldTypeWithExpression(field,'sample-properties-table')"
+                                 :item="model" :model_id="field.model_id"
+                                 :model_class="field.model"></sample-properties-table>
     </div>
 </template>
 
@@ -101,6 +121,8 @@
     import PasswordFormField from '@/components/form/fields/PasswordFormField.vue';
     import AddressFormField from '@/components/form/fields/AddressFormField.vue';
     import TextEditorFormField from '@/components/form/fields/TextEditorFormField.vue';
+    import CodeEditorFormField from '@/components/form/fields/CodeEditorFormField.vue';
+    import SamplePropertyTable from '@/components/form/components/SamplePropertyTable.vue';
 
     declare let $: any;
 
@@ -116,14 +138,14 @@
             'text-form-field': TextFormField,
             // 'text-form-alias': TextAliasFormField,
             'select-form-field': SelectFormField,
-            // 'code-editor-form-field': CodeEditorFormField,
+            'code-editor-form-field': CodeEditorFormField,
             // 'search-form-field': SearchFormField,
             // 'media-form-field': MediaFormField,
             'text-editor-form-field': TextEditorFormField,
             'date-form-field': DateFormField,
             // 'media': MediaItems,
             // 'seo': Seo,
-            // 'sample-properties-table': SamplePropertyTable,
+            'sample-properties-table': SamplePropertyTable,
             // 'catalog-item-properties': CatalogItemProperties,
             // 'catalog-category-properties': CatalogCategoryProperties,
             // 'catalog-item-store-parameters': CatalogItemStoreParameters,

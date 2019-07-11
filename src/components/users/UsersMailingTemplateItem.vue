@@ -4,16 +4,14 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {Component, Provide, Watch} from 'vue-property-decorator'
-    import {Util} from '@/Util';
-    import {UsersService} from '@/services/UsersService';
-    import {FdTranslator} from '@/FdTranslator';
+    import {Component, Provide, Watch} from 'vue-property-decorator';
     import FormBuilder from '@/components/form/FormBuilder.vue';
-    import {CrudService} from '@/services/CrudService';
+    import {UsersService} from '@/services/UsersService';
+    import {Util} from '@/Util';
+    import {FdTranslator} from '@/FdTranslator';
+
 
     declare let $: any;
-    declare let parameters: any;
-    declare let CKEDITOR: any;
 
 
     @Component({
@@ -23,26 +21,18 @@
         }
     })
 
-    export default class UsersMailingItem extends Vue {
+    export default class UsersMailingTemplateItem extends Vue {
 
         @Provide()
         id: number = null;
 
-        @Provide()
-        item: any = null;
 
-        mounted(): any {
-            let me = this;
-            this.id = parseInt(this.$route.params.id);
-            if (this.$route.params.id == 'new') {
-                this.id = 0;
-            }
-            me.getItem();
-        }
+        @Provide()
+        item: any = {id: 0};
 
         getItem(): void {
             let me = this;
-            UsersService.getMailing(this.id).then((response: any) => {
+            UsersService.getMailingTemplate(this.id).then((response: any) => {
                 if (response.data.success) {
                     me.prepareResponse(response);
                 } else {
@@ -51,6 +41,15 @@
             }, (response) => {
                 Util.errorHandler(response)
             });
+        }
+
+        mounted(): void {
+            let me = this;
+            this.id = parseInt(this.$route.params.id);
+            if (this.$route.params.id == 'new') {
+                this.id = 0;
+            }
+            me.getItem();
         }
 
         prepareResponse(response: any): void {
@@ -67,10 +66,11 @@
 
 
             me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
-                name: 'catalog-item',
+                name: 'mailing-template-item',
                 help: response.data.form.help,
                 content: {
                     buttons: Util.buttons([
+
                         {
                             text: FdTranslator._('Сохранить'),
                             icon: 'fa-pencil-square-o',
@@ -80,14 +80,14 @@
                                 me.$validator.validateAll().then((result) => {
                                     if (result) {
                                         Util.sendData({
-                                            url: 'users/mailing/save',
+                                            url: 'users/mailing/template/save',
                                             data: me.item,
                                             event: $event,
                                             callback: function (response) {
                                                 me.$store.dispatch('setRouteNotify', false);
                                                 if (!me.item.id) {
                                                     me.$router.push({
-                                                        name: 'mailing_item',
+                                                        name: 'mailing_template_item',
                                                         params: {id: response.data.items[0].id}
                                                     });
                                                     me.id = response.data.items[0].id;
@@ -110,36 +110,14 @@
                                 me.$validator.validateAll().then((result) => {
                                     if (result) {
                                         Util.sendData({
-                                            url: 'users/mailing/save',
+                                            url: 'user/mailing/template/save',
                                             data: me.item,
                                             event: $event,
                                             callback: function (response) {
                                                 me.$store.dispatch('setRouteNotify', false);
                                                 me.$router.push({name: 'mailing'});
                                             }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
-                        {
-                            text: FdTranslator._('Сохранить и запустить'),
-                            icon: 'fa-envelope',
-                            cls: 'btn-success btn-sm',
-                            id: 'save-and-close-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        me.item.create_process = 'Y';
-                                        Util.sendData({
-                                            url: 'users/mailing/save',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                me.$store.dispatch('setRouteNotify', false);
-                                                me.$router.push({name: 'mailing_status'});
-                                            }
-                                        }, me)
+                                        },me)
                                     }
                                 });
                             }
@@ -160,19 +138,13 @@
             });
 
             me.$nextTick(function () {
-
+                me.$set(me, 'load', true);// <-- флаг загрузки модели
                 $('.dropdown-toggle').dropdown();
                 $('.tooltip-container').tooltip({
                     selector: '[data-toggle=tooltip]',
                     container: 'body'
                 });
                 if (me.item) {
-                    if (me.item.files_module == 'Y') {
-                        CKEDITOR.config.filebrowserBrowseUrl = '/elfinder/ckeditor?parent_type=' +
-                            me.item.el_finder.parent_type + '&parent_id=' + me.item.el_finder.parent_id;
-                    } else {
-                        CKEDITOR.config.filebrowserBrowseUrl = '/elfinder/ckeditor?parent_type=none&parent_id=0'
-                    }
                     $(document).on('keyup', '*[data-action="save"]', function (e) {
                         e.preventDefault();
                     });

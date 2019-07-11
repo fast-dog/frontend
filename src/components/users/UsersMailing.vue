@@ -2,7 +2,6 @@
     <div>
         <DataTable
                 v-bind:option="{
-                title:'Пользователи :: подписки',
                 url:'users/mailing',
                 help:true,
                 help_name:'user_items'}"></DataTable>

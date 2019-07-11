@@ -18,7 +18,7 @@
                                 <button class="btn btn-sm btn-success btn-responsive" style="margin: 0 5px !important ;" type="button"
                                         v-on:click="helpStatic($store.getters.getForm.help)">
                                     <i class="fa fa-life-bouy"></i>
-                                    <span>{{'Помощь'|_}}</span>
+                                    {{'Помощь'|_}}
                                 </button>
                             </div>
                         </div>

@@ -4,15 +4,15 @@ import {Util} from '@/Util';
 export class UsersService {
 
     static getUser(id: any): AxiosPromise {
-        return axios.get(Util.httpRoot + 'user/' + id)
+        return axios.get(Util.httpRoot + 'users/' + id)
     }
 
     static getUserRating(id: any): AxiosPromise {
-        return axios.get(Util.httpRoot + 'user/rating/' + id)
+        return axios.get(Util.httpRoot + 'users/rating/' + id)
     }
 
     static getInfo(): AxiosPromise {
-        return axios.get(Util.httpRoot + 'user/admin-info')
+        return axios.get(Util.httpRoot + 'users/admin-info')
     }
 
     static getMailing(id: any): AxiosPromise {
@@ -20,10 +20,10 @@ export class UsersService {
     }
 
     static getMailingTemplate(id: any): AxiosPromise {
-        return axios.get(Util.httpRoot + 'user/mailing/template/' + id)
+        return axios.get(Util.httpRoot + 'users/mailing/template/' + id)
     }
 
     static getMailingProcessList(): AxiosPromise {
-        return axios.get(Util.httpRoot + 'user/mailing/process')
+        return axios.get(Util.httpRoot + 'users/mailing/process')
     }
 }
