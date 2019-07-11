@@ -47,5 +47,8 @@ class FrontendServiceProvider extends LaravelServiceProvider
         $this->publishes([__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR .
         'assets' =>
             public_path('vendor/fast_dog/' . self::NAME)], 'public');
+
+        $this->publishes([__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'ckeditor' . DIRECTORY_SEPARATOR .
+        'assets' => public_path('ckeditor/')], 'public');
     }
 }
