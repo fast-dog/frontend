@@ -70,7 +70,6 @@
                 help: response.data.form.help,
                 content: {
                     buttons: Util.buttons([
-
                         {
                             text: FdTranslator._('Сохранить'),
                             icon: 'fa-pencil-square-o',
@@ -87,7 +86,7 @@
                                                 me.$store.dispatch('setRouteNotify', false);
                                                 if (!me.item.id) {
                                                     me.$router.push({
-                                                        name: 'mailing_template_item',
+                                                        name: 'mailing_templates_item',
                                                         params: {id: response.data.items[0].id}
                                                     });
                                                     me.id = response.data.items[0].id;
@@ -110,7 +109,7 @@
                                 me.$validator.validateAll().then((result) => {
                                     if (result) {
                                         Util.sendData({
-                                            url: 'user/mailing/template/save',
+                                            url: 'users/mailing/template/save',
                                             data: me.item,
                                             event: $event,
                                             callback: function (response) {

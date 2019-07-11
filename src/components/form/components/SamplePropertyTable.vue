@@ -1,11 +1,12 @@
 <template>
     <div class="tooltip-container">
         <div class="col-md-9">
-            <div class="btn-group m-b-md">
+            <div class="btn-group" style="margin-bottom: 10px">
                 <button data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle"
                         id="presentation-one">
                     {{'Добавить параметр'|_}}
-                    <span class="caret"></span></button>
+                    <span class="caret"></span>
+                </button>
                 <ul class="dropdown-menu">
                     <li v-for="(property,index) in properties" v-if="property.show == false">
                         <a href="javascript:void(0)" v-on:click="showElement(property)">
@@ -177,7 +178,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="alert alert-info m-t-md"
+                            <div class="alert alert-info" style="margin-top: 10px"
                                  v-if="((editProperty.items && editProperty.id == 0 )|| (editProperty.type.id == 'select'&& editProperty.id == 0 ))">
                                 {{'Для добавления варианов значения необходимо сохранить параметр'|_}}
                             </div>

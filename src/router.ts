@@ -9,6 +9,7 @@ import UsersMailing from '@/components/users/UsersMailing.vue';
 import UsersMailingItem from '@/components/users/UsersMailingItem.vue';
 import UsersMailingTemplateItems from '@/components/users/UsersMailingTemplateItems.vue';
 import UsersMailingTemplateItem from '@/components/users/UsersMailingTemplateItem.vue';
+import UsersMailingStatus from '@/components/users/UsersMailingStatus.vue';
 
 declare let window: any;
 
@@ -85,10 +86,16 @@ export default new Router({
                     name: 'mailing_templates_items',
                     component: UsersMailingTemplateItems
                 },
+
                 {
                     path: 'mailing-templates/:id',
                     name: 'mailing_templates_item',
                     component: UsersMailingTemplateItem
+                },
+                {
+                    path: 'mailing-status',
+                    name: 'mailing_status',
+                    component: UsersMailingStatus
                 }
             ]
         }
