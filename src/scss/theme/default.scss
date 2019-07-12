@@ -2,13 +2,22 @@ $text-color: #676a6c;
 $text-color-active: #5b5d5f;
 $bg-color: #f3f3f4;
 $white: #ffffff;
-
-$md-color-primary: #1AB394;
+$navy: #1ab394;
+$dark-gray: #c2c2c2;
+$blue: #1c84c6;
+$lazur: #23c6c8;
+$yellow: #f8ac59;
+$red: #ED5565;
+$md-color-primary: $navy;
 $md-shadow-main: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
 
+$bg-side: $dark-gray;
+
+@import "buttons";
 
 body {
   background-color: $bg-color;
+  color: $text-color !important;
   //font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -17,14 +26,10 @@ a {
   text-decoration: none;
 }
 
-.profile {
-  background: $md-color-primary;
-}
-
 .nav_title {
-  height: 140px;
+  height: 150px;
   padding: 10px 0 0 0;
-  background-color: $md-color-primary;
+  background-color: $bg-side;
 
   .site_title {
     height: 100%;
@@ -51,6 +56,7 @@ a {
 
 .nav.side-menu > li.active {
   background: $bg-color;
+  border-right: 0px solid $md-color-primary;
 }
 
 .nav.side-menu > li.active > a {
@@ -68,7 +74,32 @@ a {
   color: $text-color !important;
 }
 
+.nav.side-menu > li a.router-link-active {
+  color: $text-color-active !important;
+  font-weight: 900 !important;
+}
 
 .x_panel {
   box-shadow: $md-shadow-main;
 }
+
+.logo {
+  box-shadow: $md-shadow-main;
+}
+
+.breadcrumb {
+  background-color: transparent !important;
+
+  .breadcrumb-item {
+    a {
+      color: $text-color;
+    }
+  }
+}
+
+.alert-info {
+  color: #31708f;
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+}
+

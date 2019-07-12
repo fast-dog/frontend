@@ -10,19 +10,7 @@
                             </a>
                         </div>
                         <div class="clearfix"></div>
-                        <!-- menu profile quick info -->
-                        <div class="profile clearfix" v-if="$store.getters.getUser">
-                            <div class="profile_pic">
-                                <img :src="$store.getters.getUser.photo" alt="..." class="img-circle profile_img">
-                            </div>
-                            <div class="profile_info">
-                                <h2>{{$store.getters.getUser.name}}</h2>
-                            </div>
-                        </div>
-                        <!-- /menu profile quick info -->
-
                         <br/>
-
                         <!-- sidebar menu -->
                         <SideMenu/>
                         <!-- /sidebar menu -->
