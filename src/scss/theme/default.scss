@@ -1,0 +1,74 @@
+$text-color: #676a6c;
+$text-color-active: #5b5d5f;
+$bg-color: #f3f3f4;
+$white: #ffffff;
+
+$md-color-primary: #1AB394;
+$md-shadow-main: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+
+
+body {
+  background-color: $bg-color;
+  //font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #337ab7;
+  text-decoration: none;
+}
+
+.profile {
+  background: $md-color-primary;
+}
+
+.nav_title {
+  height: 140px;
+  padding: 10px 0 0 0;
+  background-color: $md-color-primary;
+
+  .site_title {
+    height: 100%;
+  }
+}
+
+.nav_menu {
+  background-color: $white;
+  box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 0.34), 0 0 6px 0 rgba(0, 0, 0, 0.14);
+  border-bottom: none !important;
+}
+
+.left_col {
+  background: $white;
+}
+
+.site_title {
+  color: $text-color !important;
+}
+
+.nav.child_menu > li > a {
+  color: $text-color !important;
+}
+
+.nav.side-menu > li.active {
+  background: $bg-color;
+}
+
+.nav.side-menu > li.active > a {
+  background: $bg-color;
+  //border-top: 1px solid #b6b6b7;
+  color: $text-color-active;
+  box-shadow: none !important;
+}
+
+.nav.side-menu > li > a:hover {
+  color: $text-color !important;
+}
+
+.nav.side-menu > li > a {
+  color: $text-color !important;
+}
+
+
+.x_panel {
+  box-shadow: $md-shadow-main;
+}

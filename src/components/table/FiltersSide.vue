@@ -2,7 +2,7 @@
     <div class="filters-component">
         <div v-if="$store.getters.getFilters.length > 0">
             <h2 class="text-center">Поиск</h2>
-            <div class="x_panel">
+            <div>
                 <div class="x_content">
                     <form class="form-horizontal">
                         <template v-for="fields in $store.getters.getFilters">

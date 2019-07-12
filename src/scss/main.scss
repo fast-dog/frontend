@@ -12,7 +12,8 @@
 @import '~vue-multiselect/dist/vue-multiselect.min.css';
 @import "~bootstrap-datepicker/dist/css/bootstrap-datepicker.css";
 @import "~ladda/css/ladda";
-@import "~gentelella/build/css/custom.min.css";
+@import "~gentelella/src/scss/custom.scss";
+@import "theme/default";
 @import "~suggestions-jquery/dist/css/suggestions.min.css";
 @import "~daterangepicker/daterangepicker";
 @import '~codemirror/lib/codemirror.css';
