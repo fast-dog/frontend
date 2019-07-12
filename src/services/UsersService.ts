@@ -15,6 +15,10 @@ export class UsersService {
         return axios.get(Util.httpRoot + 'users/admin-info')
     }
 
+    static getConfiguration(): AxiosPromise {
+        return axios.get(Util.httpRoot + 'users/configuration')
+    }
+
     static getMailing(id: any): AxiosPromise {
         return axios.get(Util.httpRoot + 'users/mailing/' + id)
     }

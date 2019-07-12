@@ -9,12 +9,12 @@
                                 <button data-style="zoom-in" title="" data-placement="bottom"
                                         data-toggle="tooltip" class="btn btn-responsive btn-sm btn-default"
                                         v-on:click="back">
-                                    <i class="fa fa-chevron-left"></i> <span>{{'Назад'|_}}</span>
+                                    <i class="fa fa-chevron-left"></i> {{'Назад'|_}}
                                 </button>
                                 <button data-style="zoom-in" title="" data-placement="bottom"
                                         data-toggle="tooltip" class="btn btn-responsive btn-sm btn-default"
                                         v-on:click="update">
-                                    <i class="fa fa-repeat"></i> <span>{{'Обновить'|_}}</span>
+                                    <i class="fa fa-repeat"></i> {{'Обновить'|_}}
                                 </button>
                             </div>
                         </div>
