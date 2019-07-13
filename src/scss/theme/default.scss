@@ -10,6 +10,11 @@ $yellow: #f8ac59;
 $red: #ED5565;
 $md-color-primary: $navy;
 $md-shadow-main: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
+$text-color: #676a6c;   // Body text
+$gray: #f3f3f4;         // Background wrapper color
+$light-gray: #D1DADE;   // Default label, badget
+$label-badget-color: #5E5E5E;
+$light-blue:#f3f6fb;
 
 $bg-side: $dark-gray;
 
@@ -101,5 +106,111 @@ a {
   color: #31708f;
   background-color: #d9edf7;
   border-color: #bce8f1;
+}
+
+
+.progress-bar {
+  background-color: $navy;
+}
+
+.progress-small, .progress-small .progress-bar {
+  height: 10px;
+}
+
+.progress-small, .progress-mini {
+  margin-top: 5px;
+}
+
+.progress-mini, .progress-mini .progress-bar {
+  height: 5px;
+  margin-bottom: 0;
+}
+
+.progress-bar-navy-light {
+  background-color: #3dc7ab;
+}
+
+.progress-bar-success {
+  background-color: $blue;
+}
+
+.progress-bar-info {
+  background-color: $lazur;
+}
+
+.progress-bar-warning {
+  background-color: $yellow;
+}
+
+.progress-bar-danger {
+  background-color: $red;
+}
+
+
+.label {
+  background-color: $light-gray;
+  color: $label-badget-color;
+  font-family: 'Open Sans';
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 8px;
+  text-shadow: none;
+}
+
+.badge {
+  background-color: $light-gray;
+  color: $label-badget-color;
+  font-family: 'Open Sans';
+  font-size: 11px;
+  font-weight: 600;
+  padding-bottom: 4px;
+  padding-left: 6px;
+  padding-right: 6px;
+  text-shadow: none;
+}
+
+.label-primary, .badge-primary {
+  background-color: $navy;
+  color: #FFFFFF;
+}
+
+.label-success, .badge-success {
+  background-color: $blue;
+  color: #FFFFFF;
+}
+
+.label-warning, .badge-warning {
+  background-color: $yellow;
+  color: #FFFFFF;
+}
+
+.label-warning-light, .badge-warning-light {
+  background-color: $yellow;
+  color: #ffffff;
+}
+
+.label-danger, .badge-danger {
+  background-color: $red;
+  color: #FFFFFF;
+}
+
+.label-info, .badge-info {
+  background-color: $lazur;
+  color: #FFFFFF;
+}
+
+.label-inverse, .badge-inverse {
+  background-color: #262626;
+  color: #FFFFFF;
+}
+
+.label-white, .badge-white {
+  background-color: #FFFFFF;
+  color: #5E5E5E;
+}
+
+.label-white, .badge-disable {
+  background-color: #2A2E36;
+  color: #8B91A0;
 }
 

@@ -1,21 +1,15 @@
 <template>
     <div class="wrapper-content animated fadeInUp" v-if="!$store.getters.getSplashScreen">
-        <div class="ibox float-e-margins">
-            <div class="ibox-content">
+        <div class="x_panel float-e-margins">
+            <div class="x_content">
                 <div class="row" v-if="config">
                     <div class="col-lg-12">
                         <div class="tabs-container">
-                            <ul class="nav nav-tabs">
+                            <ul class="nav nav-tabs bar_tabs">
                                 <li class="active">
                                     <a data-toggle="tab" href="#tab-info" aria-expanded="true">{{'Информация'|_}}</a>
                                 </li>
                                 <li><a data-toggle="tab" href="#tab-config" aria-expanded="true">{{'Настройки'|_}}</a>
-                                </li>
-                                <li><a data-toggle="tab" href="#tab-access" aria-expanded="true">{{'Доступ'|_}}</a></li>
-                                <li>
-                                    <a data-toggle="tab" href="#tab-change-log" aria-expanded="true">
-                                        {{'История изменений'|_}}
-                                    </a>
                                 </li>
                             </ul>
                             <div class="tab-content">
@@ -149,29 +143,6 @@
                                         </table>
                                     </div>
                                 </div>
-                                <div id="tab-change-log" class="tab-pane">
-                                    <div class="panel-body">
-                                        <table class="table table-striped tooltip-container">
-                                            <thead>
-                                            <tr>
-                                                <th class="text-center" style="width: 100px">{{'Версия'|_}}</th>
-                                                <th>{{'Изменения'|_}}</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr v-for="(description,version) in config.change_log">
-                                                <td class="text-center">{{version}}</td>
-                                                <td>{{description}}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div id="tab-access" class="tab-pane">
-                                    <div class="panel-body">
-                                        <acl-list :list_acl=acl></acl-list>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -189,13 +160,24 @@
     import {FdTranslator} from '@/FdTranslator';
     import FormBuilder from '@/components/form/FormBuilder.vue';
     import {CrudService} from '@/services/CrudService';
+    import DesktopGraph from '@/components/desktop/DesktopGraph.vue';
 
     declare let $: any;
 
 
     @Component({
         name: 'UsersConfiguration',
-        components: {}
+        components: {
+            'graph': DesktopGraph,
+        },
+        filters: {
+            'json': function (value) {
+                return JSON.stringify(value, null, 2)
+            },
+            _: function (value) {
+                return FdTranslator._(value);
+            }
+        }
     })
 
     export default class UsersConfiguration extends Vue {
@@ -220,6 +202,9 @@
 
         @Provide()
         configuration: any = null;
+
+        @Provide()
+        actionButtons: any = null;
 
         mounted(): void {
             let me = this;
@@ -247,9 +232,9 @@
                     me.$set(me, 'config', response.data.items[0]);
                     me.$set(me, 'reportItems', response.data.items[1]);
                     // me.$set(me, 'acl', <Array<any>>response.data.items[2]);
-                    me.$set(me, 'configuration', <Array<any>>response.data.items[3]);
-                    me.$set(me, 'graph_data', <Array<any>>response.data.items[4]);
-                    me.$set(me, 'register_data', <Array<any>>response.data.items[5]);
+                    me.$set(me, 'configuration', <Array<any>>response.data.items[2]);
+                    me.$set(me, 'graph_data', <Array<any>>response.data.items[3]);
+                    me.$set(me, 'register_data', <Array<any>>response.data.items[4]);
 
 
                     me.$nextTick(function () {
