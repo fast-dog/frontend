@@ -10,11 +10,11 @@ $yellow: #f8ac59;
 $red: #ED5565;
 $md-color-primary: $navy;
 $md-shadow-main: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-$text-color: #676a6c;   // Body text
-$gray: #f3f3f4;         // Background wrapper color
-$light-gray: #D1DADE;   // Default label, badget
+$text-color: #676a6c; // Body text
+$gray: #f3f3f4; // Background wrapper color
+$light-gray: #D1DADE; // Default label, badget
 $label-badget-color: #5E5E5E;
-$light-blue:#f3f6fb;
+$light-blue: #f3f6fb;
 
 $bg-side: $dark-gray;
 
@@ -61,7 +61,11 @@ a {
 
 .nav.side-menu > li.active {
   background: $bg-color;
-  border-right: 0px solid $md-color-primary;
+  border-right: 4px solid $md-color-primary;
+}
+
+ul.bar_tabs > li.active {
+  border-right: 4px solid $md-color-primary;
 }
 
 .nav.side-menu > li.active > a {

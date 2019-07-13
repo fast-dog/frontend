@@ -161,7 +161,7 @@
         }
 
         isActive(item, route): boolean {
-            for (let i in item.children) {
+            for (let i in item.children) { // FIX MY: use name route, bug in pagination and item route
                 if (item.children[i].route === route) {
                     return true;
                 }

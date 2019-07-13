@@ -60,8 +60,13 @@
 
                 <!-- footer content -->
                 <footer>
+                    <div class="pull-left">
+                        FastDog - <a href="https://github.com/fast-dog" target="_blank">
+                        <i class="fa fa-github"></i>
+                    </a>
+                    </div>
                     <div class="pull-right">
-                        Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+                        Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com" target="_blank">Colorlib</a>
                     </div>
                     <div class="clearfix"></div>
                 </footer>
