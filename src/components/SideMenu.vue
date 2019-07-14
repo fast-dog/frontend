@@ -161,11 +161,20 @@
         }
 
         isActive(item, route): boolean {
-            for (let i in item.children) { // FIX MY: use name route, bug in pagination and item route
+
+            for (let i in item.children) {
                 if (item.children[i].route === route) {
                     return true;
                 }
             }
+
+            let segment = route.split('/')[1];
+            for (let i in item.children) {
+                if (item.children[i].route.split('/')[1] === segment) {
+                    return true;
+                }
+            }
+
             return false;
         }
     }
