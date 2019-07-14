@@ -14,6 +14,8 @@ import UsersConfiguration from '@/components/users/UsersConfiguration.vue';
 import Config from '@/components/config/Config.vue';
 import DomainItems from '@/components/config/DomainItems.vue';
 import DomainItem from '@/components/config/DomainItem.vue';
+import ComponentsItems from '@/components/config/ComponentsItems.vue';
+import ComponentsItem from '@/components/config/ComponentsItem.vue';
 
 declare let window: any;
 
@@ -126,6 +128,21 @@ export default new Router({
                     path: 'domain/:id',
                     name: 'domain_item',
                     component: DomainItem
+                },
+                {
+                    path: 'components',
+                    name: 'component_items',
+                    component: ComponentsItems
+                },
+                {
+                    path: 'components/page/:page',
+                    name: 'component_items_page',
+                    component: ComponentsItems
+                },
+                {
+                    path: 'components/:id',
+                    name: 'component_item',
+                    component: ComponentsItem
                 },
             ]
         }

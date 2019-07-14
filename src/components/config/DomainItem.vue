@@ -68,31 +68,28 @@
                 name: 'domain-item',
                 help: response.data.form.help,
                 content: {
-                    buttons: Util.buttons([
-                        Util.buttonBack(function () {
-                            me.$router.push({name: 'domain_items'});
-                        }),
-                        {
-                            text: FdTranslator._('Сохранить'),
-                            icon: 'fa-pencil-square-o',
-                            cls: 'btn-primary btn-sm',
-                            id: 'save-content-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url: me.item.id > 0 ? 'config/domain/save' : 'config/domain/add',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                // me.updateForm(response);
-                                                me.$store.dispatch('setRouteNotify', false);
-                                            }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
+                    buttons: Util.buttons([{
+                        text: FdTranslator._('Сохранить'),
+                        icon: 'fa-pencil-square-o',
+                        cls: 'btn-primary btn-sm',
+                        id: 'save-content-btn',
+                        action: function ($event) {
+                            me.$validator.validateAll().then((result) => {
+                                if (result) {
+                                    Util.sendData({
+                                        url: me.item.id > 0 ? response.data.form.create_url :
+                                            response.data.form.update_url,
+                                        data: me.item,
+                                        event: $event,
+                                        callback: function (response) {
+                                            // me.updateForm(response);
+                                            me.$store.dispatch('setRouteNotify', false);
+                                        }
+                                    }, me)
+                                }
+                            });
+                        }
+                    },
                         {
                             text: FdTranslator._('Сохранить и закрыть'),
                             icon: 'fa-check',
@@ -102,7 +99,8 @@
                                 me.$validator.validateAll().then((result) => {
                                     if (result) {
                                         Util.sendData({
-                                            url: me.item.id > 0 ? 'config/domain/save' : 'config/domain/add',
+                                            url:  me.item.id > 0 ? response.data.form.create_url :
+                                                response.data.form.update_url,
                                             data: me.item,
                                             event: $event,
                                             callback: function (response) {
