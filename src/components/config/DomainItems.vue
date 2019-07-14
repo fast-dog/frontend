@@ -2,9 +2,9 @@
     <div>
         <DataTable
                 v-bind:option="{
-                url:'users',
+                url:'config/domains',
                 help:true,
-                help_name:'user_items'}"></DataTable>
+                help_name:'domain_items'}"></DataTable>
     </div>
 </template>
 
@@ -16,21 +16,23 @@
     declare let $: any;
 
     @Component({
-        name: 'UsersItems',
+        name: 'DomainItems',
         components: {
             'DataTable': DataTable
         }
     })
 
-    export default class UsersItems extends Vue {
+    export default class DomainItems extends Vue {
 
-        @Prop({default: 'users_list_page'})
+        @Prop({default: 'domain_items_page'})
         page_route: string;
 
-        @Prop({default: 'user_profile'})
+        @Prop({default: 'domain_items'})
+        help_name: string;
+
+        @Prop({default: 'domain_item'})
         create_route: string;
     }
-
 </script>
 
 <style scoped>

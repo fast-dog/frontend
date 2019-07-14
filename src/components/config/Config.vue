@@ -6,13 +6,12 @@
     import {Component, Provide, Vue, Watch} from 'vue-property-decorator'
 
     @Component({
-        name: 'Users',
-        components: {}
+        name: 'Config',
+        components: { }
     })
 
-    export default class Users extends Vue {
+    export default class Config extends Vue {
     }
-
 </script>
 
 <style scoped>

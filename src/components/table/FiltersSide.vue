@@ -1,7 +1,7 @@
 <template>
     <div class="filters-component">
         <div v-if="$store.getters.getFilters.length > 0">
-            <h2 class="text-center">Поиск</h2>
+            <h2 class="text-center"> </h2>
             <div>
                 <div class="x_content">
                     <form class="form-horizontal">

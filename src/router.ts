@@ -11,6 +11,9 @@ import UsersMailingTemplateItems from '@/components/users/UsersMailingTemplateIt
 import UsersMailingTemplateItem from '@/components/users/UsersMailingTemplateItem.vue';
 import UsersMailingStatus from '@/components/users/UsersMailingStatus.vue';
 import UsersConfiguration from '@/components/users/UsersConfiguration.vue';
+import Config from '@/components/config/Config.vue';
+import DomainItems from '@/components/config/DomainItems.vue';
+import DomainItem from '@/components/config/DomainItem.vue';
 
 declare let window: any;
 
@@ -102,6 +105,27 @@ export default new Router({
                     path: 'configuration',
                     name: 'user_configuration',
                     component: UsersConfiguration
+                },
+            ]
+        },
+        {
+            path: '/configuration/',
+            component: Config,
+            children: [
+                {
+                    path: 'domain',
+                    name: 'domain_items',
+                    component: DomainItems
+                },
+                {
+                    path: 'domain/page/:page',
+                    name: 'domain_items_page',
+                    component: DomainItems
+                },
+                {
+                    path: 'domain/:id',
+                    name: 'domain_item',
+                    component: DomainItem
                 },
             ]
         }
