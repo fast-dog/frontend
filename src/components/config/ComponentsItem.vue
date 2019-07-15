@@ -183,7 +183,7 @@
                             action: function ($event) {
                                 me.$validator.validateAll().then((result) => {
                                     if (result) {
-                                        me.sendData({
+                                        Util.sendData({
                                             url: 'config/components/replicate',
                                             data: me.item,
                                             event: $event,
@@ -194,7 +194,7 @@
                                                     params: {id: response.data.id}
                                                 });
                                             }
-                                        })
+                                        }, me)
                                     }
                                 });
                             }
