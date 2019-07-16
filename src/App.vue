@@ -98,7 +98,7 @@
                     </button>
                 </div>
                 <div class="modal-content" style="background-color: transparent !important; border: none !important;">
-                    <iframe frameborder="0"  :src="getElfindeerRoute"
+                    <iframe frameborder="0"  :src="getElfindeerRoute()"
                             border="0"
                             height="620" width="920"
                             noresize="noresize"></iframe>
