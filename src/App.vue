@@ -97,7 +97,12 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-content" style="background-color: transparent !important; border: none !important;"></div>
+                <div class="modal-content" style="background-color: transparent !important; border: none !important;">
+                    <iframe frameborder="0"  :src="getElfindeerRoute"
+                            border="0"
+                            height="620" width="920"
+                            noresize="noresize"></iframe>
+                </div>
             </div>
         </div>
     </div>
@@ -189,6 +194,10 @@
 
         getLogo(): string {
             return window.location.protocol + '//' + window.location.hostname + '/vendor/fast_dog/frontend/img/logo.png';
+        }
+
+        getElfindeerRoute(): string {
+            return window.location.protocol + '//' + window.location.hostname + '/elfinder/popup/image';
         }
 
         isHome(): boolean {
