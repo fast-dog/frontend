@@ -103,10 +103,10 @@
                 :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
                 :help_string="(field.help != undefined) ? field.help : ''"
                 :placeholder="(field.placeholder)?field.placeholder:''"></code-editor-form-field>
-
         <sample-properties-table v-if="checkFieldTypeWithExpression(field,'sample-properties-table')"
                                  :item="model" :model_id="field.model_id"
                                  :model_class="field.model"></sample-properties-table>
+        <media :item="model" v-if="checkFieldTypeWithExpression(field,'media')"></media>
     </div>
 </template>
 
@@ -123,6 +123,7 @@
     import TextEditorFormField from '@/components/form/fields/TextEditorFormField.vue';
     import CodeEditorFormField from '@/components/form/fields/CodeEditorFormField.vue';
     import SamplePropertyTable from '@/components/form/components/SamplePropertyTable.vue';
+    import MediaItems from '@/components/form/components/MediaItems.vue';
 
     declare let $: any;
 
@@ -143,7 +144,7 @@
             // 'media-form-field': MediaFormField,
             'text-editor-form-field': TextEditorFormField,
             'date-form-field': DateFormField,
-            // 'media': MediaItems,
+            'media': MediaItems,
             // 'seo': Seo,
             'sample-properties-table': SamplePropertyTable,
             // 'catalog-item-properties': CatalogItemProperties,

@@ -90,6 +90,16 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
+        <div class="modal fade bs-example-modal-lg" v-if="$store.getters.getMainMenu.length > 0" id="elFinderModal" tabindex="-1" role="dialog" data-backdrop="false">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-header" style="display: none">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-content" style="background-color: transparent !important; border: none !important;"></div>
+            </div>
+        </div>
     </div>
 
 </template>

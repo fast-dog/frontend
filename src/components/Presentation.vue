@@ -14,12 +14,18 @@
 
     import {Component, Prop, Provide, Vue, Watch} from 'vue-property-decorator';
     import Tour from 'tour/dist/tour.js';
+    import {FdTranslator} from '@/FdTranslator';
 
     declare let $: any;
 
     @Component({
         name: 'Presentation',
-        components: {}
+        components: {},
+        filters: {
+            _: function (value) {
+                return FdTranslator._(value);
+            }
+        },
     })
 
     export default class Presentation extends Vue {
