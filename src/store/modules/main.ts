@@ -194,7 +194,7 @@ const mutations = {
         // state.ckeditor_config = config;
     },
     setCkeditorTemplates(state, payload) {
-      //  state.ckeditor_templates = payload.config;
+        //  state.ckeditor_templates = payload.config;
     },
     setUser(state, payload) {
         state.user = payload.user;
