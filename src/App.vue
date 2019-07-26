@@ -9,6 +9,7 @@
                                 <img :src="getLogo()" alt="..." class="img-thumbnail logo">
                             </a>
                         </div>
+<!--                        <a href="#" id="menu_toggle"><i class="fa fa-bars"></i></a>-->
                         <div class="clearfix"></div>
                         <br/>
                         <!-- sidebar menu -->
@@ -37,7 +38,8 @@
                              v-if="$store.getters.getBreadcrumbs.items.length > 0">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item" v-for="link in $store.getters.getBreadcrumbs.items">
-                                    <router-link :to="{path:link.url}" v-html="link.name" v-if="link.url !== false"></router-link>
+                                    <router-link :to="{path:link.url}" v-html="link.name"
+                                                 v-if="link.url !== false"></router-link>
                                     <strong v-if="link.url === false" v-html="link.name"></strong>
                                 </li>
                             </ol>
@@ -66,7 +68,8 @@
                     </a>
                     </div>
                     <div class="pull-right">
-                        Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                        Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com"
+                                                                    target="_blank">Colorlib</a>
                     </div>
                     <div class="clearfix"></div>
                 </footer>
@@ -90,15 +93,19 @@
                 </div><!-- /.modal-content -->
             </div><!-- /.modal-dialog -->
         </div><!-- /.modal -->
-        <div class="modal fade bs-example-modal-lg" v-if="$store.getters.getMainMenu.length > 0" id="elFinderModal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="modal fade bs-example-modal-lg" v-if="$store.getters.getMainMenu.length > 0" id="elFinderModal"
+             tabindex="-1" role="dialog" data-backdrop="false">
             <div class="modal-dialog modal-lg">
-                <div class="modal-header" style="display: none">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                <div>
+                    <button type="button" class="close" style="opacity: 1 !important;"
+                            data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: #ED5565; font-weight: 900">
+                            <i class="fa fa-close"></i>
+                        </span>
                     </button>
                 </div>
-                <div class="modal-content" style="background-color: transparent !important; border: none !important;">
-                    <iframe frameborder="0"  :src="getElfindeerRoute()"
+                <div style="background-color: transparent !important; border: none !important;">
+                    <iframe frameborder="0" :src="getElfindeerRoute()"
                             border="0"
                             height="620" width="920"
                             noresize="noresize"></iframe>
@@ -237,7 +244,6 @@
 
             $('.close-link').click(function () {
                 var $BOX_PANEL = $(this).closest('.x_panel');
-
                 $BOX_PANEL.remove();
             });
 
