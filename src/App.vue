@@ -9,7 +9,7 @@
                                 <img :src="getLogo()" alt="..." class="img-thumbnail logo">
                             </a>
                         </div>
-<!--                        <a href="#" id="menu_toggle"><i class="fa fa-bars"></i></a>-->
+                        <!--                        <a href="#" id="menu_toggle"><i class="fa fa-bars"></i></a>-->
                         <div class="clearfix"></div>
                         <br/>
                         <!-- sidebar menu -->
@@ -21,7 +21,8 @@
                 <!-- top navigation -->
                 <div class="top_nav">
                     <div class="nav_menu" style="padding-left: 30px">
-                        <div class="page-title animated fadeIn" v-if="$store.getters.getBreadcrumbs.page_title.length > 0">
+                        <div class="page-title animated fadeIn"
+                             v-if="$store.getters.getBreadcrumbs.page_title.length > 0">
                             <div class="title_left">
                                 <h3>{{$store.getters.getBreadcrumbs.page_title}}</h3>
                             </div>
@@ -46,9 +47,28 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="row" v-if="isHome()">
-                            <div class="col-md-12">
-                                <h2>is home</h2>
-                            </div>
+
+                            <template v-for="item in items">
+                                <div class="col-lg-4 col-md-6 _widget_ animated" :data-widget-id="item.id"
+                                     :class="getAnimatedClass()">
+                                    <div class="x_panel float-e-margins">
+                                        <div class="x_title " style="cursor: move">
+                                            <h5>{{item.name}}</h5>
+                                            <div class="ibox-tools">
+                                                <a class="close-link" v-on:click="deleteDesktopWidget(item)">
+                                                    <i class="fa fa-times"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="x_content wiget " style="height: 230px">
+                                            <desktop-graph v-if="item.type == 'Graph'"
+                                                           :alias=item.alias
+                                                           :name="'Количество'"
+                                                           :graph_items="item.items"></desktop-graph>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
                         </div>
                         <div class="row" v-if="!isHome()">
                             <div class="col-md-12 col-sm-12">
@@ -116,12 +136,14 @@
 
 </template>
 <script lang="ts">
-    import {Component, Vue, Watch} from 'vue-property-decorator';
+    import {Component, Provide, Vue, Watch} from 'vue-property-decorator';
     import SideMenu from '@/components/SideMenu.vue';
     import SplashScreen from '@/components/SplashScreen.vue';
     import {Util} from '@/Util';
-    //import {Component} from 'vue-property-decorator';
+    import {CrudService} from "@/services/CrudService";
+    import DesktopGraph from "@/components/desktop/DesktopGraph.vue";
 
+    require('jquery-ui/ui/widgets/sortable.js');
 
     declare let $: any;
 
@@ -170,11 +192,17 @@
 
     @Component({
         components: {
+            'desktop-graph': DesktopGraph,
             'SideMenu': SideMenu,
             'SplashScreen': SplashScreen
         }
     })
+
     export default class App extends Vue {
+
+        @Provide()
+        items: any = null;
+
 
         @Watch('$route.path')
         onChangeRouterPath(path, oldPath) {
@@ -214,6 +242,61 @@
         mounted(): void {
             let me = this;
 
+            CrudService.get(Util.httpRoot + 'desktop', {}).then((response: any) => {
+                this.$store.dispatch('setBreadcrumbs', {
+                    items: [{
+                        name: '', url: false
+                    }],
+                    page_title: 'Рабочий стол',
+                    splash_screen: true
+                });
+                if (response.data.success) {
+                    me.items = response.data.items;
+                    me.$nextTick(function () {
+                        $('.sortableList').sortable({
+                            cursor: 'move',
+                            items: 'div._widget_',
+                            handle: '.ibox-title',
+                            helper: function (e, ui) {
+                                return ui;
+                            },
+                            start: function (e, ui) {
+                            },
+                            stop: function (e, ui) {
+                                $(ui.item).css({opacity: 0});
+                                $(ui.item).animate({
+                                    opacity: 1,
+                                }, 800, function () {
+                                    $(ui.item).css('opacity', '');
+                                });
+                                let set = {};
+                                $('.sortableList > div._widget_').each(function (idx, element) {
+                                    set[$(element).data('id')] = idx;
+                                });
+                                Util.sendData({
+                                    url: 'desktop-sort',
+                                    data: {
+                                        set: set,
+                                    },
+                                    callback: function (response) {
+                                    }
+                                }, me)
+                            }
+                        });
+                    })
+                }
+                me.$store.commit('setNotification', {
+                    total: response.data.total,
+                    items: response.data.items,
+                    messages_total: response.data.messages_total,
+                    messages_items: response.data.messages_items,
+                });
+                // Util.initNotification(me.$parent, response);
+
+            }, (response) => {
+                Util.errorHandler(response);
+            });
+
             me.$store.dispatch('setBreadcrumbs', {
                 items: [{
                     name: 'Главная',
@@ -246,11 +329,25 @@
                 var $BOX_PANEL = $(this).closest('.x_panel');
                 $BOX_PANEL.remove();
             });
+        }
 
-            // $('[data-toggle="tooltip"]').tooltip({
-            //     container: 'body'
-            // });
+        deleteDesktopWidget(item: any): void {
+            Util.sendData({
+                url: 'desktop-delete',
+                data: {
+                    id: item.id,
+                },
+                callback: function (response) {
+                    $('*[data-widget-id="' + item.id + '"]').fadeOut('slow', function () {
+                        $(this).remove();
+                    });
+                }
+            }, this)
 
+        }
+
+        getAnimatedClass(): string {
+            return Util.getAnimation();
         }
     }
 </script>
