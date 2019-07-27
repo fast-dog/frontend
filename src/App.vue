@@ -47,7 +47,6 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="row" v-if="isHome()">
-
                             <template v-for="item in items">
                                 <div class="col-lg-4 col-md-6 _widget_ animated" :data-widget-id="item.id"
                                      :class="getAnimatedClass()">
@@ -216,6 +215,7 @@
                     }],
                     page_title: 'FastDog CMS'
                 })
+                me.loadDesktop();
             }
         }
 
@@ -239,9 +239,8 @@
             return this.$route.name == 'home';
         }
 
-        mounted(): void {
+        loadDesktop(): void {
             let me = this;
-
             CrudService.get(Util.httpRoot + 'desktop', {}).then((response: any) => {
                 this.$store.dispatch('setBreadcrumbs', {
                     items: [{
@@ -296,6 +295,13 @@
             }, (response) => {
                 Util.errorHandler(response);
             });
+        }
+
+        mounted(): void {
+            let me = this;
+            if (me.isHome()) {
+                me.loadDesktop();
+            }
 
             me.$store.dispatch('setBreadcrumbs', {
                 items: [{
