@@ -5,22 +5,21 @@
 <script lang="ts">
     import Vue from 'vue';
     import {Component, Provide, Watch} from 'vue-property-decorator'
-    import {Util} from '@/Util';
-    import {UsersService} from '@/services/UsersService';
-    import {FdTranslator} from '@/FdTranslator';
     import FormBuilder from '@/components/form/FormBuilder.vue';
-    import {ConfigService} from '@/services/ConfigService';
+    import {FdTranslator} from "@/FdTranslator";
+    import {Util} from "@/Util";
+    import {ConfigService} from "@/services/ConfigService";
 
     declare let $: any;
 
     @Component({
-        name: 'ComponentsItem',
+        name: 'EmailsItem',
         components: {
             'form-manager': FormBuilder
         }
     })
 
-    export default class ComponentsItem extends Vue {
+    export default class EmailsItem extends Vue {
 
         @Provide()
         id: number = null;
@@ -29,66 +28,26 @@
         load: boolean = false;
 
         @Provide()
-        item: any = {id: 0};
+        item: any = {
+            id: 0,
+            data: {
+                metadata: {}
+            },
+            properties: [],
+            related: [],
+            relatedChildren: []
+        };
 
-        @Watch('item.type')
-        onChangeItemType(n, o) {
-            if (n != o && o != undefined/**/) {
-                let me = this,
-                    parentIdFieldData: any = this.$store.getters.getSelectDataById('type'),
-                    templatesIdFieldData: any = this.$store.getters.getSelectDataById('template');
-                if (parentIdFieldData) {
-                    parentIdFieldData.items.forEach(function (element) {
-                        element.items.forEach(function (type) {
-                            if (type.id == n.id) {
-                                let templates = [];
-                                for (let key in type.templates) {
-                                    let tpm = [];
-                                    for (let id in type.templates[key].templates) {
-                                        tpm.push({
-                                            id: type.templates[key].templates[id].id,
-                                            name: type.templates[key].templates[id].name,
-                                        })
-                                    }
-                                    templates.push({
-                                        id: key,
-                                        name: key,
-                                        items: tpm
-                                    })
-                                }
-
-                                templatesIdFieldData.callback(templates);
-                            }
-                        })
-                    })
-                }
+        @Watch('item', {deep: true})
+        onChangeItem(newItem, oldItem) {
+            if (this.load) {
+                this.$store.dispatch('setRouteNotify', true);
             }
         }
-
-        @Watch('item.item_id')
-        onChangeItemId(n, o) {
-            let me = this;
-            switch (me.item.type) {
-                case 'data_source::pages':
-                    let elementSearch: any = this.$store.getters.getFormItemById('data_source_item_id');
-                    if (elementSearch) {
-                        me.$store.dispatch('updateSearchFieldFilter', {
-                            instance: elementSearch.instance(),
-                            filter: {
-                                id: n
-                            }
-                        });
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
 
         getItem(): void {
             let me = this;
-            ConfigService.getComponentItem(this.id).then((response: any) => {
+            ConfigService.getEmailItem(this.id).then((response: any) => {
                 if (response.data.success) {
                     me.prepareResponse(response);
                 } else {
@@ -114,16 +73,14 @@
                 items: response.data.breadcrumbs,
                 page_title: response.data.page_title
             });
-
-            me.item = response.data.items[0];// <-- Обновляемый объект
+            me.$set(me, 'item', response.data.items[0]);// <-- Обновляемый объект
 
             if (response.data.notifications) {
                 me.$store.dispatch('setNotifications', response.data.notifications);
             }
 
-
             me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
-                name: 'component-item',
+                name: 'domain-item',
                 help: response.data.form.help,
                 content: {
                     buttons: Util.buttons([
@@ -136,13 +93,24 @@
                                 me.$validator.validateAll().then((result) => {
                                     if (result) {
                                         Util.sendData({
-                                            url: me.item.id > 0 ? 'config/components/save' : 'config/components/add',
+                                            url: 'config/emails/save',
                                             data: me.item,
                                             event: $event,
                                             callback: function (response) {
                                                 if (response.data.success) {
-                                                    me.prepareResponse(response);
+                                                    if (me.item.id == 0) {
+                                                        me.item.id = response.data.items[0].id;
+                                                        me.$router.push({
+                                                            name: 'emails_item',
+                                                            params: {id: me.item.id}
+                                                        });
+                                                    }
+                                                    me.$set(me, 'item', {});
+                                                    me.$store.dispatch('clearForm');
+                                                    me.getItem();
                                                 }
+
+                                                // me.updateForm(response);
                                                 me.$store.dispatch('setRouteNotify', false);
                                             }
                                         }, me)
@@ -159,43 +127,19 @@
                                 me.$validator.validateAll().then((result) => {
                                     if (result) {
                                         Util.sendData({
-                                            url: me.item.id > 0 ? 'config/components/save' : 'config/components/add',
+                                            url: 'config/emails/save',
                                             data: me.item,
                                             event: $event,
                                             callback: function (response) {
                                                 me.$store.dispatch('setRouteNotify', false);
-                                                me.$router.push({name: 'component_items'});
+                                                me.$router.push({name: 'emails_items'});
                                             }
                                         }, me)
                                     }
                                 });
                             }
                         },
-                        {
-                            text: FdTranslator._('Сохранить копию'),
-                            icon: 'fa-copy',
-                            cls: 'btn-default btn-sm',
-                            id: 'replicate-btn',
-                            visible: false,
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url: 'config/components/replicate',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                me.$store.dispatch('setRouteNotify', false);
-                                                me.$router.push({
-                                                    name: 'component_item',
-                                                    params: {id: response.data.id}
-                                                });
-                                            }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
+
                         {
                             text: FdTranslator._('Обновить'),
                             icon: 'fa-repeat',
@@ -212,7 +156,6 @@
             });
 
             me.$nextTick(function () {
-                me.$set(me, 'load', true);// <-- флаг загрузки модели
                 $('.dropdown-toggle').dropdown();
                 $('.tooltip-container').tooltip({
                     selector: '[data-toggle=tooltip]',
@@ -231,7 +174,6 @@
             me.$store.dispatch('clearForm');
             me.getItem();
         }
-
     }
 </script>
 

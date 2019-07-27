@@ -16,6 +16,8 @@ import DomainItems from '@/components/config/DomainItems.vue';
 import DomainItem from '@/components/config/DomainItem.vue';
 import ComponentsItems from '@/components/config/ComponentsItems.vue';
 import ComponentsItem from '@/components/config/ComponentsItem.vue';
+import EmailsItems from "@/components/config/EmailsItems.vue";
+import EmailsItem from "@/components/config/EmailsItem.vue";
 
 declare let window: any;
 
@@ -143,6 +145,21 @@ export default new Router({
                     path: 'components/:id',
                     name: 'component_item',
                     component: ComponentsItem
+                },
+                {
+                    path: 'emails',
+                    name: 'emails_items',
+                    component: EmailsItems
+                },
+                {
+                    path: 'emails/page/:page',
+                    name: 'emails_items_page',
+                    component: EmailsItems
+                },
+                {
+                    path: 'emails/:id',
+                    name: 'emails_item',
+                    component: EmailsItem
                 },
             ]
         }
