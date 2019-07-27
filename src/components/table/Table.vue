@@ -6,6 +6,8 @@
                 <div class="control-btn">
                     <button v-for="button in actionButtons" class="btn btn-responsive"
                             v-bind:class="button.cls"
+                            v-bind:data-disabled_selection="button.disabled_selection"
+
                             data-style="zoom-in"
                             :title="button.text"
                             data-placement="bottom"
@@ -15,7 +17,8 @@
                         <i class="fa" v-bind:class="button.icon"></i>
                         {{button.text}}
                     </button>
-                    <button class="btn btn-sm btn-success pull-right btn-responsive" v-if="option.help === true" type="button"
+                    <button class="btn btn-sm btn-success pull-right btn-responsive" v-if="option.help === true"
+                            type="button"
                             v-on:click="helpStatic()">
                         <i class="fa fa-life-bouy"></i>
                     </button>
@@ -101,7 +104,8 @@
                                             <input class="form-check-input" type="checkbox"
                                                    :checked="item.checked" :id="'record-'+item.id"
                                                    v-on:change="checkItem(item,$event)">
-                                            <label class="form-check-label" style="cursor:default;" :for="'record-'+item.id"></label>
+                                            <label class="form-check-label" style="cursor:default;"
+                                                   :for="'record-'+item.id"></label>
                                         </div>
                                     </td>
                                     <td v-for="column in $store.getters.getTableCols"
@@ -401,6 +405,16 @@
             }
         }
 
+        @Watch('$store.getters.getSelectedItems')
+        onChangeTableColsSelected(newCols, oldCols) {
+            let me = this;
+            if (me.$store.getters.getSelectedItems.length == 0) {
+                $('*[data-disabled_selection=Y]').addClass('disabled');
+            } else {
+                $('*[data-disabled_selection=Y]').removeClass('disabled');
+            }
+        }
+
         mounted(): void {
             let me = this,
                 parent: any = me.$parent;
@@ -440,8 +454,9 @@
                     {
                         text: FdTranslator._('Изменить'),
                         icon: 'fa-pencil-square-o',
-                        cls: 'btn-default btn-sm',
+                        cls: 'btn-default btn-sm disabled',
                         visible: (parent.create_route) ? true : false,
+                        disabled_selection: 'Y',
                         action: function ($event) {
                             let ids = me.$store.getters.getSelectedItems;
                             switch (ids.length) {
@@ -461,7 +476,8 @@
                         text: FdTranslator._('В корзину'),
                         icon: 'fa-trash',
                         visible: true,
-                        cls: 'btn-default btn-sm',
+                        disabled_selection: 'Y',
+                        cls: 'btn-default btn-sm disabled',
                         action: function ($event) {
                             me.deleteItems($event);
                         }
@@ -480,8 +496,9 @@
                     {
                         text: FdTranslator._('Удалить'),
                         icon: 'fa-trash-o',
-                        cls: 'btn-danger btn-sm animated fadeIn',
+                        cls: 'btn-danger btn-sm animated fadeIn disabled',
                         visible: true,
+                        disabled_selection: 'Y',
                         action: function ($event) {
                             let ids = [],
                                 selected = me.$store.getters.getSelectedItems;
