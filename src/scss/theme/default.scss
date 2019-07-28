@@ -234,9 +234,9 @@ ul.bar_tabs > li.active {
     height: 20px;
     position: absolute !important;
     right: 10px;
-    top: 0;
+    top: 2px;
 
-    i {
+    &:hover {
       color: $blue !important;
     }
   }
