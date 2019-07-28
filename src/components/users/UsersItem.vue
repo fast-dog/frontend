@@ -49,46 +49,27 @@
 
                 me.$set(me, 'item', response.data.items[0]);// <-- Обновляемый объект
 
+                let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
+
                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
                     name: 'user-item',
                     content: {
                         buttons: Util.buttons([
-                            {
-                                text: FdTranslator._('Сохранить'),
-                                icon: 'fa-pencil-square-o',
-                                cls: 'btn-success',
-                                action: function ($event) {
-                                    me.sendData({
-                                        url: me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url,
-                                        data: me.item,
-                                        event: $event,
-                                        callback: function (response) {
-                                            if (response.success) {
-
-                                            }
-                                        }
-                                    })
-                                }
-                            },
-                            {
-                                text: FdTranslator._('Сохранить и закрыть'),
-                                icon: 'fa-check',
-                                cls: 'btn-primary',
-                                action: function ($event) {
-                                    me.sendData({
-                                        url: me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url,
-                                        data: me.item,
-                                        event: $event,
-                                        callback: function (response) {
-                                            window.history.back()
-                                        }
-                                    })
-                                }
-                            },
-                            {
-                                text: FdTranslator._('Обновить'),
-                                icon: 'fa-refresh',
-                                action: function ($event) {
+                            Util.buttonSave({
+                                me: me,
+                                url: url,
+                                item: me.item,
+                                callback: null,
+                                route_name: ''
+                            }),
+                            Util.buttonSaveAndClose({
+                                me: me,
+                                url: url,
+                                item: me.item,
+                                route_name: 'users'
+                            }),
+                            Util.buttonUpdate({
+                                callback: function () {
                                     me.$store.dispatch('setBreadcrumbs', {
                                         items: []
                                     });
@@ -96,7 +77,8 @@
                                     me.$store.dispatch('clearForm');
                                     me.getUser();
                                 }
-                            }
+                            }),
+                            Util.buttonDelete('users/update', me.item)
                         ]),
                         tabs: response.data.form.tabs
                     }

@@ -387,6 +387,124 @@ export class Util extends Vue {
         }
     }
 
+    public static buttonSave(params: {
+        me: Vue,
+        item: any,
+        url: string,
+        callback: any,
+        route_name: string
+    }): any {
+        return {
+            text: FdTranslator._('Сохранить'),
+            icon: 'fa-pencil-square-o',
+            cls: 'btn-primary btn-sm',
+            id: 'save-content-btn',
+            action: function ($event) {
+                params.me.$validator.validateAll().then((result) => {
+                    if (result) {
+                        Util.sendData({
+                            url: params.url,
+                            data: params.item,
+                            event: $event,
+                            callback: function (response) {
+                                if (response.data.success) {
+                                    if (params.item.id == 0) {
+                                        params.item.id = response.data.items[0].id;
+                                        if (params.route_name !== '') {
+                                            params.me.$router.push({
+                                                name: params.route_name,
+                                                params: {id: params.item.id}
+                                            });
+                                        }
+                                    }
+                                    if (params.callback) {
+                                        params.me.$set(params.me, 'item', {});
+                                        params.me.$store.dispatch('clearForm');
+                                        params.callback(response)
+                                    }
+                                }
+                                params.me.$store.dispatch('setRouteNotify', false);
+                            }
+                        }, params.me)
+                    }
+                });
+            }
+        }
+    }
+
+    public static buttonSaveAndClose(params: {
+        me: Vue,
+        item: any,
+        url: string,
+        route_name: string
+    }): any {
+        return {
+            text: FdTranslator._('Сохранить и закрыть'),
+            icon: 'fa-check',
+            cls: 'btn-default btn-sm',
+            id: 'save-and-close-btn',
+            action: function ($event) {
+                params.me.$validator.validateAll().then((result) => {
+                    if (result) {
+                        Util.sendData({
+                            url: params.url,
+                            data: params.item,
+                            event: $event,
+                            callback: function (response) {
+                                params.me.$store.dispatch('setRouteNotify', false);
+                                params.me.$router.push({name: params.route_name});
+                            }
+                        }, params.me)
+                    }
+                });
+            }
+        }
+    }
+
+    public static buttonUpdate(params: {
+        callback: any
+    }): any {
+        return {
+            text: FdTranslator._('Обновить'),
+            icon: 'fa-repeat',
+            cls: 'btn-sm btn-default',
+            visible: true,
+            id: 'update-content-btn',
+            action: function ($event) {
+                params.callback();
+            }
+        }
+    }
+
+    public static buttonDelete(url, item): any {
+        return {
+            text: FdTranslator._('В корзину'),
+            icon: 'fa-trash',
+            visible: item.id > 0,
+            cls: 'btn-danger btn-sm',
+            action: function ($event) {
+                Util.deleteDialog({
+                    title: '', text: '',
+                    callback: function () {
+                        CrudService.post(Util.httpRoot + url, {
+                            id: item.id,
+                            field: 'deleted',
+                            value: 1
+                        }).then((response: any) => {
+                            if (response.data.success) {
+                                window.history.back()
+                            } else {
+                                Util.errorHandler(response)
+                            }
+                        }, (response) => {
+                            Util.errorHandler(response)
+                        });
+                    }
+                })
+            }
+        };
+    }
+
     public static buttons(data: any /*[{
         icon?: string,
         text: string,

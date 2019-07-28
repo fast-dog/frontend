@@ -64,80 +64,41 @@
                 me.$store.dispatch('setNotifications', response.data.notifications);
             }
 
+            let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
 
             me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
                 name: 'mailing-template-item',
                 help: response.data.form.help,
                 content: {
                     buttons: Util.buttons([
-                        {
-                            text: FdTranslator._('Сохранить'),
-                            icon: 'fa-pencil-square-o',
-                            cls: 'btn-primary btn-sm',
-                            id: 'save-content-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url: 'users/mailing/template/save',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                me.$store.dispatch('setRouteNotify', false);
-                                                if (!me.item.id) {
-                                                    me.$router.push({
-                                                        name: 'mailing_templates_item',
-                                                        params: {id: response.data.items[0].id}
-                                                    });
-                                                    me.id = response.data.items[0].id;
-                                                }
-                                                me.$set(me, 'item', {});
-                                                me.$store.dispatch('clearForm');
-                                                me.getItem();
-                                            }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
-                        {
-                            text: FdTranslator._('Сохранить и закрыть'),
-                            icon: 'fa-check',
-                            cls: 'btn-default btn-sm',
-                            id: 'save-and-close-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url: 'users/mailing/template/save',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                me.$store.dispatch('setRouteNotify', false);
-                                                me.$router.push({name: 'mailing'});
-                                            }
-                                        },me)
-                                    }
-                                });
-                            }
-                        },
-                        {
-                            text: FdTranslator._('Обновить'),
-                            icon: 'fa-repeat',
-                            cls: 'btn-sm btn-default',
-                            visible: true,
-                            id: 'update-content-btn',
-                            action: function ($event) {
+                        Util.buttonSave({
+                            me: me,
+                            url: url,
+                            item: me.item,
+                            callback: function (response) {
+                                me.getItem();
+                            },
+                            route_name: 'mailing_templates_item'
+                        }),
+                        Util.buttonSaveAndClose({
+                            me: me,
+                            url: url,
+                            item: me.item,
+                            route_name: 'mailing_templates_items'
+                        }),
+                        Util.buttonUpdate({
+                            callback: function () {
                                 me.update();
                             }
-                        }
+                        }),
+                        Util.buttonDelete('user/mailing/template/update', me.item)
                     ]),
                     tabs: response.data.form.tabs
                 }
             });
 
             me.$nextTick(function () {
-                me.$set(me, 'load', true);// <-- флаг загрузки модели
+
                 $('.dropdown-toggle').dropdown();
                 $('.tooltip-container').tooltip({
                     selector: '[data-toggle=tooltip]',

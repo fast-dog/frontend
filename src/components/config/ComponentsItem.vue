@@ -120,57 +120,30 @@
             if (response.data.notifications) {
                 me.$store.dispatch('setNotifications', response.data.notifications);
             }
-
+            let url = me.item.id > 0 ? response.data.form.create_url : response.data.form.update_url;
 
             me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
                 name: 'component-item',
                 help: response.data.form.help,
                 content: {
                     buttons: Util.buttons([
-                        {
-                            text: FdTranslator._('Сохранить'),
-                            icon: 'fa-pencil-square-o',
-                            cls: 'btn-primary btn-sm',
-                            id: 'save-content-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url: me.item.id > 0 ? 'config/components/save' : 'config/components/add',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                if (response.data.success) {
-                                                    me.prepareResponse(response);
-                                                }
-                                                me.$store.dispatch('setRouteNotify', false);
-                                            }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
-                        {
-                            text: FdTranslator._('Сохранить и закрыть'),
-                            icon: 'fa-check',
-                            cls: 'btn-default btn-sm',
-                            id: 'save-and-close-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url: me.item.id > 0 ? 'config/components/save' : 'config/components/add',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                me.$store.dispatch('setRouteNotify', false);
-                                                me.$router.push({name: 'component_items'});
-                                            }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
+                        Util.buttonSave({
+                            me: me,
+                            url: url,
+                            item: me.item,
+                            callback: function (response) {
+                                if (response.data.success) {
+                                    me.prepareResponse(response);
+                                }
+                            },
+                            route_name: ''
+                        }),
+                        Util.buttonSaveAndClose({
+                            me: me,
+                            url: url,
+                            item: me.item,
+                            route_name: 'component_items'
+                        }),
                         {
                             text: FdTranslator._('Сохранить копию'),
                             icon: 'fa-copy',
@@ -196,16 +169,12 @@
                                 });
                             }
                         },
-                        {
-                            text: FdTranslator._('Обновить'),
-                            icon: 'fa-repeat',
-                            cls: 'btn-sm btn-default',
-                            visible: true,
-                            id: 'update-content-btn',
-                            action: function ($event) {
+                        Util.buttonUpdate({
+                            callback: function () {
                                 me.update();
                             }
-                        }
+                        }),
+                        Util.buttonDelete('config/components/update', me.item)
                     ]),
                     tabs: response.data.form.tabs
                 }

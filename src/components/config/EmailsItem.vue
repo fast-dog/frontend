@@ -68,7 +68,8 @@
         }
 
         prepareResponse(response: any): void {
-            let me = this;
+            let me = this,
+                url = me.item.id > 0 ? response.data.form.create_url : response.data.form.update_url;
             me.$store.dispatch('setBreadcrumbs', {
                 items: response.data.breadcrumbs,
                 page_title: response.data.page_title
@@ -84,72 +85,27 @@
                 help: response.data.form.help,
                 content: {
                     buttons: Util.buttons([
-                        {
-                            text: FdTranslator._('Сохранить'),
-                            icon: 'fa-pencil-square-o',
-                            cls: 'btn-primary btn-sm',
-                            id: 'save-content-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url: 'config/emails/save',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                if (response.data.success) {
-                                                    if (me.item.id == 0) {
-                                                        me.item.id = response.data.items[0].id;
-                                                        me.$router.push({
-                                                            name: 'emails_item',
-                                                            params: {id: me.item.id}
-                                                        });
-                                                    }
-                                                    me.$set(me, 'item', {});
-                                                    me.$store.dispatch('clearForm');
-                                                    me.getItem();
-                                                }
-
-                                                // me.updateForm(response);
-                                                me.$store.dispatch('setRouteNotify', false);
-                                            }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
-                        {
-                            text: FdTranslator._('Сохранить и закрыть'),
-                            icon: 'fa-check',
-                            cls: 'btn-default btn-sm',
-                            id: 'save-and-close-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url: 'config/emails/save',
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                me.$store.dispatch('setRouteNotify', false);
-                                                me.$router.push({name: 'emails_items'});
-                                            }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
-
-                        {
-                            text: FdTranslator._('Обновить'),
-                            icon: 'fa-repeat',
-                            cls: 'btn-sm btn-default',
-                            visible: true,
-                            id: 'update-content-btn',
-                            action: function ($event) {
+                        Util.buttonSave({
+                            me: me,
+                            url: url,// 'config/emails/save',
+                            item: me.item,
+                            callback: function () {
+                                me.getItem();
+                            },
+                            route_name: 'emails_item'
+                        }),
+                        Util.buttonSaveAndClose({
+                            me: me,
+                            url: url,
+                            item: me.item,
+                            route_name: 'emails_items'
+                        }),
+                        Util.buttonUpdate({
+                            callback: function () {
                                 me.update();
                             }
-                        }
+                        }),
+                        Util.buttonDelete('config/emails/update', me.item)
                     ]),
                     tabs: response.data.form.tabs
                 }

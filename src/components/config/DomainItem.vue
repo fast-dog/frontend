@@ -53,7 +53,8 @@
         }
 
         prepareResponse(response: any): void {
-            let me = this;
+            let me = this,
+                url = me.item.id > 0 ? response.data.form.create_url : response.data.form.update_url;
             me.$store.dispatch('setBreadcrumbs', {
                 items: response.data.breadcrumbs,
                 page_title: response.data.page_title
@@ -68,60 +69,25 @@
                 name: 'domain-item',
                 help: response.data.form.help,
                 content: {
-                    buttons: Util.buttons([{
-                        text: FdTranslator._('Сохранить'),
-                        icon: 'fa-pencil-square-o',
-                        cls: 'btn-primary btn-sm',
-                        id: 'save-content-btn',
-                        action: function ($event) {
-                            me.$validator.validateAll().then((result) => {
-                                if (result) {
-                                    Util.sendData({
-                                        url: me.item.id > 0 ? response.data.form.create_url :
-                                            response.data.form.update_url,
-                                        data: me.item,
-                                        event: $event,
-                                        callback: function (response) {
-                                            // me.updateForm(response);
-                                            me.$store.dispatch('setRouteNotify', false);
-                                        }
-                                    }, me)
-                                }
-                            });
-                        }
-                    },
-                        {
-                            text: FdTranslator._('Сохранить и закрыть'),
-                            icon: 'fa-check',
-                            cls: 'btn-default btn-sm',
-                            id: 'save-and-close-btn',
-                            action: function ($event) {
-                                me.$validator.validateAll().then((result) => {
-                                    if (result) {
-                                        Util.sendData({
-                                            url:  me.item.id > 0 ? response.data.form.create_url :
-                                                response.data.form.update_url,
-                                            data: me.item,
-                                            event: $event,
-                                            callback: function (response) {
-                                                me.$store.dispatch('setRouteNotify', false);
-                                                me.$router.push({name: 'domain_items'});
-                                            }
-                                        }, me)
-                                    }
-                                });
-                            }
-                        },
-                        {
-                            text: FdTranslator._('Обновить'),
-                            icon: 'fa-repeat',
-                            cls: 'btn-sm btn-default',
-                            visible: true,
-                            id: 'update-content-btn',
-                            action: function ($event) {
+                    buttons: Util.buttons([
+                        Util.buttonSave({
+                            me: me,
+                            url: url,
+                            item: me.item,
+                            callback: null,
+                            route_name: ''
+                        }),
+                        Util.buttonSaveAndClose({
+                            me: me,
+                            url: url,
+                            item: me.item,
+                            route_name: 'domain_items'
+                        }),
+                        Util.buttonUpdate({
+                            callback: function () {
                                 me.update();
                             }
-                        }
+                        })
                     ]),
                     tabs: response.data.form.tabs
                 }
