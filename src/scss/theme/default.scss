@@ -218,3 +218,28 @@ ul.bar_tabs > li.active {
   color: #8B91A0;
 }
 
+
+.side-menu li {
+  position: relative;
+
+  &:hover {
+    > .new_object {
+      display: block;
+    }
+  }
+
+  .new_object {
+    display: none;
+    width: 20px;
+    height: 20px;
+    position: absolute !important;
+    right: 10px;
+    top: 0;
+
+    i {
+      color: $blue !important;
+    }
+  }
+}
+
+

@@ -2,7 +2,7 @@
     <div>
         <DataTable
                 v-bind:option="{
-                url:'config/emails',
+                url:'config/localization',
                 help:true,
                 help_name:'domain_items'}"></DataTable>
     </div>
@@ -15,21 +15,21 @@
     declare let $: any;
 
     @Component({
-        name: 'EmailsItems',
+        name: 'LocalizationItems',
         components: {
             'DataTable': DataTable
         }
     })
 
-    export default class EmailsItems extends Vue {
+    export default class LocalizationItems extends Vue {
 
-        @Prop({default: 'emails_items_page'})
+        @Prop({default: 'localization_items_page'})
         page_route: string;
 
-        @Prop({default: 'emails_items'})
+        @Prop({default: 'localization_items'})
         help_name: string;
 
-        @Prop({default: 'emails_item'})
+        @Prop({default: 'localization_item'})
         create_route: string;
 
     }

@@ -18,6 +18,7 @@ import ComponentsItems from '@/components/config/ComponentsItems.vue';
 import ComponentsItem from '@/components/config/ComponentsItem.vue';
 import EmailsItems from "@/components/config/EmailsItems.vue";
 import EmailsItem from "@/components/config/EmailsItem.vue";
+import LocalizationItems from "@/components/config/LocalizationItems.vue";
 
 declare let window: any;
 
@@ -94,7 +95,6 @@ export default new Router({
                     name: 'mailing_templates_items',
                     component: UsersMailingTemplateItems
                 },
-
                 {
                     path: 'mailing-templates/:id',
                     name: 'mailing_templates_item',
@@ -161,6 +161,21 @@ export default new Router({
                     name: 'emails_item',
                     component: EmailsItem
                 },
+                {
+                    path: 'localization',
+                    name: 'localization_items',
+                    component: LocalizationItems
+                },
+                {
+                    path: 'localization/page/:page',
+                    name: 'localization_items_page',
+                    component: LocalizationItems
+                },
+                // {
+                //     path: 'localization/:id',
+                //     name: 'localization_item',
+                //     component: LocalizationItem
+                // },
             ]
         }
     ]

@@ -16,6 +16,10 @@
                             <router-link :to="child.route">
                                 <i :class="'fa ' + child.icon" v-if="child.icon"></i> {{child.name}}
                             </router-link>
+                            <router-link v-if="child.new"
+                                         :to="child.new" :class="'new_object'">
+                                <i class="fa fa-plus-circle"></i>
+                            </router-link>
                         </li>
                     </ul>
                 </li>
