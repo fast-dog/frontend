@@ -27,7 +27,7 @@
             <div class="x_content" style="padding: 0 !important;">
                 <div class="table-responsive "
                      :class="{'col-md-9':$store.getters.getExternalFilters}">
-                    <table class="table table-striped table-hover"
+                    <table class="table table-striped table-hover _table_"
                            v-bind:class="{'opacity-03':process}">
                         <slot name="thead">
                             <thead>
@@ -108,7 +108,7 @@
                                                    :for="'record-'+item.id"></label>
                                         </div>
                                     </td>
-                                    <td v-for="column in $store.getters.getTableCols"
+                                    <td v-for="(column,index) in $store.getters.getTableCols"
                                         :class="column.class"
                                         :style="{width: (column.width) ? column.width + 'px' : 'auto'}">
                                       <span class="_link-block">
@@ -130,6 +130,24 @@
                                              v-on:click.prevent="showModal($event,item)">
                                           </a>
                                       </span>
+                                        <div class="hidden _action_block_" v-if="column.action">
+                                            <span class="label label-default" v-if="column.action.edit">
+                                               <router-link v-if="column.link != null"
+                                                            :to="{name:column.link,params:{id:item.id}}">
+                                                   {{'Редактировать'|_}}
+                                               </router-link>
+                                            </span>
+                                            <span class="label label-default" v-if="column.action.replicate">
+                                                 <a href="#" v-on:click.prevent="replicateItem($event,item.id)">
+                                                   {{'Копировать'|_}}
+                                                 </a>
+                                            </span>
+                                            <span class="label label-danger" v-if="column.action.delete">
+                                              <a href="#" v-on:click.prevent="deleteItems($event,item.id)">
+                                                  {{'Удалить'|_}}
+                                              </a>
+                                            </span>
+                                        </div>
                                     </td>
                                 </tr>
                             </slot>
@@ -781,18 +799,33 @@
             this.loadPage(this.tableData, this.tableCallback);
         }
 
-        deleteItems($event: Event): void {
+        replicateItem($event: Event, id?: any): void {
+            let me = this;
+
+            me.itemUpdate({
+                id: id,
+                field: 'replicate',
+                value: 1
+            });
+        }
+
+        deleteItems($event: Event, id?: any): void {
             let ids = [], me = this,
                 selected = me.$store.getters.getSelectedItems;
-            if (selected.length) {
-                selected.forEach(function (element) {
-                    ids.push(element.id);
-                });
-                me.itemUpdate({
-                    ids: ids,
-                    field: 'trash',
-                    value: 1
-                });
+            if (selected.length || id) {
+                Util.deleteDialog({
+                    title: '', text: '',
+                    callback: function () {
+                        selected.forEach(function (element) {
+                            ids.push(element.id);
+                        });
+                        me.itemUpdate({
+                            ids: (ids.length) ? ids : [id],
+                            field: 'deleted',
+                            value: 1
+                        });
+                    }
+                })
             } else {
                 Util.showWarning(FdTranslator._('Не выбраны записи в таблице'));
             }

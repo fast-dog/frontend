@@ -54,5 +54,46 @@
 //    height: 60px !important;
 //  }
 //}
+._table_ td {
+  height: 48px;
+  padding: 3px !important;
+}
 
+._table_ td span {
+  line-height: 20px !important;
+}
 
+td:hover > ._action_block_ {
+  display: block !important;
+}
+
+._action_block_ {
+  //font-size: 95%;
+  display: inline-block;
+  width: 100%;
+
+  span {
+    margin-top: 5px;
+    margin-right: 4px;
+    font-size: 12px;
+    //a {
+    //  color: $text-color;
+    //}
+    &.label-default {
+      // background-color: #777;
+      a {
+        color: $text-color;
+      }
+    }
+
+    &.label-danger {
+      a {
+        color: #fff;
+      }
+    }
+
+    &:hover {
+      box-shadow: $md-shadow-main;
+    }
+  }
+}
