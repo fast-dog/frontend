@@ -91,7 +91,7 @@
                                 me.update();
                             }
                         }),
-                        Util.buttonDelete('user/mailing/template/update', me.item)
+                        Util.buttonDelete('users/mailing/templates/update', me.item)
                     ]),
                     tabs: response.data.form.tabs
                 }
