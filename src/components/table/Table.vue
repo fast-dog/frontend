@@ -134,17 +134,18 @@
                                             <span class="label label-default" v-if="column.action.edit">
                                                <router-link v-if="column.link != null"
                                                             :to="{name:column.link,params:{id:item.id}}">
+                                                   <i class="fa fa-edit"></i>
                                                    {{'Редактировать'|_}}
                                                </router-link>
                                             </span>
                                             <span class="label label-default" v-if="column.action.replicate">
                                                  <a href="#" v-on:click.prevent="replicateItem($event,item.id)">
-                                                   {{'Копировать'|_}}
+                                                   <i class="fa fa-copy"></i> {{'Копировать'|_}}
                                                  </a>
                                             </span>
-                                            <span class="label label-danger" v-if="column.action.delete">
+                                            <span class="label label-danger" v-if="column.action.delete && access.delete">
                                               <a href="#" v-on:click.prevent="deleteItems($event,item.id)">
-                                                  {{'Удалить'|_}}
+                                                  <i class="fa fa-trash"></i> {{'Удалить'|_}}
                                               </a>
                                             </span>
                                         </div>
@@ -654,6 +655,11 @@
                                     value: me.access.delete
                                 });
                                 me.buttonCmd({
+                                    icon: 'fa-trash-o',
+                                    field: 'visible',
+                                    value: me.access.delete
+                                });
+                                me.buttonCmd({
                                     icon: 'fa-plus',
                                     field: 'visible',
                                     value: me.access.create
@@ -800,12 +806,32 @@
         }
 
         replicateItem($event: Event, id?: any): void {
-            let me = this;
+            let me = this,
+                parent: any = me.$parent;
 
-            me.itemUpdate({
+            CrudService.post(me.url + '/update', {
                 id: id,
                 field: 'replicate',
                 value: 1
+            }).then((response: any) => {
+                if (response.data.success) {
+                    console.log(parent.create_route)
+                    if (response.data.items.length) {
+                        me.$router.push({
+                            name: parent.create_route, params: {
+                                id: response.data.items[0].id
+                            }
+                        });
+                    } else {
+                        Util.showSuccess('');
+                        me.update();
+                    }
+                } else {
+                    Util.errorHandler(response);
+                    me.update();
+                }
+            }, (response) => {
+                Util.errorHandler(response)
             });
         }
 
