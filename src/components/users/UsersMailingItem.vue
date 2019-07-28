@@ -113,7 +113,7 @@
                                 me.update();
                             }
                         }),
-                        Util.buttonDelete('user/mailing/update', me.item)
+                        Util.buttonDelete('users/mailing/update', me.item)
                     ]),
                     tabs: response.data.form.tabs
                 }
