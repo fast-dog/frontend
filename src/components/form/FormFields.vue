@@ -107,6 +107,16 @@
                                  :item="model" :model_id="field.model_id"
                                  :model_class="field.model"></sample-properties-table>
         <media :item="model" v-if="checkFieldTypeWithExpression(field,'media')"></media>
+        <text-form-alias
+                v-if="checkFieldTypeWithExpression(field,'text-form-alias')"
+                :item="model"
+                :required="(field.required != undefined) ? field.required : false"
+                :validate="field.validate"
+                :label="field.label"
+                :placeholder="(field.placeholder  != undefined )?field.placeholder:''"
+                :form_group="field.form_group"
+                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'">
+        </text-form-alias>
     </div>
 </template>
 
@@ -124,6 +134,7 @@
     import CodeEditorFormField from '@/components/form/fields/CodeEditorFormField.vue';
     import SamplePropertyTable from '@/components/form/components/SamplePropertyTable.vue';
     import MediaItems from '@/components/form/components/MediaItems.vue';
+    import TextAliasFormField from "@/components/form/fields/TextAliasFormField.vue";
 
     declare let $: any;
 
@@ -137,7 +148,7 @@
         components: {
             'address-form-field': AddressFormField,
             'text-form-field': TextFormField,
-            // 'text-form-alias': TextAliasFormField,
+            'text-form-alias': TextAliasFormField,
             'select-form-field': SelectFormField,
             'code-editor-form-field': CodeEditorFormField,
             // 'search-form-field': SearchFormField,

@@ -111,7 +111,18 @@
                                     <td v-for="(column,index) in $store.getters.getTableCols"
                                         :class="column.class"
                                         :style="{width: (column.width) ? column.width + 'px' : 'auto'}">
-                                      <span class="_link-block">
+                                        <span v-if="column.domain && item.suffix">
+                                            &nbsp;
+                                            <i class="fa fa-globe" v-if="item.site_id == '000' && item.suffix == null"
+                                               data-toggle="tooltip"
+                                               data-placement="top" title="Общий доступ"></i>
+                                            <i class="fa fa-globe" v-if="item.suffix" data-toggle="tooltip"
+                                               data-placement="top"
+                                               v-bind:title="'#'+item.suffix.code +' '+item.suffix.text.name"
+                                               v-bind:style="{color: '#' + item.suffix.color }"></i>
+                                            &nbsp;
+                                        </span>
+                                        <span class="_link-block">
                                           <router-link
                                                   v-if="column.link != null"
                                                   :to="{name:column.link,params:{id:item.id}}"
@@ -143,7 +154,8 @@
                                                    <i class="fa fa-copy"></i> {{'Копировать'|_}}
                                                  </a>
                                             </span>
-                                            <span class="label label-danger" v-if="column.action.delete && access.delete">
+                                            <span class="label label-danger"
+                                                  v-if="column.action.delete && access.delete">
                                               <a href="#" v-on:click.prevent="deleteItems($event,item.id)">
                                                   <i class="fa fa-trash"></i> {{'Удалить'|_}}
                                               </a>
