@@ -5,34 +5,47 @@
 <script lang="ts">
     import Vue from 'vue';
     import {Component, Provide, Watch} from 'vue-property-decorator'
-    import {Util} from '@/Util';
-    import {UsersService} from '@/services/UsersService';
-    import {FdTranslator} from '@/FdTranslator';
     import FormBuilder from '@/components/form/FormBuilder.vue';
-    import {ConfigService} from '@/services/ConfigService';
+    import {Util} from "@/Util";
+    import {ConfigService} from "@/services/ConfigService";
 
     declare let $: any;
 
     @Component({
-        name: 'DomainItem',
+        name: 'HelpItem',
         components: {
             'form-manager': FormBuilder
         }
     })
 
-    export default class DomainItem extends Vue {
-
+    export default class HelpItem extends Vue {
         @Provide()
         id: number = null;
 
         @Provide()
+        load: boolean = false;
+
+        @Provide()
         item: any = {
-            id: 0
+            id: 0,
+            data: {
+                metadata: {}
+            },
+            properties: [],
+            related: [],
+            relatedChildren: []
         };
+
+        @Watch('item', {deep: true})
+        onChangeItem(newItem, oldItem) {
+            if (this.load) {
+                this.$store.dispatch('setRouteNotify', true);
+            }
+        }
 
         getItem(): void {
             let me = this;
-            ConfigService.getItem(this.id).then((response: any) => {
+            ConfigService.getHelpItem(this.id).then((response: any) => {
                 if (response.data.success) {
                     me.prepareResponse(response);
                 } else {
@@ -58,7 +71,6 @@
                 items: response.data.breadcrumbs,
                 page_title: response.data.page_title
             });
-
             me.$set(me, 'item', response.data.items[0]);// <-- Обновляемый объект
 
             let url = me.item.id > 0 ? response.data.form.create_url : response.data.form.update_url;
@@ -68,7 +80,7 @@
             }
 
             me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
-                name: 'domain-item',
+                name: 'help-item',
                 help: response.data.form.help,
                 content: {
                     buttons: Util.buttons([
@@ -76,14 +88,16 @@
                             me: me,
                             url: url,
                             item: me.item,
-                            callback: null,
-                            route_name: ''
+                            callback: function (response) {
+                                me.getItem();
+                            },
+                            route_name: 'emails_item'
                         }),
                         Util.buttonSaveAndClose({
                             me: me,
                             url: url,
                             item: me.item,
-                            route_name: 'domain_items'
+                            route_name: 'help_items'
                         }),
                         Util.buttonUpdate({
                             callback: function () {
@@ -115,7 +129,6 @@
             me.getItem();
         }
     }
-
 </script>
 
 <style scoped>
