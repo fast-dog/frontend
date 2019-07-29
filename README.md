@@ -1,5 +1,5 @@
 <p align="center">
-  <img  src="/src/assets/fast-dog.png">
+  <img  src="/src/assets/img/logo.png">
 </p>
 
 # frontend
