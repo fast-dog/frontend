@@ -20,6 +20,7 @@ import EmailsItems from "@/components/config/EmailsItems.vue";
 import EmailsItem from "@/components/config/EmailsItem.vue";
 import LocalizationItems from "@/components/config/LocalizationItems.vue";
 import LocalizationItem from "@/components/config/LocalizationItem.vue";
+import HelpItems from './components/config/HelpItems.vue';
 
 declare let window: any;
 
@@ -177,6 +178,21 @@ export default new Router({
                     name: 'localization_item',
                     component: LocalizationItem
                 },
+                {
+                    path: 'help',
+                    name: 'help_items',
+                    component: HelpItems
+                },
+                {
+                    path: 'help/page/:page',
+                    name: 'help_items_page',
+                    component: HelpItems
+                },
+                // {
+                //     path: 'help/:id',
+                //     name: 'help_item',
+                //     component: HelpItem
+                // },
             ]
         }
     ]

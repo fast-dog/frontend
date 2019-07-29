@@ -50,14 +50,17 @@
                             <template v-for="item in items">
                                 <div class="col-lg-4 col-md-6 _widget_ animated" :data-widget-id="item.id"
                                      :class="getAnimatedClass()">
-                                    <div class="x_panel float-e-margins">
-                                        <div class="x_title " style="cursor: move">
-                                            <h5>{{item.name}}</h5>
-                                            <div class="ibox-tools">
-                                                <a class="close-link" v-on:click="deleteDesktopWidget(item)">
-                                                    <i class="fa fa-times"></i>
-                                                </a>
-                                            </div>
+                                    <div class="x_panel">
+                                        <div class="x_title" style="cursor:move;">
+                                            <h2><i class="fa fa-bar-chart"></i> {{item.name}}</h2>
+                                            <ul class="nav navbar-right panel_toolbox text-right">
+                                                <li style="float: none !important;">
+                                                    <a class="close-link" v-on:click="deleteDesktopWidget(item)">
+                                                        <i class="fa fa-close"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <div class="clearfix"></div>
                                         </div>
                                         <div class="x_content wiget " style="height: 230px">
                                             <desktop-graph v-if="item.type == 'Graph'"
