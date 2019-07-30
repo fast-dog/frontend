@@ -104,7 +104,7 @@
                                 me.update();
                             }
                         }),
-                        Util.buttonDelete('config/help/update', me.item)
+                        Util.buttonDelete('config/helps/update', me.item)
                     ]),
                     tabs: response.data.form.tabs
                 }
