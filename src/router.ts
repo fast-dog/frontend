@@ -22,6 +22,8 @@ import LocalizationItems from "@/components/config/LocalizationItems.vue";
 import LocalizationItem from "@/components/config/LocalizationItem.vue";
 import HelpItems from './components/config/HelpItems.vue';
 import HelpItem from './components/config/HelpItem.vue';
+import Menu from "@/components/menu/Menu.vue";
+import MenuIndex from "@/components/menu/MenuIndex.vue";
 
 declare let window: any;
 
@@ -195,6 +197,57 @@ export default new Router({
                     component: HelpItem
                 },
             ]
-        }
+        },
+        {
+            path: '/menu/',
+            component: Menu,
+            children: [
+                // {
+                //     path: 'configuration',
+                //     name: 'menu_info',
+                //     component: MenuInfo
+                // },
+                {
+                    path: 'index',
+                    name: 'menu',
+                    component: MenuIndex
+                },
+                // {
+                //     path: 'items',
+                //     name: 'menu_items',
+                //     component: MenuItems
+                // },
+                // {
+                //     path: 'list/:id',
+                //     name: 'menu_items_child',
+                //     component: MenuItems
+                // },
+                // {
+                //     path: 'diagnostic',
+                //     name: 'menu_diagnostic',
+                //     component: MenuDiagnostic
+                // },
+                // {
+                //     path: 'item/:id',
+                //     name: 'menu_item',
+                //     component: MenuItem
+                // },
+                // {
+                //     path: 'new/:parent_id',
+                //     name: 'menu_create_children',
+                //     component: MenuItem
+                // },
+                // {
+                //     path: 'new',
+                //     name: 'menu_create',
+                //     component: MenuItem
+                // },
+                // {
+                //     path: 'sitemap',
+                //     name: 'sitemap',
+                //     component: Sitemaps
+                // }
+            ]
+        },
     ]
 })
