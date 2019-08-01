@@ -7,9 +7,9 @@
                     :class="{'active': isActive(item,$route.fullPath)}">
                     <a>
                         <i :class="'fa ' + item.icon"></i> {{item.name}}
-                        <span class="fa fa-chevron-down" v-if="item.children.length > 0"></span>
+                        <span class="fa fa-chevron-down" v-if="item.children && item.children.length > 0"></span>
                     </a>
-                    <ul class="nav child_menu" v-if="item.children.length > 0"
+                    <ul class="nav child_menu" v-if="item.children && item.children.length > 0"
                         :style="{'display': (isActive(item,$route.fullPath))?'block':''}">
                         <li v-for="child in item.children"
                             :class="{'active': ($route.fullPath === child.route)}">
