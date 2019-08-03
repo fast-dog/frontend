@@ -232,6 +232,10 @@
                 value: value
             })
         }
+
+        beforeDestroy(): void {
+            $('.daterangepicker').remove();
+        }
     }
 </script>
 
