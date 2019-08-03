@@ -39,20 +39,20 @@ const actions = {
         commit('setForm', payload)
     },
     clearForm({commit, state}, payload) {
-        commit('clearForm', default_form)
-        commit('clearSelectData')
-        commit('clearFormItems')
+        commit('clearForm', default_form);
+        commit('clearSelectData');
+        commit('clearFormItems');
     },
     setFormItem({commit, state}, payload) {
-        commit('setFormItem', payload)
+        commit('setFormItem', payload);
     },
     setSelectData({commit, state}, payload) {
-        commit('setSelectData', payload)
+        commit('setSelectData', payload);
     },
     deleteSelectDataById({commit, state}, payload) {
         let newArray = state.select_data.filter(function (item) {
             return item.id !== payload.id
-        })
+        });
         commit('setClearSelectData', newArray)
     },
     updateSearchFieldFilter({commit, state}, payload) {

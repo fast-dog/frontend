@@ -38,6 +38,7 @@
             if (n && n.id) {
                 let me = this,
                     parentIdFieldData: any = this.$store.getters.getSelectDataById('parent_id');
+
                 if (parentIdFieldData && me.menuItems[n.id]) {
                     parentIdFieldData.callback(me.menuItems[n.id]);
                     parentIdFieldData.clearValue();
@@ -57,7 +58,7 @@
             }
         }
 
-        @Watch('item.template')
+        @Watch('item.__template')
         onChangeTemplate(newTpl, oldTpl) {
             let me = this;
             if (me.modules[me.item.type] != undefined) {
@@ -121,49 +122,36 @@
 
         @Watch('item.type')
         onChangeMenuType(n, o) {
-            let me = this, type = (n) ? n.id : '';
-            me.$nextTick(function () {
-                switch (type) {
-                    case 'alias':
-                        me.item.route_instance = '';
-                        break;
-                    // case 'content_blog':
-                    //     let categoryFieldData: any = me.$store.getters.getSelectDataById('category_id');
-                    //     console.log(me.categories);
-                    //     if (categoryFieldData && me.categories.content) {
-                    //         categoryFieldData.callback(me.categories.content);
-                    //     }
-                    //     break;
-                    case 'form':
-                        let formFieldData: any = me.$store.getters.getSelectDataById('form_id');
-                        if (formFieldData && me.modules[type].forms) {
-                            formFieldData.callback(me.modules[type].forms);
-                        }
-                        break;
-                }
+            let me = this,
+                type = (n) ? n.id : '',
+                moduleType = (type !== '') ? type.split('::') : null;
+            if (moduleType) {
+                me.$nextTick(function () {
+                    type = moduleType[0];
+                    let typeFieldData: any = me.$store.getters.getSelectDataById('template');
 
-                let typeFieldData: any = me.$store.getters.getSelectDataById('template');
-                if (typeFieldData && me.modules[type]) {
-                    let templates = [];
-                    for (let key in me.modules[type].templates) {
-                        let tpm = [];
-                        for (let id in me.modules[type].templates[key].templates) {
-                            tpm.push({
-                                id: me.modules[type].templates[key].templates[id].id,
-                                name: me.modules[type].templates[key].templates[id].name,
+                    if (n.templates) {
+                        let templates = [];
+                        for (let key in n.templates) {
+                            let tpm = [];
+                            for (let id in n.templates[key].templates) {
+                                tpm.push({
+                                    id: n.templates[key].templates[id].id,
+                                    name: n.templates[key].templates[id].name,
+                                })
+                            }
+
+                            templates.push({
+                                id: key,
+                                name: key,
+                                items: tpm
                             })
                         }
 
-                        templates.push({
-                            id: key,
-                            name: key,
-                            items: tpm
-                        })
+                        typeFieldData.callback(templates);
                     }
-
-                    typeFieldData.callback(templates);
-                }
-            })
+                })
+            }
         }
 
         mounted(): void {
@@ -231,7 +219,7 @@
                                                 me.getItem();
                                             }
                                         }
-                                    },me)
+                                    }, me)
                                 }
                             },
                             {
@@ -248,7 +236,7 @@
                                         callback: function (response) {
                                             window.history.back()
                                         }
-                                    },me)
+                                    }, me)
                                 }
                             },
                             {
@@ -280,7 +268,7 @@
                                         event: $event,
                                         callback: function (response) {
                                         }
-                                    },me)
+                                    }, me)
                                 }
                             },
                             {
