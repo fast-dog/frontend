@@ -24,6 +24,7 @@ import HelpItems from './components/config/HelpItems.vue';
 import HelpItem from './components/config/HelpItem.vue';
 import Menu from "@/components/menu/Menu.vue";
 import MenuIndex from "@/components/menu/MenuIndex.vue";
+import MenuItem from './components/menu/MenuItem.vue';
 
 declare let window: any;
 
@@ -212,6 +213,23 @@ export default new Router({
                     name: 'menu',
                     component: MenuIndex
                 },
+                {
+                    path: 'new/:parent_id',
+                    name: 'menu_create_children',
+                    component: MenuItem
+                },
+                {
+                    path: 'new',
+                    name: 'menu_create',
+                    component: MenuItem
+                },
+                {
+                    path: 'item/:id',
+                    name: 'menu_item',
+                    component: MenuItem
+                },
+
+
                 // {
                 //     path: 'items',
                 //     name: 'menu_items',
@@ -227,21 +245,8 @@ export default new Router({
                 //     name: 'menu_diagnostic',
                 //     component: MenuDiagnostic
                 // },
-                // {
-                //     path: 'item/:id',
-                //     name: 'menu_item',
-                //     component: MenuItem
-                // },
-                // {
-                //     path: 'new/:parent_id',
-                //     name: 'menu_create_children',
-                //     component: MenuItem
-                // },
-                // {
-                //     path: 'new',
-                //     name: 'menu_create',
-                //     component: MenuItem
-                // },
+
+
                 // {
                 //     path: 'sitemap',
                 //     name: 'sitemap',

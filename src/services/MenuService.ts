@@ -12,27 +12,27 @@ export class MenuService {
     }
 
     static getItems(): AxiosPromise {
-        return axios.get(Util.httpRoot + 'public/menu/roots');
+        return axios.get(Util.httpRoot + 'menu/roots');
     }
 
     static getMenuItems(params: any = {include_templates: 'Y'}): AxiosPromise {
-        return axios.get(Util.httpRoot + 'public/menu/roots', params);
+        return axios.get(Util.httpRoot + 'menu/roots', params);
     }
 
     static itemRoot(id: any): AxiosPromise {
-        return axios.get(Util.httpRoot + 'public/menu-root/' + id);
+        return axios.get(Util.httpRoot + 'menu-root/' + id);
     }
 
     static itemNavigation(id: any): AxiosPromise {
-        return axios.get(Util.httpRoot + 'public/menu/' + id);
+        return axios.get(Util.httpRoot + 'menu/' + id);
     }
 
     static itemTree(id: any): AxiosPromise {
-        return axios.get(Util.httpRoot + 'public/menu-tree/' + id);
+        return axios.get(Util.httpRoot + 'menu-tree/' + id);
     }
 
     static getInfo(): AxiosPromise {
-        return axios.get(Util.httpRoot + 'public/menu/admin-info');
+        return axios.get(Util.httpRoot + 'menu/admin-info');
     }
 
     static getDiagnostic(period: string = 'total'): AxiosPromise {
