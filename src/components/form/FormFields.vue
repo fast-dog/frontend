@@ -117,6 +117,7 @@
                 :form_group="field.form_group"
                 :css_class="(field.css_class) ? field.css_class : 'col-sm-6'">
         </text-form-alias>
+        <seo :item="model" v-if="checkFieldTypeWithExpression(field,'seo')"></seo>
     </div>
 </template>
 
@@ -135,6 +136,7 @@
     import SamplePropertyTable from '@/components/form/components/SamplePropertyTable.vue';
     import MediaItems from '@/components/form/components/MediaItems.vue';
     import TextAliasFormField from "@/components/form/fields/TextAliasFormField.vue";
+    import Seo from "@/components/form/components/Seo.vue";
 
     declare let $: any;
 
@@ -156,7 +158,7 @@
             'text-editor-form-field': TextEditorFormField,
             'date-form-field': DateFormField,
             'media': MediaItems,
-            // 'seo': Seo,
+            'seo': Seo,
             'sample-properties-table': SamplePropertyTable,
             // 'catalog-item-properties': CatalogItemProperties,
             // 'catalog-category-properties': CatalogCategoryProperties,

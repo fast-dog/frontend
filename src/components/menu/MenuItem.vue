@@ -191,59 +191,32 @@
                 me.$set(me, 'menuTypes', response.data.types);// <-- Типы меню
                 me.$set(me, 'modules', response.data.modules);// <-- Доступные модули
                 // me.$set(me, 'categories', response.data.categories);// <-- Доступные категории (Материалы, Каталог)
+                let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
+
                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
                     name: 'menu-item',
                     content: {
                         buttons: Util.buttons([
-                            Util.buttonBack(function () {
-                                history.back();
+                            Util.buttonSave({
+                                me: me,
+                                url: url,
+                                item: me.item,
+                                callback: function () {
+                                    me.getItem();
+                                },
+                                route_name: ''
                             }),
-                            {
-                                text: FdTranslator._('Сохранить'),
-                                icon: 'fa-pencil-square-o',
-                                cls: 'btn-primary',
-                                id: 'save-content-btn',
-                                action: function ($event) {
-                                    me.item.set_properties = me.$store.getters.getItemPropertiesOffer;
-                                    Util.sendData({
-                                        url: me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url,
-                                        data: me.item,
-                                        event: $event,
-                                        callback: function (response) {
-                                            if (me.item.id > 0) {
-                                                me.$store.dispatch('setBreadcrumbs', {
-                                                    items: []
-                                                });
-                                                me.$set(me, 'item', {});
-                                                me.$store.dispatch('clearForm');
-                                                me.getItem();
-                                            }
-                                        }
-                                    }, me)
+                            Util.buttonSaveAndClose({
+                                me: me,
+                                url: url,
+                                item: me.item,
+                                route_name: '',
+                                callback: function (response) {
+                                    window.history.back()
                                 }
-                            },
-                            {
-                                text: FdTranslator._('Сохранить и закрыть'),
-                                icon: 'fa-check',
-                                cls: 'btn-primary',
-                                id: 'save-and-close-btn',
-                                action: function ($event) {
-                                    me.item.set_properties = me.$store.getters.getItemPropertiesOffer;
-                                    Util.sendData({
-                                        url: me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url,
-                                        data: me.item,
-                                        event: $event,
-                                        callback: function (response) {
-                                            window.history.back()
-                                        }
-                                    }, me)
-                                }
-                            },
-                            {
-                                text: FdTranslator._('Обновить'),
-                                icon: 'fa-refresh',
-                                id: 'update-content-btn',
-                                action: function ($event) {
+                            }),
+                            Util.buttonUpdate({
+                                callback: function () {
                                     me.$store.dispatch('setBreadcrumbs', {
                                         items: []
                                     });
@@ -251,45 +224,46 @@
                                     me.$store.dispatch('clearForm');
                                     me.getItem();
                                 }
-                            },
-                            {
-                                text: FdTranslator._('Сохранить шаблон'),
-                                icon: 'fa-code',
-                                cls: 'btn-success',
-                                visible: false,
-                                id: 'save-menu-template',
-                                action: function ($event) {
-                                    Util.sendData({
-                                        url: 'menu/api/template',
-                                        data: {
-                                            template: me.item.template,
-                                            raw: me.item.template_raw
-                                        },
-                                        event: $event,
-                                        callback: function (response) {
-                                        }
-                                    }, me)
-                                }
-                            },
-                            {
-                                text: FdTranslator._('Сохранить локализацию'),
-                                icon: 'fa-language',
-                                cls: 'btn-success',
-                                visible: false,
-                                id: 'save-menu-lang',
-                                action: function ($event) {
-                                    Util.sendData({
-                                        url: 'menu/api/translate',
-                                        data: {
-                                            template: me.item.template,
-                                            translate: me.item.translate
-                                        },
-                                        event: $event,
-                                        callback: function (response) {
-                                        }
-                                    }, me)
-                                }
-                            }
+                            }),
+                            Util.buttonDelete('menu/update', me.item)
+                            // {
+                            //     text: FdTranslator._('Сохранить шаблон'),
+                            //     icon: 'fa-code',
+                            //     cls: 'btn-success',
+                            //     visible: false,
+                            //     id: 'save-menu-template',
+                            //     action: function ($event) {
+                            //         Util.sendData({
+                            //             url: 'menu/api/template',
+                            //             data: {
+                            //                 template: me.item.template,
+                            //                 raw: me.item.template_raw
+                            //             },
+                            //             event: $event,
+                            //             callback: function (response) {
+                            //             }
+                            //         }, me)
+                            //     }
+                            // },
+                            // {
+                            //     text: FdTranslator._('Сохранить локализацию'),
+                            //     icon: 'fa-language',
+                            //     cls: 'btn-success',
+                            //     visible: false,
+                            //     id: 'save-menu-lang',
+                            //     action: function ($event) {
+                            //         Util.sendData({
+                            //             url: 'menu/api/translate',
+                            //             data: {
+                            //                 template: me.item.template,
+                            //                 translate: me.item.translate
+                            //             },
+                            //             event: $event,
+                            //             callback: function (response) {
+                            //             }
+                            //         }, me)
+                            //     }
+                            // }
                         ]),
                         tabs: response.data.form.tabs
                     }

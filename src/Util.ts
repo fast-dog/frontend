@@ -436,7 +436,8 @@ export class Util extends Vue {
         me: Vue,
         item: any,
         url: string,
-        route_name: string
+        route_name: string,
+        callback?: any
     }): any {
         return {
             text: FdTranslator._('Сохранить и закрыть'),
@@ -451,8 +452,12 @@ export class Util extends Vue {
                             data: params.item,
                             event: $event,
                             callback: function (response) {
-                                params.me.$store.dispatch('setRouteNotify', false);
-                                params.me.$router.push({name: params.route_name});
+                                if (params.callback) {
+                                    params.callback(response)
+                                } else {
+                                    params.me.$store.dispatch('setRouteNotify', false);
+                                    params.me.$router.push({name: params.route_name});
+                                }
                             }
                         }, params.me)
                     }
