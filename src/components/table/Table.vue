@@ -7,7 +7,6 @@
                     <button v-for="button in actionButtons" class="btn btn-responsive"
                             v-bind:class="button.cls"
                             v-bind:data-disabled_selection="button.disabled_selection"
-
                             data-style="zoom-in"
                             :title="button.text"
                             data-placement="bottom"
@@ -123,8 +122,7 @@
                                             &nbsp;
                                         </span>
                                         <span class="_link-block">
-                                          <router-link
-                                                  v-if="column.link != null"
+                                          <router-link v-if="column.link != null"
                                                   :to="{name:column.link,params:{id:item.id}}"
                                                   v-html="getItemData(item,column.key)">
                                           </router-link>
@@ -144,7 +142,7 @@
                                         <div class="hidden _action_block_" v-if="column.action">
                                             <span class="label label-default" v-if="column.action.edit">
                                                <router-link v-if="column.link != null"
-                                                            :to="{name:column.link,params:{id:item.id}}">
+                                                            :to="{name: (column.edit_link) ? column.edit_link : column.link ,params:{id:item.id}}">
                                                    <i class="fa fa-edit"></i>
                                                    {{'Редактировать'|_}}
                                                </router-link>
