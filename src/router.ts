@@ -230,7 +230,7 @@ export default new Router({
                     component: MenuItem
                 },
                 {
-                    path: 'items',
+                    path: 'list/:id',
                     name: 'menu_items',
                     component: MenuItems
                 },

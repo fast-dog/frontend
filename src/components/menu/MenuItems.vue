@@ -1,8 +1,8 @@
 <template>
-    <div>
+    <div v-if="getUrl()">
         <DataTable
                 v-bind:option="{
-                url:'menu/list',
+                url: getUrl(),
                 help:true,
                 help_name:'menu_items'}"></DataTable>
     </div>
@@ -31,6 +31,9 @@
         @Provide()
         create_route: any;
 
+        @Provide()
+        url: any = null;
+
         @Prop({default: 'menu/reorder'})
         reorder_url: string;
 
@@ -40,12 +43,15 @@
                 root_id = parseInt(this.$route.params.id);
 
             if (root_id > 0) {
+                me.url = 'menu/list/' + root_id;
                 me.create_route = function () {
                     me.$router.push({name: 'menu_create_children', params: {parent_id: me.$route.params.id}});
                 };
-            } else {
-                me.$set(me, 'create_route', 'menu_create');
             }
+        }
+
+        getUrl(): any {
+            return this.url;
         }
     }
 </script>
