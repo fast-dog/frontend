@@ -4,7 +4,7 @@
                 v-bind:option="{
                 url:'menu/roots',
                 help:true,
-                help_name:'user_items'}"></DataTable>
+                help_name:'menu_roots'}"></DataTable>
     </div>
 </template>
 

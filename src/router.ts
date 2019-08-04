@@ -25,6 +25,7 @@ import HelpItem from './components/config/HelpItem.vue';
 import Menu from "@/components/menu/Menu.vue";
 import MenuIndex from "@/components/menu/MenuIndex.vue";
 import MenuItem from './components/menu/MenuItem.vue';
+import MenuItems from "@/components/menu/MenuItems.vue";
 
 declare let window: any;
 
@@ -228,18 +229,16 @@ export default new Router({
                     name: 'menu_item',
                     component: MenuItem
                 },
-
-
-                // {
-                //     path: 'items',
-                //     name: 'menu_items',
-                //     component: MenuItems
-                // },
-                // {
-                //     path: 'list/:id',
-                //     name: 'menu_items_child',
-                //     component: MenuItems
-                // },
+                {
+                    path: 'items',
+                    name: 'menu_items',
+                    component: MenuItems
+                },
+                {
+                    path: 'list/:id',
+                    name: 'menu_items_child',
+                    component: MenuItems
+                },
                 // {
                 //     path: 'diagnostic',
                 //     name: 'menu_diagnostic',
