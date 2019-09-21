@@ -68,6 +68,14 @@ ul.bar_tabs > li.active {
   border-right: 4px solid $md-color-primary;
 }
 
+ul.tabs-left > li.active {
+  border-right: 4px solid $md-color-primary;
+}
+
+.tabs-left > li.active a {
+  border-bottom-color: #ddd !important;
+}
+
 .nav.side-menu > li.active > a {
   background: $bg-color;
   //border-top: 1px solid #b6b6b7;
@@ -242,4 +250,31 @@ ul.bar_tabs > li.active {
   }
 }
 
+.he-tree {
+  // border: 1px solid $light-gray;
+  // padding: 20px;
 
+}
+
+.tree-node {
+}
+
+.tree-node-inner {
+  padding: 5px;
+  border: 1px solid $light-gray;
+  cursor: pointer;
+}
+
+.draggable-placeholder {
+}
+
+.draggable-placeholder-inner {
+  border: 1px dashed $blue;
+  box-sizing: border-box;
+  background: rgba(0, 136, 249, 0.09);
+  color: $blue;
+  text-align: center;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
