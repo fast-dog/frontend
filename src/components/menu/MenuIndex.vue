@@ -11,7 +11,7 @@
                     <!-- start accordion -->
                     <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
                         <div class="panel"
-                             v-for="(item,idx) in resource">
+                             v-for="(item, name, idx) in resource">
                             <a class="panel-heading" role="tab" id="headingOne"
                                data-toggle="collapse" data-parent="#accordion"
                                :href="'#'+item.id"
@@ -25,7 +25,15 @@
                                  class="panel-collapse collapse"
                                  role="tabpanel" aria-labelledby="headingOne">
                                 <div class="panel-body">
-
+                                    <div class="checkbox" v-for="type in item.items">
+                                        <label>
+                                            <input type="checkbox" value="">
+                                            {{type.name}}
+                                        </label>
+                                    </div>
+                                    <button class="btn btn-responsive btn-sm animated fadeIn btn-primary btn-sm pull-right">
+                                        {{'Добавить в меню'|_}}
+                                    </button>
 
                                 </div>
                             </div>
@@ -35,10 +43,24 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8 col-sm-8 col-xs-12">
+        <div class="col-md-8 col-sm-8 col-xs-12" v-if="roots.length > 0">
             <div class="x_panel tile">
                 <div class="x_title">
-                    <h2>Меню</h2>
+                    <h2>Меню:</h2>
+                    <select-form-field
+                            :label="false"
+                            :model="model"
+                            :id="'root'"
+                            :required="false"
+                            :multiple="false"
+                            :readonly="false"
+                            :css_class="'col-sm-6'"
+                            :form_group="true"
+                            :option_group="false"
+                            :data="roots"
+                            :placeholder="''"
+                            :field="'root'">
+                    </select-form-field>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -68,13 +90,14 @@
 
 <script lang="ts">
 
-    import {Component, Prop, Provide, Vue} from 'vue-property-decorator'
+    import {Component, Prop, Provide, Vue, Watch} from 'vue-property-decorator'
     import DataTable from "@/components/table/Table.vue";
     import {DraggableTree} from 'vue-draggable-nested-tree'
     import {CrudService} from "@/services/CrudService";
     import {Util} from "@/Util";
     import DataPreview from "@/components/table/DataPreview.vue";
     import {FdTranslator} from "@/FdTranslator";
+    import SelectFormField from "@/components/form/fields/SelectFormField.vue";
 
     declare let $: any;
 
@@ -83,7 +106,8 @@
         components: {
             'preview': DataPreview,
             'DataTable': DataTable,
-            'DraggableTree': DraggableTree
+            'DraggableTree': DraggableTree,
+            'select-form-field': SelectFormField,
         },
         filters: {
             'json': function (value) {
@@ -113,23 +137,33 @@
         @Provide()
         data: any = [];
 
+        @Provide()
+        roots: any = [];
+
+        @Provide()
+        model: any = {root: {id: 0, name: ''}};
+
+
+        @Watch('model.root')
+        onChangeRoot(n, o, t) {
+            if (n.id !== o.id) {
+                let me = this;
+                CrudService.post(Util.httpRoot + 'menu/list/' + n.id, {}).then((response: any) => {
+                    if (response.data.success) {
+                        me.$set(me, 'data', response.data.items);
+                        Util.showSuccess('Команда выполнена успешно');
+                    }
+                }).catch((response) => {
+
+                });
+            }
+        }
+
+
         mounted(): void {
             let me = this;
 
-            me.$set(me, 'resource', [
-                {
-                    id: 'pages',
-                    name: 'Страницы',
-                    items: [{id: 1, name: 'test content', alias: ''}]
-                },
-                {
-                    id: 'content',
-                    name: 'Материалы',
-                    items: [{id: 1, name: 'test content', alias: ''}]
-                }
-            ]);
-
-            CrudService.post(Util.httpRoot + 'menu/list/0', {}).then((response: any) => {
+            CrudService.post(Util.httpRoot + 'menu/load', {}).then((response: any) => {
                 if (response.data.success) {
                     if (response.data.breadcrumbs !== undefined) {
                         me.$store.dispatch('setBreadcrumbs', {
@@ -137,11 +171,10 @@
                             page_title: response.data.page_title
                         });
                     }
-                    me.$set(me, 'data', response.data.items);
+                    me.$set(me, 'resource', response.data.resource);
+                    me.$set(me, 'roots', response.data.roots);
+                    // me.$set(me, 'data', response.data.items);
                     Util.showSuccess('Команда выполнена успешно');
-
-                } else {
-
                 }
             }).catch((response) => {
 
@@ -149,7 +182,7 @@
         }
 
         tree1Change(node, targetTree) {
-            console.log(node)
+            console.log(node.id, node.parent.id);
             this.data = targetTree.getPureData()
         }
     }

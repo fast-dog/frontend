@@ -6,6 +6,7 @@ import form from '@/store/modules/form';
 import table from '@/store/modules/table';
 import main from '@/store/modules/main';
 import catalog from '@/store/modules/catalog';
+import menu from "@/store/modules/menu";
 // import form from './modules/form';
 // import catalog from './modules/catalog';
 
@@ -22,7 +23,8 @@ export default new Vuex.Store({
         main: main,
         table: table,
         form: form,
-        catalog: catalog
+        catalog: catalog,
+        menu: menu
     },
     plugins: debug ? [createLogger()] : []
 })
