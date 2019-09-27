@@ -63,7 +63,13 @@
                     </select-form-field>
                     <div class="clearfix"></div>
                 </div>
-                <div class="x_content">
+                <div class="x_content _menu_">
+                    <p v-if="data.length === 0" class="alert alert-info text-center">
+                        {{'Не выбрано меню'|_}}
+                    </p>
+                    <div class="process" v-if="process">
+                        <i class="fa fa-paw" style="font-size: 25px"></i>
+                    </div>
                     <DraggableTree :data="data" draggable crossTree ref="tree1"
                                    @change="tree1Change">
                         <div slot-scope="{data, store}" class="menu-item">
@@ -141,18 +147,25 @@
         roots: any = [];
 
         @Provide()
+        process: boolean = false;
+
+        @Provide()
         model: any = {root: {id: 0, name: ''}};
 
 
         @Watch('model.root')
         onChangeRoot(n, o, t) {
-            if (n.id !== o.id) {
-                let me = this;
+            let me = this;
+            if (n === null) {
+                me.$set(me, 'data', []);
+            } else if (n.id) {
+                me.$set(me, 'process', true);
                 CrudService.post(Util.httpRoot + 'menu/list/' + n.id, {}).then((response: any) => {
                     if (response.data.success) {
                         me.$set(me, 'data', response.data.items);
                         Util.showSuccess('Команда выполнена успешно');
                     }
+                    me.$set(me, 'process', false);
                 }).catch((response) => {
 
                 });
@@ -182,14 +195,86 @@
         }
 
         tree1Change(node, targetTree) {
-            console.log(node.id, node.parent.id);
-            this.data = targetTree.getPureData()
+            this.data = targetTree.getPureData();
+            if (node.parent.id === undefined) {
+                console.log('-->', 'parent_id is undefined');
+                this.reorder(node.id, this.data);
+            } else {
+                console.log('--> |', 'parent_id #' + node.parent.id);
+                this.reorder(node.id, node.parent.children, node.parent);
+            }
+        }
+
+        reorder(id, data, parent?): void {
+            let me = this;
+            for (let idx in data) {
+                let _node = data[idx],
+                    i: any = parseInt(idx);
+                if (id === _node.id) {
+                    let setIdx = (i > 0) ? i - 1 : i + 1,
+                        direction = (i > 0) ? 'down' : 'up';
+
+                    if (data.length == 1) {
+                        direction = 'insert';
+                        data[setIdx] = parent;
+                    }
+
+                    if (data[setIdx]) {
+                        console.log('-->', data[setIdx].name);
+                        console.log('-->', 'move node #' + id + ' in target #' +
+                            data[setIdx].id + ' dir is:' + direction);
+                        // move node in target
+                        me.$set(me, 'process', true);
+                        CrudService.post(Util.httpRoot + 'menu/reorder', {
+                            id: id,
+                            model: 'category',
+                            position: '',
+                            parent: data[setIdx].id,
+                            move: direction
+                        }).then((response: any) => {
+                            if (response.data.success) {
+                                Util.showSuccess('Команда выполнена успешно');
+                            } else {
+                                Util.showError(response.data.message);
+                            }
+                            me.$set(me, 'process', false);
+
+                        }, (response) => {
+                            Util.errorHandler(response);
+                            me.$set(me, 'process', false);
+                        });
+                    } else {
+                        console.log('--> i: ' + i, ', idx: ' + setIdx + ' not exist?' + ' dir is:' + direction);
+                        console.dir(data)
+                    }
+                }
+            }
         }
     }
 
 </script>
 
 <style scoped lang="scss">
+    ._menu_ {
+        position: relative;
+
+        .process {
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: #e7eaec;
+            opacity: 0.3;
+
+            i {
+                position: absolute;
+                left: 49%;
+                top: 45%;
+            }
+        }
+    }
+
     .menu-item {
 
     }
