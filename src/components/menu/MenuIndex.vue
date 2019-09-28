@@ -27,14 +27,15 @@
                                 <div class="panel-body">
                                     <div class="checkbox" v-for="type in item.items">
                                         <label>
-                                            <input type="checkbox" value="">
+                                            <input type="checkbox" v-on:change.prevent="changeType(type,$event)"/>
                                             {{type.name}}
                                         </label>
                                     </div>
-                                    <button class="btn btn-responsive btn-sm animated fadeIn btn-primary btn-sm pull-right">
+                                    <button class="btn btn-responsive btn-sm animated fadeIn btn-primary btn-sm pull-right"
+                                            v-bind:disabled="(model.root=== null || model.root.id === 0)"
+                                            v-on:click.prevent="appendMenu()">
                                         {{'Добавить в меню'|_}}
                                     </button>
-
                                 </div>
                             </div>
                         </div>
@@ -58,9 +59,14 @@
                             :form_group="true"
                             :option_group="false"
                             :data="roots"
-                            :placeholder="''"
+                            :placeholder="'Выберите меню'"
                             :field="'root'">
                     </select-form-field>
+                    <button class="btn btn-success btn-sm"
+                            v-on:click.prevent="$router.push({name:  'menu_create', params: { id: '0'}})">
+                        <i class="fa fa-plus"></i>
+                        Добавить меню
+                    </button>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content _menu_">
@@ -144,6 +150,9 @@
         data: any = [];
 
         @Provide()
+        append_menu: any = {};
+
+        @Provide()
         roots: any = [];
 
         @Provide()
@@ -152,7 +161,6 @@
         @Provide()
         model: any = {root: {id: 0, name: ''}};
 
-
         @Watch('model.root')
         onChangeRoot(n, o, t) {
             let me = this;
@@ -160,6 +168,7 @@
                 me.$set(me, 'data', []);
             } else if (n.id) {
                 me.$set(me, 'process', true);
+                me.model.root.id = n.id;
                 CrudService.post(Util.httpRoot + 'menu/list/' + n.id, {}).then((response: any) => {
                     if (response.data.success) {
                         me.$set(me, 'data', response.data.items);
@@ -171,7 +180,6 @@
                 });
             }
         }
-
 
         mounted(): void {
             let me = this;
@@ -250,6 +258,43 @@
                 }
             }
         }
+
+        changeType(type, $event: Event): void {
+            let target: any = $event.target, me = this;
+            me.append_menu[type.id] = {
+                id: 0,
+                menu_id: {
+                    id: me.model.root.id
+                },
+                type: {
+                    id: type.id
+                },
+                name: type.name,
+                checked: target.checked
+            };
+        }
+
+        appendMenu(): void {
+            let me = this, append = [];
+
+            for (let i in me.append_menu) {
+                if (me.append_menu[i].checked) {
+                    append.push(me.append_menu[i])
+                }
+            }
+            CrudService.post(Util.httpRoot + 'menu/append', {
+                items: append,
+                append: 'Y'
+            }).then((response: any) => {
+                if (response.data.success) {
+                    Util.showSuccess('Команда выполнена успешно');
+                }
+            }).catch((response) => {
+
+            });
+            console.log(append)
+
+        }
     }
 
 </script>
@@ -264,13 +309,13 @@
             left: 0;
             bottom: 0;
             right: 0;
-            background-color: #e7eaec;
-            opacity: 0.3;
+            opacity: 0.8;
 
             i {
                 position: absolute;
                 left: 49%;
                 top: 45%;
+                color: #1c84c6;
             }
         }
     }

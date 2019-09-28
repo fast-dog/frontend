@@ -27,6 +27,10 @@ export class MenuService {
         return axios.get(Util.httpRoot + 'menu/' + id);
     }
 
+    static getPage(id: any): AxiosPromise {
+        return axios.get(Util.httpRoot + 'page/' + id);
+    }
+
     static itemTree(id: any): AxiosPromise {
         return axios.get(Util.httpRoot + 'menu-tree/' + id);
     }

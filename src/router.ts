@@ -26,6 +26,7 @@ import Menu from "@/components/menu/Menu.vue";
 import MenuIndex from "@/components/menu/MenuIndex.vue";
 import MenuItem from './components/menu/MenuItem.vue';
 import MenuItems from "@/components/menu/MenuItems.vue";
+import PageItem from "@/components/menu/PageItem.vue";
 
 declare let window: any;
 
@@ -251,6 +252,11 @@ export default new Router({
                 //     name: 'sitemap',
                 //     component: Sitemaps
                 // }
+                {
+                    path: 'page/:id',
+                    name: 'page_item',
+                    component: PageItem
+                },
             ]
         },
     ]

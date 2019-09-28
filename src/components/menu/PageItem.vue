@@ -4,35 +4,33 @@
 
 <script lang="ts">
     import Vue from 'vue';
-    import {Component, Provide, Watch} from 'vue-property-decorator'
-    import {Util} from '@/Util';
-    import {UsersService} from '@/services/UsersService';
-    import {FdTranslator} from '@/FdTranslator';
+    import {Component, Provide} from 'vue-property-decorator'
     import FormBuilder from '@/components/form/FormBuilder.vue';
+    import {Util} from "@/Util";
+    import {MenuService} from "@/services/MenuService";
 
     declare let $: any;
 
     @Component({
-        name: 'user_item',
+        name: 'page_item',
         components: {
             'form-manager': FormBuilder
         }
     })
 
-    export default class UsersItem extends Vue {
+    export default class PageItem extends Vue {
 
         @Provide()
         item: any = null;
 
         mounted(): any {
-
-            this.getUser();
+            this.getPage();
         }
 
 
-        getUser(): void {
+        getPage(): void {
             let me = this;
-            UsersService.getUser(this.$route.params.id).then((response: any) => {
+            MenuService.getPage(this.$route.params.id).then((response: any) => {
                 me.prepareResponse(response);
             }, (response) => {
                 Util.errorHandler(response)
@@ -75,7 +73,7 @@
                                     });
                                     me.$set(me, 'item', {});
                                     me.$store.dispatch('clearForm');
-                                    me.getUser();
+                                    me.getPage();
                                 }
                             }),
                             Util.buttonDelete('users/update', me.item)
@@ -85,19 +83,7 @@
                 })
             }
         }
-
-        sendData(data: { url: string, data: any, event: any, callback: any }): void {
-            if (data.event != null) {
-                if (data.event.target.nodeName != 'BUTTON') {
-                    return;
-                }
-                data.event.preventDefault();
-            }
-            Util.sendData(data, this);
-        }
-
     }
-
 </script>
 
 <style scoped>
