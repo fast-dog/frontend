@@ -150,29 +150,6 @@
 
         mounted(): void {
             let me = this;
-
-            me.$nextTick(function () {
-                $('.connectedSortable').sortable({
-                    connectWith: '.field_container',
-                    placeholder: 'field',
-                    forcePlaceholderSize: true,
-                    start: function (e, ui) {
-                        ui.placeholder.height(ui.item.height());
-                        ui.placeholder.css({
-
-                            opacity: 1,
-                            backgroundColor: 'rgba(26,179,148,0.4)',
-                            display: 'block',
-                            visibility: 'visible',
-                            border: '1px solid #1ab394'
-                        });
-                    },
-                    receive: function (event, ui) {
-                        me.buildForm();
-                    }
-                });
-            });
-
             ConfigService.getForm(me.$route.params.id).then((response: any) => {
                 if (response.data.success) {
                     me.prepareResponse(response);
@@ -182,80 +159,17 @@
             }, (response) => {
                 Util.errorHandler(response)
             });
-            me.$set(me, 'form', {
-                'create_url': 'page\/create',
-                'update_url': 'page\/create',
-                'tabs':
-                    [
-                        {
-                            'id': 'page-general-tab',
-                            'name': '\u041e\u0441\u043d\u043e\u0432\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f',
-                            'active': true,
-                            'fields': [
-                                {'type': 'text-form-field', 'name': 'name', 'label': '\u041d\u0430\u0437\u0432\u0430\u043d\u0438\u0435', 'css_class': 'col-sm-6', 'form_group': false},
-                                {
-                                    'type': 'text-form-alias',
-                                    'name': 'alias',
-                                    'label': '\u041f\u0441\u0435\u0432\u0434\u043e\u043d\u0438\u043c'
-                                },
-                                {
-                                    'type': 'tabs',
-                                    'form_group': true,
-                                    'tabs': [{
-                                        'id': 'page-introtext-tab',
-                                        'name': '\u0412\u0441\u0442\u0443\u043f\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442',
-                                        'active': true,
-                                        'fields': [{'id': 'introtext', 'type': 'text-editor-form-field', 'name': 'introtext', 'label': ''}]
-                                    }, {'id': 'page-fulltext-tab', 'name': '\u041f\u043e\u043b\u043d\u044b\u0439 \u0442\u0435\u043a\u0441\u0442', 'active': false, 'fields': [{'id': 'fulltext', 'type': 'text-editor-form-field', 'name': 'fulltext', 'label': ''}]}]
-                                }
-                            ],
-                            'side': [{
-                                'id': 'access',
-                                'type': 'access-list',
-                                'name': 'site_id',
-                                'label': '\u0414\u043e\u0441\u0442\u0443\u043f',
-                                'items': [{'id': '000', 'name': '\u041e\u0431\u0449\u0438\u0439 \u0434\u043e\u0441\u0442\u0443\u043f'}, {
-                                    'id': '001',
-                                    'name': '\u0421\u0430\u0439\u0442 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e',
-                                    'url': '\/',
-                                    'lang': 'ru',
-                                    'item': {
-                                        'id': 1,
-                                        'name': '\u0421\u0430\u0439\u0442 \u043f\u043e \u0443\u043c\u043e\u043b\u0447\u0430\u043d\u0438\u044e',
-                                        'url': '\/',
-                                        'code': '001',
-                                        'data': '[]',
-                                        'state': 0,
-                                        'site_id': '001',
-                                        'lang': 'ru',
-                                        'created_at': '2019-07-30 19:12:20',
-                                        'updated_at': '2019-07-30 19:12:20',
-                                        'deleted_at': null
-                                    }
-                                }],
-                                'css_class': 'col-sm-12',
-                                'active': false
-                            }]
-                        },
-                        {'id': 'page-media-tab', 'name': '\u041c\u0435\u0434\u0438\u0430 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u044b', 'fields': [{'type': 'media'}]},
-                        {
-                            'id': 'page-extend-tab',
-                            'name': '\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u043e',
-                            'fields': [{'type': 'sample-properties-table', 'model_id': 4788257, 'model': 'FastDog\\Menu\\Menu'}]
-                        },
-                        {
-                            'id': 'page-templates-tab',
-                            'name': '\u0428\u0430\u0431\u043b\u043e\u043d',
-                            'expression': 'function(item){ return (item.template_raw != undefined) }',
-                            'fields': [{'id': 'template_raw', 'type': 'code-editor-form-field', 'name': 'template_raw', 'css_class': 'col-sm-12 m-t-xs', 'label': 'HTML \u0442\u0435\u043a\u0441\u0442', 'default_mode': 'lazy'}]
-                        },
-                        {
-                            'id': 'page-translate-tab', 'name': '\u041b\u043e\u043a\u0430\u043b\u0438\u0437\u0430\u0446\u0438\u044f',
-                            'expression': 'function(item){ return (item.translate != undefined) }',
-                            'fields': [{'type': 'translate-items'}]
-                        }
-                    ]
+
+        }
+
+        prepareResponse(response: any): void {
+            let me = this;
+            me.$store.dispatch('setBreadcrumbs', {
+                items: response.data.breadcrumbs,
+                page_title: response.data.page_title
             });
+
+            me.$set(me, 'form', response.data.items[0].data.form);// <-- Обновляемый объект
 
             me.openTab = me.form.tabs[0].id;
             Util.setLocalVar('open-tab-editor', me.openTab);
@@ -271,17 +185,26 @@
                 }
             }
 
-            console.log(me.form);
-        }
-
-        prepareResponse(response: any): void {
-            let me = this;
-            me.$store.dispatch('setBreadcrumbs', {
-                items: response.data.breadcrumbs,
-                page_title: response.data.page_title
+            me.$nextTick(function () {
+                $('.connectedSortable').sortable({
+                    connectWith: '.field_container',
+                    placeholder: 'field',
+                    forcePlaceholderSize: true,
+                    start: function (e, ui) {
+                        ui.placeholder.height(ui.item.height());
+                        ui.placeholder.css({
+                            opacity: 1,
+                            backgroundColor: 'rgba(26,179,148,0.4)',
+                            display: 'block',
+                            visibility: 'visible',
+                            border: '1px solid #1ab394'
+                        });
+                    },
+                    receive: function (event, ui) {
+                        me.buildForm();
+                    }
+                });
             });
-            me.$set(me, 'item', response.data.items[0]);// <-- Обновляемый объект
-
         }
 
         removeTab(idx: number, $event: Event): void {
@@ -290,7 +213,7 @@
                 if (index === idx) {
                     if (element.fields.length) {
                         for (let i in element.fields)
-                            me.source.push(element.fields[i]);
+                            me.destination[me.form.tabs[0].id].source.push(element.fields[i]);
                     }
                 }
                 return (idx !== index);
