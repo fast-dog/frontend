@@ -67,7 +67,8 @@
                 me.$store.dispatch('setNotifications', response.data.notifications);
             }
 
-            me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+             me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                    form_builder: (response.data.form.form_builder) ? response.data.form.form_builder : false,
                 name: 'domain-item',
                 help: response.data.form.help,
                 content: {

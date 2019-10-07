@@ -1,13 +1,13 @@
 <template>
-    <form-manager :model="item"></form-manager>
+  <form-manager :model="item"></form-manager>
 </template>
 
 <script lang="ts">
     import Vue from 'vue';
     import {Component, Provide} from 'vue-property-decorator'
     import FormBuilder from '@/components/form/FormBuilder.vue';
-    import {Util} from "@/Util";
-    import {MenuService} from "@/services/MenuService";
+    import {Util} from '@/Util';
+    import {MenuService} from '@/services/MenuService';
 
     declare let $: any;
 
@@ -50,6 +50,7 @@
                 let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
 
                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                    form_builder: (response.data.form.form_builder) ? response.data.form.form_builder : false,
                     name: 'user-item',
                     content: {
                         buttons: Util.buttons([

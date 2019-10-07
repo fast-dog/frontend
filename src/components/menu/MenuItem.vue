@@ -193,7 +193,8 @@
                 // me.$set(me, 'categories', response.data.categories);// <-- Доступные категории (Материалы, Каталог)
                 let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
 
-                me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                    form_builder: (response.data.form.form_builder) ? response.data.form.form_builder : false,
                     name: 'menu-item',
                     content: {
                         buttons: Util.buttons([

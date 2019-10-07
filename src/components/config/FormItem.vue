@@ -115,6 +115,7 @@
     import se from 'gentelella/vendors/moment/src/locale/se';
     import vi from 'gentelella/vendors/moment/src/locale/vi';
     import FormBuilderElement from '@/components/form/fields/FormBuilderElement.vue';
+    import {ConfigService} from '@/services/ConfigService';
 
     declare let $: any;
 
@@ -136,7 +137,7 @@
     export default class FormItem extends Vue {
 
         @Provide()
-        sources: any = {};
+        source: any = {};
 
         @Provide()
         form: any = null;
@@ -172,6 +173,15 @@
                 });
             });
 
+            ConfigService.getForm(me.$route.params.id).then((response: any) => {
+                if (response.data.success) {
+                    me.prepareResponse(response);
+                } else {
+                    Util.errorHandler(response)
+                }
+            }, (response) => {
+                Util.errorHandler(response)
+            });
             me.$set(me, 'form', {
                 'create_url': 'page\/create',
                 'update_url': 'page\/create',
@@ -264,6 +274,16 @@
             console.log(me.form);
         }
 
+        prepareResponse(response: any): void {
+            let me = this;
+            me.$store.dispatch('setBreadcrumbs', {
+                items: response.data.breadcrumbs,
+                page_title: response.data.page_title
+            });
+            me.$set(me, 'item', response.data.items[0]);// <-- Обновляемый объект
+
+        }
+
         removeTab(idx: number, $event: Event): void {
             let me = this;
             me.form.tabs = me.form.tabs.filter(function (element, index) {
@@ -273,10 +293,8 @@
                             me.source.push(element.fields[i]);
                     }
                 }
-
                 return (idx !== index);
             })
-
         }
 
         addTab(): void {
@@ -367,9 +385,11 @@
     margin: 0;
     padding: 0;
   }
+
   .field {
     margin: 2px;
   }
+
   .bar_tabs {
     li {
       span {
