@@ -24,6 +24,12 @@
           </ul>
         </div>
       </div>
+      <div v-if="field.type === 'media'" :class="field.type">
+        <div class="handler col-sm-12">
+          <i class="fa fa-hand-grab-o"></i>
+          <media :item="{media:[{type:'file',value:''}]}" :disabled=true :presentation="false"></media>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -34,12 +40,16 @@
     import {FormField} from '@/components/form/fields/FormField';
     import VueSuggestions from 'vue-suggestions/vue-suggestions.vue';
     import {FdTranslator} from '@/FdTranslator';
+    import MediaItems from '@/components/form/components/MediaItems.vue';
 
     declare let $: any;
 
     @Component({
         name: 'form-builder-element',
-        components: {},
+        components: {
+            'media': MediaItems
+
+        },
         filters: {
             _: function (value) {
                 return FdTranslator._(value);
@@ -73,7 +83,13 @@
     }
   }
 
-  .text-form-field, .text-form-alias, .tabs {
+  .media {
+    .handler {
+      height: auto;
+    }
+  }
+
+  .text-form-field, .text-form-alias, .tabs, .media {
     color: #555;
     background-color: #fff;
     background-image: none;

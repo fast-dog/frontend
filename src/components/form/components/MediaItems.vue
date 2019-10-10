@@ -1,6 +1,6 @@
 <template>
     <div class="tooltip-container">
-        <div class="push-right col-sm-12 m-b-sm" v-if="tourSteps && presentation == true">
+        <div class="push-right col-sm-12 m-b-sm" v-if="tourSteps && presentation === true">
             <presentation :steps="tourSteps"></presentation>
         </div>
         <div class="col-sm-12" v-if="set_item">
@@ -8,27 +8,30 @@
                 <div class="col-md-6">
                     <div class="input-group">
                         <input type="text" class="form-control"
-                               v-bind:readonly="mediaItem.type=='file'"
+                               v-bind:readonly="mediaItem.type==='file'"
                                v-model="mediaItem.value"
+                               :disabled="disabled"
                                :placeholder="'Выбор файла'|_">
                         <span class="input-group-btn">
                     <button type="button"
-                            :id="(idx == 0) ? 'presentation-media-one' : null"
-                            v-if="mediaItem.type == 'file'"
+                            :id="(idx === 0) ? 'presentation-media-one' : null"
+                            v-if="mediaItem.type === 'file'"
                             v-on:click="openFinder(mediaItem)"
                             v-bind:data-href="mediaItem.value"
                             :title="'Выбрать файлы'|_"
                             data-toggle="tooltip"
                             data-placement="left"
+                            :disabled="disabled"
                             class="btn btn-primary preview">
                         <i class="fa fa-folder-o" :title="'Выбрать файлы'|_"></i>
                     </button>
                     <button type="button" class="btn btn-danger"
                             data-toggle="tooltip"
                             data-placement="right"
+                            :disabled="disabled"
                             :title="'Удалить файл'|_"
-                            :id="(idx == 0) ? 'presentation-media-four' : null"
-                            v-on:click="deleteItem(mediaItem);">
+                            :id="(idx === 0) ? 'presentation-media-four' : null"
+                            v-on:click="deleteItem(mediaItem)">
                        <i class="fa fa-trash"></i>
                    </button>
                 </span>
@@ -36,14 +39,16 @@
                 </div>
                 <div class="col-md-4">
                     <input type="text" class="form-control"
-                           :id="(idx == 0) ? 'presentation-media-two' : null"
+                           :id="(idx === 0) ? 'presentation-media-two' : null"
                            v-model="mediaItem.description"
+                           :disabled="disabled"
                            :placeholder="'Описание'|_">
                 </div>
                 <div class="col-md-2">
                     <input type="number" class="form-control"
                            v-model="mediaItem.sort"
-                           :id="(idx == 0) ? 'presentation-media-three' : null"
+                           :disabled="disabled"
+                           :id="(idx === 0) ? 'presentation-media-three' : null"
                            :placeholder="'Сортировка'|_">
                 </div>
             </div>
@@ -84,6 +89,9 @@
 
         @Prop({default: true})
         presentation: boolean;
+
+        @Prop({default: false})
+        disabled: boolean;
 
         @Provide()
         set_item: any = null;
