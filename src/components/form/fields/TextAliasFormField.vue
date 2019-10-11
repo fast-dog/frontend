@@ -4,11 +4,13 @@
             <label class="control-label">{{label|_}}</label>
             <div style="position: relative" v-if="item && item.id >= 0">
                 <input type="text" class="form-control" v-model="item.alias"
+                       :disabled="disabled"
                        v-bind:readonly="readonly">
                 <span class="pull-right">
                 <button type="button"
                         :class="{'btn-danger': (readonly),'btn-primary': (readonly === false)}"
                         v-on:click="changeAlias" class="btn btn-xs"
+                        :disabled="disabled"
                         style="position: absolute; top: 6px; right: 20px;">
                     {{'Изменить'|_}}
                     <i data-style="zoom-in" class="fa"
@@ -48,6 +50,9 @@
 
         @Provide()
         readonly: boolean = true;
+
+        @Prop({default: false})
+        disabled: boolean;
 
         @Prop({default: 'col-sm-12'})
         css_class: string;

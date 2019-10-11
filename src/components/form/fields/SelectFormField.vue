@@ -8,6 +8,7 @@
                          track-by="id"
                          label="name"
                          :id="id"
+                         :disabled="disabled"
                          v-model="set_model"
                          open-direction="bottom"
                          :options="set_data"
@@ -19,6 +20,7 @@
                          :id="id"
                          group-label="name"
                          v-model="set_model"
+                         :disabled="disabled"
                          group-values="items"
                          open-direction="bottom"
                          :options="set_data"
@@ -58,6 +60,9 @@
 
         @Prop({default: null})
         data: [any];
+
+        @Prop({default: false})
+        disabled: boolean;
 
         @Provide()
         set_data: [any] = null;

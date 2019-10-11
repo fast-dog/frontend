@@ -1,9 +1,11 @@
 <template>
   <div class="row">
     <div class="col-lg-12">
-      <div class="x_panel">
-        <div class="x_title">form name</div>
-        <div class="x_content" v-if="form">
+      <div class="x_panel" v-if="form">
+        <div class="x_title">
+          {{form.name}}
+        </div>
+        <div class="x_content">
           <div class="tabs-container">
             <ul class="nav nav-tabs bar_tabs">
               <li v-for="(tab,idx) in form.tabs"
@@ -27,7 +29,7 @@
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="col-sm-6 fields">
-                        <div class="field_container connectedSortable col-sm-6">
+                        <div class="field_container  col-sm-6">
                           <draggable v-model="destination[tab.id].left"
                                      draggable=".field"
                                      group="field">
@@ -40,7 +42,7 @@
                         </div>
                       </div>
                       <div class="col-sm-6 fields">
-                        <div class="field_container connectedSortable col-sm-6">
+                        <div class="field_container  col-sm-6">
                           <draggable v-model="destination[tab.id].right"
                                      draggable=".field"
                                      group="field">
@@ -54,7 +56,7 @@
                       </div>
                       <div class="col-sm-12">
                         <div class="fields">
-                          <div class="field_container connectedSortable col-sm-12">
+                          <div class="field_container  col-sm-12">
                             <draggable v-model="destination[tab.id].center" draggable=".field"
                                        group="field">
                               <div class="field" v-for="(field,idx) in destination[tab.id].center"
@@ -67,7 +69,7 @@
                         </div>
                       </div>
                       <div class="col-sm-12 fields">
-                        <div class="field_container connectedSortable col-sm-12">
+                        <div class="field_container  col-sm-12">
                           <draggable v-model="destination[tab.id].center_second"
                                      draggable=".field"
                                      group="field">
@@ -81,23 +83,41 @@
                       </div>
                     </div>
                     <div class="col-sm-3">
-                      <div class="fields">
-                        <div class="field_container connectedSortable col-sm-12">
-                          <draggable v-model="destination[tab.id].side"
-                                     draggable=".field"
-                                     group="field">
-                            <div class="field" v-for="(field,idx) in destination[tab.id].side"
-                                 :key="field.edit_id"
-                                 v-bind:data-id="field.edit_id">
-                              <FormBuilderElement :item="field"></FormBuilderElement>
-                            </div>
-                          </draggable>
+                      <div class="row">
+                        <div class="fields">
+                          <div class="field_container col-sm-12">
+                            <draggable v-model="destination[tab.id].side"
+                                       draggable=".field"
+                                       group="field">
+                              <div class="field" v-for="(field,idx) in destination[tab.id].side"
+                                   :key="field.edit_id"
+                                   v-bind:data-id="field.edit_id">
+                                <FormBuilderElement :item="field"></FormBuilderElement>
+                              </div>
+                            </draggable>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="exist-fields">
+                          <div class="field_container">
+                            <h5 class="text-center">{{'Доступные поля формы'|_}}</h5>
+                            <draggable v-model="destination[tab.id].source_side"
+                                       draggable=".field"
+                                       group="field">
+                              <div class="field" v-for="field in destination[tab.id].source_side"
+                                   :key="field.edit_id"
+                                   v-bind:data-id="field.edit_id">
+                                <FormBuilderElement :item="field"></FormBuilderElement>
+                              </div>
+                            </draggable>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    <div class="col-sm-12">
-                      <div class="exist-fields col-sm-9">
-                        <div class="field_container connectedSortable col-sm-12">
+                    <div class="col-sm-9">
+                      <div class="exist-fields col-sm-12">
+                        <div class="field_container col-sm-12">
                           <h5 class="text-center">{{'Доступные поля формы'|_}}</h5>
                           <draggable v-model="destination[tab.id].source"
                                      draggable=".field"
@@ -190,7 +210,7 @@
                 items: response.data.breadcrumbs,
                 page_title: response.data.page_title
             });
-
+            response.data.items[0].data.form.name = response.data.items[0].name;
             me.$set(me, 'form', response.data.items[0].data.form);// <-- Обновляемый объект
 
             me.openTab = me.form.tabs[0].id;
@@ -203,7 +223,8 @@
                     center: [],
                     center_second: [],
                     side: [],
-                    source: me.form.tabs[i].fields,
+                    source: (me.form.tabs[i].fields) ? me.form.tabs[i].fields : [],
+                    source_side: (me.form.tabs[i].side) ? me.form.tabs[i].side : [],
                 }
             }
             me.$set(me, 'destination', _destionation);
