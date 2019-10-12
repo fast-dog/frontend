@@ -28,6 +28,8 @@ import MenuItem from './components/menu/MenuItem.vue';
 import MenuItems from '@/components/menu/MenuItems.vue';
 import PageItem from '@/components/menu/PageItem.vue';
 import FormItem from './components/config/FormItem.vue';
+import Media from '@/components/media/Media.vue';
+import MediaIndex from '@/components/media/MediaIndex.vue';
 
 declare let window: any;
 
@@ -265,5 +267,21 @@ export default new Router({
         },
       ]
     },
+    {
+      path: '/media/',
+      component: Media,
+      children: [
+        {
+          path: 'index',
+          name: 'media_configuration',
+          component: MediaIndex
+        },
+        // {
+        //   path: 'configuration',
+        //   name: 'media_configuration',
+        //   component: MediaIndex
+        // },
+      ]
+    }
   ]
 })

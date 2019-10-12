@@ -5,7 +5,7 @@
             <ul class="nav side-menu">
                 <li v-for="item in $store.getters.getMainMenu"
                     :class="{'active': isActive(item,$route.fullPath)}">
-                    <a>
+                    <a v-if="item.name">
                         <i :class="'fa ' + item.icon"></i> {{item.name}}
                         <span class="fa fa-chevron-down" v-if="item.children && item.children.length > 0"></span>
                     </a>
