@@ -1,211 +1,212 @@
 <template>
-    <div class="tooltip-container">
-        <div class="col-md-9">
-            <div class="btn-group" style="margin-bottom: 10px">
-                <button data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle"
-                        id="presentation-one">
-                    {{'Добавить параметр'|_}}
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu">
-                    <li v-for="(property,index) in properties" v-if="property.show == false">
-                        <a href="javascript:void(0)" v-on:click="showElement(property)">
-                            <i class="fa fa-question-circle" style="margin-top: 5px"
-                               :data-toggle="'tooltip'"
-                               :data-placement="'right'"
-                               :title="property.data.description"></i>
-                            {{property.name}}
-                        </a>
-                    </li>
-                    <li class="divider"></li>
-                    <li><a href="javascript:void(0)" v-on:click="openSetting($event)" class="font-bold">
-                        <i class="fa fa-gear"></i>
-                        {{'Список параметров'|_}}</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="push-right col-md-3" v-if="tourSteps">
-            <presentation :steps="tourSteps"></presentation>
-        </div>
-        <div class="col-md-12" v-if="selectedProperties.length == 0">
-            <p class="alert alert-info">
-                {{'Дополнительные параметры не выбраны, будут использованы значения по умолчанию'|_}}
-            </p>
-        </div>
-        <table class="table table-striped" v-if="selectedProperties.length > 0">
-            <thead>
-            <tr>
-                <th class="col-md-8">{{'Описание'|_}}</th>
-                <th class="col-md-3">{{'Значение'|_}}</th>
-                <th class="col-md-1"></th>
-            </tr>
-            </thead>
-            <tbody id="presentation-two">
-            <tr v-for="(property,index) in properties" v-if="property.show == true">
-                <td v-html="property.data.description" :id=" (index == 0) ? 'presentation-three': false"></td>
-                <td :id=" (index == 0) ? 'presentation-four': false">
-                    <select-form-field
-                            v-if="property.type.id == 'select'"
-                            :model="property"
-                            :id="property.code"
-                            :readonly="false"
-                            :css_class="''"
-                            :form_group="false"
-                            :option_group="false"
-                            :data="property.data.values"
-                            :field="'value'">
-                    </select-form-field>
-                    <div class="input-group" v-if="property.type.id == 'location' || property.type.id == 'file'">
-                        <input type="text" class="form-control" placeholder="" v-model="property.value">
-                        <span class="input-group-btn" v-if="property.type.id == 'file'">
+  <div class="tooltip-container">
+
+    <div class="col-md-9">
+      <div class="btn-group" style="margin-bottom: 10px">
+        <button data-toggle="dropdown" class="btn btn-sm btn-default dropdown-toggle"
+                id="presentation-one">
+          {{'Добавить параметр'|_}}
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+          <li v-for="(property,index) in properties" v-if="property.show === false">
+            <a href="javascript:void(0)" v-on:click="showElement(property)">
+              <i class="fa fa-question-circle" style="margin-top: 5px"
+                 :data-toggle="'tooltip'"
+                 :data-placement="'right'"
+                 :title="property.data.description"></i>
+              {{property.name}}
+            </a>
+          </li>
+          <li class="divider"></li>
+          <li><a href="javascript:void(0)" v-on:click="openSetting($event)" class="font-bold">
+            <i class="fa fa-gear"></i>
+            {{'Список параметров'|_}}</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="push-right col-md-3" v-if="tourSteps">
+      <presentation :steps="tourSteps"></presentation>
+    </div>
+    <div class="col-md-12" v-if="selectedProperties.length === 0">
+      <p class="alert alert-info">
+        {{'Дополнительные параметры не выбраны, будут использованы значения по умолчанию'|_}}
+      </p>
+    </div>
+    <table class="table table-striped" v-if="selectedProperties.length > 0">
+      <thead>
+      <tr>
+        <th class="col-md-8">{{'Описание'|_}}</th>
+        <th class="col-md-3">{{'Значение'|_}}</th>
+        <th class="col-md-1"></th>
+      </tr>
+      </thead>
+      <tbody id="presentation-two">
+      <tr v-for="(property,index) in properties" v-if="property.show === true">
+        <td v-html="property.data.description" :id=" (index === 0) ? 'presentation-three': false"></td>
+        <td :id=" (index === 0) ? 'presentation-four': false">
+          <select-form-field
+            v-if="property.type.id === 'select'"
+            :model="property"
+            :id="property.code"
+            :readonly="false"
+            :css_class="''"
+            :form_group="false"
+            :option_group="false"
+            :data="property.data.values"
+            :field="'value'">
+          </select-form-field>
+          <div class="input-group" v-if="property.type.id === 'location' || property.type.id === 'file'">
+            <input type="text" class="form-control" placeholder="" v-model="property.value">
+            <span class="input-group-btn" v-if="property.type.id === 'file'">
                         <button type="button" v-on:click="openFinder(property)" class="btn btn-primary">
                             <i class="fa fa-folder-o"></i>
                         </button>
                     </span>
-                        <span class="input-group-btn" v-if="property.type.id == 'location'">
+            <span class="input-group-btn" v-if="property.type.id === 'location'">
                         <button type="button" v-on:click="openMap(property)" class="btn btn-primary">
                             <i class="fa fa-map-marker"></i>
                         </button>
                     </span>
-                    </div>
+          </div>
 
-                    <div v-if="property.type.id == 'string'">
-                        <input type="text" class="form-control" v-model="property.value"
-                               maxlength="245"
-                               placeholder="">
-                    </div>
-                    <div class="input-group" v-if="property.type.id == 'number'">
-                        <input type="number" class="form-control"
-                               data-validate="integer" step="0.1"
-                               v-model="property.value" placeholder="">
-                    </div>
+          <div v-if="property.type.id === 'string'">
+            <input type="text" class="form-control" v-model="property.value"
+                   maxlength="245"
+                   placeholder="">
+          </div>
+          <div class="input-group" v-if="property.type.id === 'number'">
+            <input type="number" class="form-control"
+                   data-validate="integer" step="0.1"
+                   v-model="property.value" placeholder="">
+          </div>
+        </td>
+        <td class="text-center" :id=" (index === 0) ? 'presentation-five': false">
+          <button type="button" v-on:click="hideElement(property)"
+                  class="btn btn-danger">
+            <i class="fa fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="modal fade bs-example-modal-lg" id="property-table" tabindex="-1" role="dialog" data-backdrop="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true">×</span>
+              <span class="sr-only">Close</span>
+            </button>
+            <h4 class="modal-title">{{'Управление'|_}}</h4>
+          </div>
+          <div class="modal-body" style="padding-bottom: 0; padding-top: 0">
+            <table class="table table-striped" v-if="!editProperty">
+              <thead>
+              <tr>
+                <th class="col-md-3">{{'Название'|_}}</th>
+                <th class="col-md-3">{{'Тип'|_}}</th>
+                <th class="col-md-5"></th>
+                <th class="col-md-1"></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(property,index) in properties">
+                <td v-html="property.alias"></td>
+                <td>{{property.type.name}}</td>
+                <td v-html="property.data.description"></td>
+                <td>
+                  <button type="button" v-on:click="editElement($event,property)"
+                          class="btn btn-xs btn-success">
+                    <i class="fa fa-gear"></i>
+                  </button>
+                  <button type="button" v-on:click="deleteElement($event,property)"
+                          class="btn btn-xs btn-danger">
+                    <i class="fa fa-trash"></i>
+                  </button>
                 </td>
-                <td class="text-center" :id=" (index == 0) ? 'presentation-five': false">
-                    <button type="button" v-on:click="hideElement(property)"
-                            class="btn btn-danger">
-                        <i class="fa fa-trash"></i>
-                    </button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <div class="modal fade bs-example-modal-lg" id="property-table" tabindex="-1" role="dialog" data-backdrop="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title">{{'Управление'|_}}</h4>
-                    </div>
-                    <div class="modal-body" style="padding-bottom: 0; padding-top: 0">
-                        <table class="table table-striped" v-if="!editProperty">
-                            <thead>
-                            <tr>
-                                <th class="col-md-3">{{'Название'|_}}</th>
-                                <th class="col-md-3">{{'Тип'|_}}</th>
-                                <th class="col-md-5"></th>
-                                <th class="col-md-1"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="(property,index) in properties">
-                                <td v-html="property.alias"></td>
-                                <td>{{property.type.name}}</td>
-                                <td v-html="property.data.description"></td>
-                                <td>
-                                    <button type="button" v-on:click="editElement($event,property)"
-                                            class="btn btn-xs btn-success">
-                                        <i class="fa fa-gear"></i>
-                                    </button>
-                                    <button type="button" v-on:click="deleteElement($event,property)"
-                                            class="btn btn-xs btn-danger">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                            <tfoot>
-                            <tr>
-                                <td colspan="4" class="text-right">
+              </tr>
+              </tbody>
+              <tfoot>
+              <tr>
+                <td colspan="4" class="text-right">
                                 <span v-on:click="addElement($event)" class="btn btn-primary btn-sm">
                                     <i class="fa fa-plus-circle"></i>
                                     {{'Добавить параметр'|_}}
                                 </span>
-                                </td>
-                            </tr>
-                            </tfoot>
-                        </table>
-                        <form method="post" class="form-horizontal m-b-md" v-if="editProperty">
-                            <div class="row">
-                                <template v-for="(field,idx) in editFormFields">
-                                    <text-form-field
-                                            v-if="field.type == 'text-form-field'"
-                                            :id="field.id"
-                                            :name="field.name"
-                                            :field="field.name"
-                                            :label="field.label"
-                                            :model="editProperty"
-                                            :required="(field.required != undefined) ? field.required : false"
-                                            :validate="field.validate"
-                                            :form_group="field.form_group"
-                                            :readonly="(field.readonly != undefined) ? field.readonly : false"
-                                            :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
-                                            :help_string="(field.help != undefined) ? field.help : ''"
-                                            :placeholder="(field.placeholder  != undefined )?field.placeholder:''"></text-form-field>
-                                    <select-form-field
-                                            v-if="field.type == 'select-form-field'"
-                                            :label="field.label"
-                                            :model="editProperty"
-                                            :id="field.id"
-                                            :required="(field.required != undefined) ? field.required : false"
-                                            :validate="field.validate"
-                                            :readonly="(field.readonly != undefined) ? field.readonly : false"
-                                            :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
-                                            :form_group="(field.form_group != undefined) ? field.form_group : true"
-                                            :option_group="(field.option_group != undefined) ? field.option_group : false"
-                                            :data="field.items"
-                                            :placeholder="(field.placeholder  != undefined )?field.placeholder:''"
-                                            :field="field.name">
-                                    </select-form-field>
-                                </template>
-                                <div>
-                                    <div class="col-sm-12">
-                                        <label class="control-label">{{'Описание'|_}}</label>
-                                        <textarea v-model="editProperty.data.description" class="form-control"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="alert alert-info" style="margin-top: 10px"
-                                 v-if="((editProperty.items && editProperty.id == 0 )|| (editProperty.type.id == 'select'&& editProperty.id == 0 ))">
-                                {{'Для добавления варианов значения необходимо сохранить параметр'|_}}
-                            </div>
-                            <table class="table table-bordered m-t-md"
-                                   v-if="((editProperty.items && editProperty.id > 0 )|| (editProperty.type.id == 'select'&& editProperty.id > 0 ))">
-                                <caption>{{'Варианты значений'|_}}</caption>
-                                <thead>
-                                <tr>
-                                    <th style="width: 50px" class="text-center">ID</th>
-                                    <th>ALIAS</th>
-                                    <th>NAME</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr v-for="value in editProperty.data.values">
-                                    <td class="text-center">{{value.id}}</td>
-                                    <td v-bind:class="{'has-error':errors.has('property_alias_'+value.id)}">
-                                        <input type="text" v-validate="'required'" v-model="value.alias"
-                                               :name="'property_alias_' + value.id" class="form-control">
-                                    </td>
-                                    <td>
-                                        <div class="input-group" v-bind:class="{'has-error':errors.has('property_name_'+value.id)}">
-                                            <input type="text" v-model="value.name"
-                                                   v-validate="'required'"
-                                                   :name="'property_name_' + value.id"
-                                                   class="form-control">
-                                            <span class="input-group-btn">
+                </td>
+              </tr>
+              </tfoot>
+            </table>
+            <form method="post" class="form-horizontal m-b-md" v-if="editProperty">
+              <div class="row">
+                <template v-for="(field,idx) in editFormFields">
+                  <text-form-field
+                    v-if="field.type === 'text-form-field'"
+                    :id="field.id"
+                    :name="field.name"
+                    :field="field.name"
+                    :label="field.label"
+                    :model="editProperty"
+                    :required="(field.required !== undefined) ? field.required : false"
+                    :validate="field.validate"
+                    :form_group="field.form_group"
+                    :readonly="(field.readonly !== undefined) ? field.readonly : false"
+                    :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+                    :help_string="(field.help !== undefined) ? field.help : ''"
+                    :placeholder="(field.placeholder  !== undefined )?field.placeholder:''"></text-form-field>
+                  <select-form-field
+                    v-if="field.type === 'select-form-field'"
+                    :label="field.label"
+                    :model="editProperty"
+                    :id="field.id"
+                    :required="(field.required !== undefined) ? field.required : false"
+                    :validate="field.validate"
+                    :readonly="(field.readonly !== undefined) ? field.readonly : false"
+                    :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+                    :form_group="(field.form_group !== undefined) ? field.form_group : true"
+                    :option_group="(field.option_group !== undefined) ? field.option_group : false"
+                    :data="field.items"
+                    :placeholder="(field.placeholder  !== undefined )?field.placeholder:''"
+                    :field="field.name">
+                  </select-form-field>
+                </template>
+                <div>
+                  <div class="col-sm-12">
+                    <label class="control-label">{{'Описание'|_}}</label>
+                    <textarea v-model="editProperty.data.description" class="form-control"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="alert alert-info" style="margin-top: 10px"
+                   v-if="((editProperty.items && editProperty.id === 0 )|| (editProperty.type.id === 'select'&& editProperty.id === 0 ))">
+                {{'Для добавления варианов значения необходимо сохранить параметр'|_}}
+              </div>
+              <table class="table table-bordered m-t-md"
+                     v-if="((editProperty.items && editProperty.id > 0 )|| (editProperty.type.id === 'select'&& editProperty.id > 0 ))">
+                <caption>{{'Варианты значений'|_}}</caption>
+                <thead>
+                <tr>
+                  <th style="width: 50px" class="text-center">ID</th>
+                  <th>ALIAS</th>
+                  <th>NAME</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="value in editProperty.data.values">
+                  <td class="text-center">{{value.id}}</td>
+                  <td v-bind:class="{'has-error':errors.has('property_alias_'+value.id)}">
+                    <input type="text" v-validate="'required'" v-model="value.alias"
+                           :name="'property_alias_' + value.id" class="form-control">
+                  </td>
+                  <td>
+                    <div class="input-group" v-bind:class="{'has-error':errors.has('property_name_'+value.id)}">
+                      <input type="text" v-model="value.name"
+                             v-validate="'required'"
+                             :name="'property_name_' + value.id"
+                             class="form-control">
+                      <span class="input-group-btn">
                                              <button type="button" data-style="zoom-in"
                                                      v-on:click="saveValue($event, value)" class="btn btn-primary btn-md">
                                                 <i class="fa fa-check"></i>
@@ -215,60 +216,57 @@
                                                 <i class="fa fa-trash"></i>
                                             </button>
                                         </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                                <tfoot>
-                                <tr>
-                                    <td colspan="3" class="text-right">
-                                        <button type="button" v-on:click="addValue($event)" class="btn btn-primary btn-sm">
-                                            <i class="fa fa-plus-circle"></i>
-                                            {{'Добавить значение'|_}}
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tfoot>
-                            </table>
-                        </form>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white" v-if="!editProperty" data-dismiss="modal">{{'Закрыть'|_}}</button>
-                        <a href="#" class="btn btn-warning" v-if="editProperty" v-on:click="editElement($event,null)">
-                            <i class="fa fa-chevron-left"></i> {{'Назад'|_}}
-                        </a>
-                        <button type="button" class="btn btn-primary" data-style="zoom-in"
-                                v-on:click="saveElement($event)" v-if="editProperty">
-                            <i class="fa fa-check"></i>
-                            {{'Сохранить'|_}}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+                  </td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <td colspan="3" class="text-right">
+                    <button type="button" v-on:click="addValue($event)" class="btn btn-primary btn-sm">
+                      <i class="fa fa-plus-circle"></i>
+                      {{'Добавить значение'|_}}
+                    </button>
+                  </td>
+                </tr>
+                </tfoot>
+              </table>
+            </form>
+          </div>
+          <div class="modal-footer">
+<!--            <button type="button" class="btn btn-white" v-if="!editProperty" data-dismiss="modal">{{'Закрыть'|_}}</button>-->
 
-        <div class="modal fade bs-example-modal-lg" id="property-setting" tabindex="-1" role="dialog" data-backdrop="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true">×</span>
-                            <span class="sr-only">Close</span>
-                        </button>
-                        <h4 class="modal-title" v-if="editProperty">{{'Редактирование параметра'|_}}:
-                            #{{editProperty.id}}-{{editProperty.alias}}</h4>
-                    </div>
-                    <div class="modal-body" v-if="editFormFields && editProperty">
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white" data-dismiss="modal">{{'Закрыть'|_}}</button>
-                        <button type="button" class="btn btn-primary">{{'Применить'|_}}</button>
-                    </div>
-                </div>
-            </div>
+            <a href="#" class="btn btn-warning" v-if="editProperty" v-on:click="editElement($event,null)">
+              <i class="fa fa-chevron-left"></i> {{'Назад'|_}}
+            </a>
+            <button type="button" class="btn btn-primary" data-style="zoom-in"
+                    v-on:click="saveElement($event)" v-if="editProperty">
+              <i class="fa fa-check"></i>
+              {{'Сохранить'|_}}
+            </button>
+          </div>
         </div>
+      </div>
     </div>
+    <div class="modal inmodal fade" id="mapModal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+              class="sr-only">Close</span></button>
+            <h4 class="modal-title">Поиск по карте</h4>
+          </div>
+          <div class="modal-body" style="padding: 0">
+            <div id="map" style="width: 100%; height: 400px"></div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-white" data-dismiss="modal">Закрыть</button>
+            <button type="button" class="btn btn-primary">Применить</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -338,7 +336,6 @@
 
             me.$nextTick(function () {
                 $('.dropdown-toggle').dropdown();
-                // me.initChosen();
             });
 
 
@@ -622,17 +619,17 @@
                     me.editProperty.model_class = me.model_class;
                     Util.sendData({
                         event: $event,
-                        url: 'content/save-property',
+                        url: 'config/save-property',
                         data: me.editProperty,
                         callback: function (response) {
                             if (response.data.success) {
-                                me.properties = response.data.items;
-                                me.editProperty = response.data.item;
-                                if (response.data.item.data.values) {
-                                    me.editProperty.values = response.data.item.data.values;
-                                }
-                            } else {
-                                Util.showWarning(FdTranslator._('Ошибка сохранения парамтера'))
+                                setTimeout(function () {
+                                    me.properties = response.data.items;
+                                    if (response.data.item.data.values) {
+                                        me.editProperty.values = response.data.item.data.values;
+                                    }
+                                    me.$set(me, 'editProperty', null);
+                                }, 150)
                             }
                         }
                     }, me)
@@ -658,7 +655,7 @@
                     callback: function () {
                         Util.sendData({
                             event: $event,
-                            url: 'content/delete-select-value',
+                            url: 'config/delete-select-value',
                             data: {
                                 id: value.id,
                                 type: me.editProperty.type,
@@ -702,7 +699,7 @@
                 if (result) {
                     Util.sendData({
                         event: $event,
-                        url: 'content/add-select-value',
+                        url: 'config/add-select-value',
                         data: {
                             id: value.id,
                             name: value.name,
@@ -725,7 +722,7 @@
 </script>
 
 <style>
-    .modal-backdrop.in {
-        display: none !important;
-    }
+  .modal-backdrop.in {
+    display: none !important;
+  }
 </style>

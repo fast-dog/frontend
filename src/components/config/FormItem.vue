@@ -36,7 +36,9 @@
                             <div class="field" v-for="(field,idx) in destination[tab.id].left"
                                  :key="field.edit_id"
                                  v-bind:data-id="field.edit_id">
-                              <FormBuilderElement :item="field"></FormBuilderElement>
+                              <div class="handler col-sm-12" :class="field.type">
+                                <FormBuilderElement :item="field"></FormBuilderElement>
+                              </div>
                             </div>
                           </draggable>
                         </div>
@@ -49,7 +51,9 @@
                             <div class="field" v-for="(field,idx) in destination[tab.id].right"
                                  :key="field.edit_id"
                                  v-bind:data-id="field.edit_id">
-                              <FormBuilderElement :item="field"></FormBuilderElement>
+                              <div class="handler col-sm-12" :class="field.type">
+                                <FormBuilderElement :item="field"></FormBuilderElement>
+                              </div>
                             </div>
                           </draggable>
                         </div>
@@ -62,7 +66,9 @@
                               <div class="field" v-for="(field,idx) in destination[tab.id].center"
                                    :key="field.edit_id"
                                    v-bind:data-id="field.edit_id">
-                                <FormBuilderElement :item="field"></FormBuilderElement>
+                                <div class="handler col-sm-12" :class="field.type">
+                                  <FormBuilderElement :item="field"></FormBuilderElement>
+                                </div>
                               </div>
                             </draggable>
                           </div>
@@ -76,7 +82,9 @@
                             <div class="field" v-for="(field,idx) in destination[tab.id].center_second"
                                  :key="field.edit_id"
                                  v-bind:data-id="field.edit_id">
-                              <FormBuilderElement :item="field"></FormBuilderElement>
+                              <div class="handler col-sm-12" :class="field.type">
+                                <FormBuilderElement :item="field"></FormBuilderElement>
+                              </div>
                             </div>
                           </draggable>
                         </div>
@@ -92,7 +100,9 @@
                               <div class="field" v-for="(field,idx) in destination[tab.id].side"
                                    :key="field.edit_id"
                                    v-bind:data-id="field.edit_id">
-                                <FormBuilderElement :item="field"></FormBuilderElement>
+                                <div class="handler col-sm-12" :class="field.type">
+                                  <FormBuilderElement :item="field"></FormBuilderElement>
+                                </div>
                               </div>
                             </draggable>
                           </div>
@@ -100,7 +110,7 @@
                       </div>
                       <div class="row">
                         <div class="exist-fields">
-                          <div class="field_container">
+                          <div class="field_container col-sm-12">
                             <h5 class="text-center">{{'Доступные поля формы'|_}}</h5>
                             <draggable v-model="destination[tab.id].source_side"
                                        draggable=".field"
@@ -108,7 +118,9 @@
                               <div class="field" v-for="field in destination[tab.id].source_side"
                                    :key="field.edit_id"
                                    v-bind:data-id="field.edit_id">
-                                <FormBuilderElement :item="field"></FormBuilderElement>
+                                <div class="handler col-sm-12" :class="field.type">
+                                  <FormBuilderElement :item="field"></FormBuilderElement>
+                                </div>
                               </div>
                             </draggable>
                           </div>
@@ -125,7 +137,17 @@
                             <div class="field" v-for="field in destination[tab.id].source"
                                  :key="field.edit_id"
                                  v-bind:data-id="field.edit_id">
-                              <FormBuilderElement :item="field"></FormBuilderElement>
+                              <div class="handler col-sm-12" :class="field.type">
+                                <a href="#" class="next-tab" v-if="idx  >= 0 && idx < form.tabs.length"
+                                   v-on:click.prevent="moveToNextTab(idx,field)">
+                                  <i class="fa fa-arrow-circle-right"></i>
+                                </a>
+                                <a href="#" class="prev-tab" v-if="idx  > 0 && idx <= form.tabs.length"
+                                   v-on:click.prevent="moveToPrevTab(idx,field)">
+                                  <i class="fa fa-arrow-circle-left"></i>
+                                </a>
+                                <FormBuilderElement :item="field"></FormBuilderElement>
+                              </div>
                             </div>
                           </draggable>
                         </div>
@@ -234,7 +256,6 @@
         removeTab(id: any, $event: Event): void {
             let me = this,
                 _destionation = {};
-
             for (let i in me.destination[id]) {
                 me.destination[id][i] = me.destination[id][i].filter(function (field, idx) {
                     me.destination[me.form.tabs[0].id].source.push(field);
@@ -243,8 +264,6 @@
             for (let i in me.destination) {
                 if (i != id) {
                     _destionation[i] = me.destination[i];
-                } else {
-                    console.log('removeD id: ' + id)
                 }
             }
 
@@ -271,8 +290,6 @@
 
         saveForm(): void {
             let me = this;
-
-
             CrudService.post(Util.httpRoot + 'form', {
                 id: me.$route.params.id,
                 preset: me.destination
@@ -303,18 +320,29 @@
             return result;
         }
 
-        onEndSourceCenter(env) {
-            let me = this,
-                parent = $(env.to).parent(),
-                tab_id = $(parent).data('id'),
-                position = $(parent).data('position');
-            console.log(tab_id, position, me.destination[tab_id][position]);
-            return true;
+        moveToPrevTab(idx, field): void {
+            this.moveField(idx, field, 'prev');
         }
 
-        onEndSourceCenter2(env) {
-            //alert('ok')
+        moveToNextTab(idx, field): void {
+            this.moveField(idx, field, 'next');
         }
+
+        moveField(idx, field, to) {
+            let me = this,
+                current = me.form.tabs[idx].id,
+                to_tab = me.form.tabs[(to == 'next') ? idx + 1 : idx - 1],
+                destination = (to_tab) ? to_tab.id : null;
+            if (destination) {
+                me.destination[current].source = me.destination[current].source.filter(function (element, idx) {
+                    if (field.edit_id === element.edit_id) {
+                        me.destination[destination].source.push(element);
+                    }
+                    return field.edit_id !== element.edit_id;
+                });
+            }
+        }
+
     }
 </script>
 
@@ -366,15 +394,28 @@
     }
   }
 
-  .field {
 
-    .handler {
-      line-height: 25px;
-      cursor: move;
-      padding: 5px;
-      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .2), 0 1px 3px 0 rgba(0, 0, 0, .12);
+  .handler {
+    line-height: 25px;
+    cursor: move;
+    padding: 5px;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .2), 0 1px 3px 0 rgba(0, 0, 0, .12);
+
+    .next-tab {
+      position: absolute;
+      right: 0;
+      top: -5px;
+      font-size: 16px;
+    }
+
+    .prev-tab {
+      position: absolute;
+      left: 0;
+      top: -5px;
+      font-size: 16px;
     }
   }
+
 
   .media {
     .handler {
@@ -382,11 +423,11 @@
     }
   }
 
-  .text-form-field, .text-form-alias, .tabs, .media {
+  .text-form-field, .text-form-alias, .tabs, .media, .access-list {
     color: #555;
     background-color: #fff;
     background-image: none;
-    border: 1px solid #ccc;
+    // border: 1px solid #ccc;
     // box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
   }
 </style>

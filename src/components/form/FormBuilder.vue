@@ -24,7 +24,6 @@
                   <i class="fa fa-life-bouy"></i>
                   {{'Помощь'|_}}
                 </button>
-
               </div>
             </div>
             <div class="x_content" :style="{minHeight: $store.getters.getTableHeight + 'px'}">

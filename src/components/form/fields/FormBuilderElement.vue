@@ -2,56 +2,49 @@
   <div class="row" style="margin: 0 5px" v-if="field">
     <div class="col-md-12">
       <div v-if="field.type === 'text-form-alias'">
-        <div class="handler col-sm-12" :class="field.type">
-          <text-form-alias
-            :item="{id:0,alias:''}"
-            :required="false"
-            :validate="''"
-            :label="field.label"
-            :disabled="true"
-            :placeholder="''"
-            :form_group="false"
-            :css_class="'col-sm-12'">
-          </text-form-alias>
-        </div>
+        <text-form-alias
+          :item="{id:0,alias:''}"
+          :required="field.required"
+          :validate="''"
+          :label="field.label"
+          :disabled="true"
+          :placeholder="''"
+          :form_group="false"
+          :css_class="'col-sm-12'">
+        </text-form-alias>
       </div>
       <div v-if="field.type === 'text-form-field'">
-        <div class="handler col-sm-12" :class="field.type">
-          <text-form-field
-            :id="''"
-            :name="field.name"
-            :field="'name'"
-            :label="field.label"
-            :model="{name:''}"
-            :scope="null"
-            :required="false"
-            :form_group="false"
-            :readonly="true"
-            :css_class="'col-sm-12'"
-            :help_string="''"
-            :placeholder="''"></text-form-field>
-        </div>
+        <text-form-field
+          :id="''"
+          :name="field.name"
+          :field="'name'"
+          :label="field.label"
+          :model="{name:''}"
+          :scope="null"
+          :required="field.required"
+          :form_group="false"
+          :readonly="true"
+          :css_class="'col-sm-12'"
+          :help_string="''"
+          :placeholder="''"></text-form-field>
       </div>
 
       <div v-if="field.type === 'select-form-field' || field.type === 'access-list'">
-        <div class="handler col-sm-12" :class="field.type">
-          <select-form-field
-            :label="field.label"
-            :model="{value:''}"
-            :required="false"
-            :multiple="false"
-            :readonly="true"
-            :css_class="'col-sm-12'"
-            :form_group="false"
-            :option_group="false"
-            :data="[]"
-            :disabled="true"
-            :placeholder="''"
-            :field="''">
-          </select-form-field>
-        </div>
+        <select-form-field
+          :label="field.label"
+          :model="{value:''}"
+          :required="false"
+          :multiple="false"
+          :readonly="true"
+          :css_class="'col-sm-12'"
+          :form_group="false"
+          :option_group="false"
+          :data="[]"
+          :disabled="true"
+          :placeholder="''"
+          :field="''">
+        </select-form-field>
       </div>
-
       <div :class="field.type" v-if="field.type === 'tabs'">
         <div class="handler">
           <div class="tabs-container">
@@ -66,9 +59,10 @@
         </div>
       </div>
       <div v-if="field.type === 'media'">
-        <div class="handler col-sm-12" :class="field.type">
-          <media :item="{media:[{type:'file',value:''}]}" :disabled=true :presentation="false"></media>
-        </div>
+        <media :item="{media:[{type:'file',value:''}]}" :disabled=true :presentation="false"></media>
+      </div>
+      <div v-if="field.type === 'sample-properties-table'">
+
       </div>
     </div>
   </div>
@@ -118,15 +112,6 @@
 
 <style scoped lang="scss">
 
-  .field {
-
-    .handler {
-      line-height: 25px;
-      cursor: move;
-      padding: 5px;
-      box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .14), 0 2px 1px -1px rgba(0, 0, 0, .2), 0 1px 3px 0 rgba(0, 0, 0, .12);
-    }
-  }
 
   .media {
     .handler {
@@ -134,11 +119,4 @@
     }
   }
 
-  .text-form-field, .text-form-alias, .tabs, .media, .access-list {
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    // border: 1px solid #ccc;
-    // box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
-  }
 </style>

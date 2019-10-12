@@ -296,8 +296,9 @@ export class Util extends Vue {
             if (l) {
                 setTimeout(function () {
                     let html = $('span.ladda-label', target).html();
+                    console.log(target);
                     $('span.ladda-label,.ladda-spinner,.ladda-progress', target).remove();
-                    $(target).html(html);
+                    $(target).html(html); console.log(html)
                     l.remove()
                 })
             }
