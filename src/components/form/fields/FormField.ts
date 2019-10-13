@@ -5,59 +5,62 @@ import moment from 'moment';
 
 export class FormField extends Vue {
 
-    @Prop({default: ''})
-    placeholder: string;
+  @Prop({default: ''})
+  placeholder: string;
 
-    @Prop({default: moment().millisecond().toString()})
-    id: string;
+  @Prop({default: moment().millisecond().toString()})
+  id: string;
 
-    @Prop({default: ''})
-    label: string;
+  @Prop({default: false})
+  disabled: boolean;
 
-    @Prop({default: ''})
-    help_string: string;
+  @Prop({default: ''})
+  label: string;
 
-    @Prop({default: false})
-    readonly: boolean;
+  @Prop({default: ''})
+  help_string: string;
 
-    @Prop({default: ''})
-    field: string;
+  @Prop({default: false})
+  readonly: boolean;
 
-    @Prop({default: 300})
-    height: number;
+  @Prop({default: ''})
+  field: string;
 
-    @Prop({default: null})
-    model: any;
+  @Prop({default: 300})
+  height: number;
 
-    @Prop({default: null})
-    scope: any;
+  @Prop({default: null})
+  model: any;
 
-    @Provide()
-    set_model: any = null;
+  @Prop({default: null})
+  scope: any;
 
-    @Prop({default: 'col-sm-12'})
-    css_class: string;
+  @Provide()
+  set_model: any = null;
 
-    @Provide()
-    set_id: any = null;
+  @Prop({default: 'col-sm-12'})
+  css_class: string;
 
-    @Prop({default: false})
-    form_group: boolean;
+  @Provide()
+  set_id: any = null;
 
-    @Prop({default: false})
-    required: boolean;
+  @Prop({default: false})
+  form_group: boolean;
 
-    @Prop({default: ''})
-    validate: string;
+  @Prop({default: false})
+  required: boolean;
 
-    @Prop({default: ''})
-    name: string;
+  @Prop({default: ''})
+  validate: string;
 
-    mounted(): void {
+  @Prop({default: ''})
+  name: string;
 
-    }
+  mounted(): void {
 
-    beforeDestroy(): void {
+  }
 
-    }
+  beforeDestroy(): void {
+
+  }
 }

@@ -4,6 +4,7 @@
             <presentation :steps="tourSteps"></presentation>
         </div>
         <div class="col-sm-12" v-if="set_item">
+          <label class="control-label">{{label|_}}</label>
             <div class="form-group " v-for="(mediaItem,idx) in set_item.media">
                 <div class="col-md-6">
                     <div class="input-group">
@@ -86,6 +87,9 @@
 
         @Prop({default: null})
         item: any;
+
+        @Prop({default: null})
+        label: any;
 
         @Prop({default: true})
         presentation: boolean;

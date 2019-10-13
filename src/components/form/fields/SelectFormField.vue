@@ -61,9 +61,6 @@
         @Prop({default: null})
         data: [any];
 
-        @Prop({default: false})
-        disabled: boolean;
-
         @Provide()
         set_data: [any] = null;
 

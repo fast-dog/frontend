@@ -59,7 +59,27 @@
         </div>
       </div>
       <div v-if="field.type === 'media'">
-        <media :item="{media:[{type:'file',value:''}]}" :disabled=true :presentation="false"></media>
+        <media :item="{media:[{type:'file',value:''}]}"
+               :label="'Медиа материалы'"
+               :disabled=true :presentation="false"></media>
+      </div>
+      <div v-if="field.type === 'media-form-field'">
+        <media-form-field
+          :label="field.label"
+          :disabled="true"></media-form-field>
+      </div>
+      <div v-if="field.type === 'map'">
+        <div class="col-sm-12">
+          <label class="control-label">{{field.label|_}}</label>
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="" readonly>
+            <span class="input-group-btn">
+            <button type="button" disabled class="btn btn-primary">
+              <i class="fa fa-map-marker"></i>
+            </button>
+          </span>
+          </div>
+        </div>
       </div>
       <div v-if="field.type === 'sample-properties-table'">
 
@@ -78,6 +98,7 @@
     import TextAliasFormField from '@/components/form/fields/TextAliasFormField.vue';
     import TextFormField from '@/components/form/fields/TextFormField.vue';
     import SelectFormField from '@/components/form/fields/SelectFormField.vue';
+    import MediaFormField from '@/components/form/fields/MediaFormField.vue';
 
     declare let $: any;
 
@@ -88,6 +109,7 @@
             'text-form-field': TextFormField,
             'text-form-alias': TextAliasFormField,
             'select-form-field': SelectFormField,
+            'media-form-field': MediaFormField,
         },
         filters: {
             _: function (value) {

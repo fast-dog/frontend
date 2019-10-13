@@ -423,10 +423,11 @@
     }
   }
 
-  .text-form-field, .text-form-alias, .tabs, .media, .access-list {
+  .text-form-field, .text-form-alias, .tabs, .media, .access-list, .select-form-field, .map, .media-form-field {
     color: #555;
     background-color: #fff;
     background-image: none;
+    margin: 0 1px;
     // border: 1px solid #ccc;
     // box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
   }

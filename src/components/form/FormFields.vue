@@ -1,124 +1,124 @@
 <template>
-    <div>
-        <text-form-field
-                v-if="checkFieldTypeWithExpression(field,'text-form-field')"
-                :id="field.id"
-                :name="field.name"
-                :field="field.name"
-                :label="field.label"
-                :mask="field.mask"
-                :model="model"
-                :scope="(field.scope)?field.scope:null"
-                :required="(field.required != undefined) ? field.required : false"
-                :validate="field.validate"
-                :form_group="field.form_group"
-                :readonly="(field.readonly != undefined) ? field.readonly : false"
-                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
-                :help_string="(field.help != undefined) ? field.help : ''"
-                :placeholder="(field.placeholder  != undefined )?field.placeholder:''"></text-form-field>
-        <select-form-field
-                v-if="checkFieldTypeWithExpression(field,'select-form-field') || checkFieldTypeWithExpression(field,'access-list')"
-                :label="field.label"
-                :model="model"
-                :id="field.id"
-                :required="(field.required != undefined) ? field.required : false"
-                :multiple="(field.multiple != undefined) ? field.multiple : false"
-                :validate="field.validate"
-                :readonly="(field.readonly != undefined) ? field.readonly : false"
-                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
-                :form_group="(field.form_group != undefined) ? field.form_group : true"
-                :option_group="(field.option_group != undefined) ? field.option_group : false"
-                :data="field.items"
-                :placeholder="(field.placeholder  != undefined )?field.placeholder:''"
-                :field="field.name">
-        </select-form-field>
-        <date-form-field
-                v-if="checkFieldTypeWithExpression(field,'date-form-field')"
-                :id="field.id"
-                :name="field.name"
-                :field="field.name"
-                :label="field.label"
-                :model="model"
-                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
-                :form_group="field.form_group"
-                :required="(field.required != undefined) ? field.required : false"
-                :validate="field.validate"
-                :readonly="(field.readonly != undefined) ? field.readonly : false"
-                :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
-        </date-form-field>
-        <password-form-field
-                v-if="checkFieldTypeWithExpression(field,'password-form-field')"
-                :id="field.id"
-                :name="field.name"
-                :field="field.name"
-                :label="field.label"
-                :model="model"
-                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
-                :form_group="field.form_group"
-                :required="(field.required != undefined) ? field.required : false"
-                :validate="field.validate"
-                :readonly="(field.readonly != undefined) ? field.readonly : false"
-                :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
-        </password-form-field>
-        <address-form-field
-                v-if="checkFieldTypeWithExpression(field,'address-form-field')"
-                :id="field.id"
-                :name="field.name"
-                :field="field.name"
-                :label="field.label"
-                :token="field.token"
-                :model="model"
-                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
-                :form_group="field.form_group"
-                :required="(field.required != undefined) ? field.required : false"
-                :validate="field.validate"
-                :readonly="(field.readonly != undefined) ? field.readonly : false"
-                :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
-        </address-form-field>
-        <text-editor-form-field
-                v-if="checkFieldTypeWithExpression(field,'text-editor-form-field')"
-                :id="field.id"
-                :name="field.name"
-                :field="field.name"
-                :label="field.label"
-                :model="model"
-                :required="(field.required != undefined) ? field.required : false"
-                :validate="field.validate"
-                :readonly="(field.readonly != undefined) ? field.readonly : false"
-                :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
-        </text-editor-form-field>
-        <code-editor-form-field
-                v-if="checkFieldTypeWithExpression(field,'code-editor-form-field')"
-                :id="field.id"
-                :name="field.name"
-                :field="field.name"
-                :label="(field.label)?field.label:'HTML оформление'"
-                :model="model"
-                :default_mode="field.default_mode"
-                :event="field.event"
-                :required="(field.required != undefined) ? field.required : false"
-                :validate="field.validate"
-                :form_group="field.form_group"
-                :readonly="(field.readonly != undefined) ? field.readonly : false"
-                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
-                :help_string="(field.help != undefined) ? field.help : ''"
-                :placeholder="(field.placeholder)?field.placeholder:''"></code-editor-form-field>
-        <sample-properties-table v-if="checkFieldTypeWithExpression(field,'sample-properties-table')"
-                                 :item="model" :model_id="field.model_id"
-                                 :model_class="field.model"></sample-properties-table>
-        <media :item="model" v-if="checkFieldTypeWithExpression(field,'media')"></media>
-        <text-form-alias
-                v-if="checkFieldTypeWithExpression(field,'text-form-alias')"
-                :item="model"
-                :required="(field.required != undefined) ? field.required : false"
-                :validate="field.validate"
-                :label="field.label"
-                :placeholder="(field.placeholder  != undefined )?field.placeholder:''"
-                :form_group="field.form_group"
-                :css_class="(field.css_class) ? field.css_class : 'col-sm-6'">
-        </text-form-alias>
-        <seo :item="model" v-if="checkFieldTypeWithExpression(field,'seo')"></seo>
-    </div>
+  <div>
+    <text-form-field
+      v-if="checkFieldTypeWithExpression(field,'text-form-field')"
+      :id="field.id"
+      :name="field.name"
+      :field="field.name"
+      :label="field.label"
+      :mask="field.mask"
+      :model="model"
+      :scope="(field.scope)?field.scope:null"
+      :required="(field.required != undefined) ? field.required : false"
+      :validate="field.validate"
+      :form_group="field.form_group"
+      :readonly="(field.readonly != undefined) ? field.readonly : false"
+      :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+      :help_string="(field.help != undefined) ? field.help : ''"
+      :placeholder="(field.placeholder  != undefined )?field.placeholder:''"></text-form-field>
+    <select-form-field
+      v-if="checkFieldTypeWithExpression(field,'select-form-field') || checkFieldTypeWithExpression(field,'access-list')"
+      :label="field.label"
+      :model="model"
+      :id="field.id"
+      :required="(field.required != undefined) ? field.required : false"
+      :multiple="(field.multiple != undefined) ? field.multiple : false"
+      :validate="field.validate"
+      :readonly="(field.readonly != undefined) ? field.readonly : false"
+      :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+      :form_group="(field.form_group != undefined) ? field.form_group : true"
+      :option_group="(field.option_group != undefined) ? field.option_group : false"
+      :data="field.items"
+      :placeholder="(field.placeholder  != undefined )?field.placeholder:''"
+      :field="field.name">
+    </select-form-field>
+    <date-form-field
+      v-if="checkFieldTypeWithExpression(field,'date-form-field')"
+      :id="field.id"
+      :name="field.name"
+      :field="field.name"
+      :label="field.label"
+      :model="model"
+      :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+      :form_group="field.form_group"
+      :required="(field.required != undefined) ? field.required : false"
+      :validate="field.validate"
+      :readonly="(field.readonly != undefined) ? field.readonly : false"
+      :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
+    </date-form-field>
+    <password-form-field
+      v-if="checkFieldTypeWithExpression(field,'password-form-field')"
+      :id="field.id"
+      :name="field.name"
+      :field="field.name"
+      :label="field.label"
+      :model="model"
+      :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+      :form_group="field.form_group"
+      :required="(field.required != undefined) ? field.required : false"
+      :validate="field.validate"
+      :readonly="(field.readonly != undefined) ? field.readonly : false"
+      :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
+    </password-form-field>
+    <address-form-field
+      v-if="checkFieldTypeWithExpression(field,'address-form-field')"
+      :id="field.id"
+      :name="field.name"
+      :field="field.name"
+      :label="field.label"
+      :token="field.token"
+      :model="model"
+      :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+      :form_group="field.form_group"
+      :required="(field.required != undefined) ? field.required : false"
+      :validate="field.validate"
+      :readonly="(field.readonly != undefined) ? field.readonly : false"
+      :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
+    </address-form-field>
+    <text-editor-form-field
+      v-if="checkFieldTypeWithExpression(field,'text-editor-form-field')"
+      :id="field.id"
+      :name="field.name"
+      :field="field.name"
+      :label="field.label"
+      :model="model"
+      :required="(field.required != undefined) ? field.required : false"
+      :validate="field.validate"
+      :readonly="(field.readonly != undefined) ? field.readonly : false"
+      :placeholder="(field.placeholder  != undefined )?field.placeholder:''">
+    </text-editor-form-field>
+    <code-editor-form-field
+      v-if="checkFieldTypeWithExpression(field,'code-editor-form-field')"
+      :id="field.id"
+      :name="field.name"
+      :field="field.name"
+      :label="(field.label)?field.label:'HTML оформление'"
+      :model="model"
+      :default_mode="field.default_mode"
+      :event="field.event"
+      :required="(field.required != undefined) ? field.required : false"
+      :validate="field.validate"
+      :form_group="field.form_group"
+      :readonly="(field.readonly != undefined) ? field.readonly : false"
+      :css_class="(field.css_class) ? field.css_class : 'col-sm-6'"
+      :help_string="(field.help != undefined) ? field.help : ''"
+      :placeholder="(field.placeholder)?field.placeholder:''"></code-editor-form-field>
+    <sample-properties-table v-if="checkFieldTypeWithExpression(field,'sample-properties-table')"
+                             :item="model" :model_id="field.model_id"
+                             :model_class="field.model"></sample-properties-table>
+    <media :item="model" v-if="checkFieldTypeWithExpression(field,'media')"></media>
+    <text-form-alias
+      v-if="checkFieldTypeWithExpression(field,'text-form-alias')"
+      :item="model"
+      :required="(field.required != undefined) ? field.required : false"
+      :validate="field.validate"
+      :label="field.label"
+      :placeholder="(field.placeholder  != undefined )?field.placeholder:''"
+      :form_group="field.form_group"
+      :css_class="(field.css_class) ? field.css_class : 'col-sm-6'">
+    </text-form-alias>
+    <seo :item="model" v-if="checkFieldTypeWithExpression(field,'seo')"></seo>
+  </div>
 </template>
 
 <script lang="ts">
@@ -135,8 +135,9 @@
     import CodeEditorFormField from '@/components/form/fields/CodeEditorFormField.vue';
     import SamplePropertyTable from '@/components/form/components/SamplePropertyTable.vue';
     import MediaItems from '@/components/form/components/MediaItems.vue';
-    import TextAliasFormField from "@/components/form/fields/TextAliasFormField.vue";
-    import Seo from "@/components/form/components/Seo.vue";
+    import TextAliasFormField from '@/components/form/fields/TextAliasFormField.vue';
+    import Seo from '@/components/form/components/Seo.vue';
+    import MediaFormField from '@/components/form/fields/MediaFormField.vue';
 
     declare let $: any;
 
@@ -154,7 +155,7 @@
             'select-form-field': SelectFormField,
             'code-editor-form-field': CodeEditorFormField,
             // 'search-form-field': SearchFormField,
-            // 'media-form-field': MediaFormField,
+            'media-form-field': MediaFormField,
             'text-editor-form-field': TextEditorFormField,
             'date-form-field': DateFormField,
             'media': MediaItems,
