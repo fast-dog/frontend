@@ -52,6 +52,7 @@
                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
                     form_builder: (response.data.form.form_builder) ? response.data.form.form_builder : false,
                     name: 'user-item',
+                    is_preset: (response.data.form.is_preset) ? response.data.form.is_preset : 'N',
                     content: {
                         buttons: Util.buttons([
                             Util.buttonSave({

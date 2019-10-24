@@ -1,5 +1,5 @@
 <template>
-    <form-manager :model="item"></form-manager>
+  <form-manager :model="item"></form-manager>
 </template>
 
 <script lang="ts">
@@ -51,7 +51,7 @@
 
                 let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
 
-                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
                     form_builder: (response.data.form.form_builder) ? response.data.form.form_builder : false,
                     name: 'user-item',
                     content: {

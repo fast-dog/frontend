@@ -2,8 +2,20 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="x_panel" v-if="form">
+        <!--
         <div class="x_title">
-          {{form.name}}
+           {{form.name}}
+         </div>
+         -->
+        <div class="x_title fixed-scroll">
+          <button v-for="button in buttons" class="btn btn-responsive"
+                  :id="button.id"
+                  v-bind:class="button.cls"
+                  data-style="zoom-in"
+                  v-on:click="button.action($event)">
+            <i class="fa" v-bind:class="button.icon"></i>
+            {{button.text}}
+          </button>
         </div>
         <div class="x_content">
           <div class="tabs-container">
@@ -23,9 +35,7 @@
             <div class="tab-content">
               <div :id="tab.id" v-for="(tab,idx) in form.tabs"
                    class="tab-pane" :class="{'active': getActiveTab(tab.id, tab.active) === true}">
-                <div class="panel-body"
-                     v-bind:data-id="tab.id"
-                     data-action="tab">
+                <div class="panel-body" v-bind:data-id="tab.id" data-action="tab">
                   <div class="row">
                     <div class="col-sm-9">
                       <div class="col-sm-6 fields">
@@ -198,6 +208,9 @@
         source: any = {};
 
         @Provide()
+        buttons: any = {};
+
+        @Provide()
         form: any = null;
 
         @Provide()
@@ -208,7 +221,11 @@
 
         mounted(): void {
             let me = this;
+
+
             me.load();
+
+
         }
 
         load(): void {
@@ -227,19 +244,27 @@
 
         prepareResponse(response: any): void {
             let me = this,
-                _destionation = {};
+                _destionation = {},
+                preset = {};
             me.$store.dispatch('setBreadcrumbs', {
                 items: response.data.breadcrumbs,
                 page_title: response.data.page_title
             });
             response.data.items[0].data.form.name = response.data.items[0].name;
             me.$set(me, 'form', response.data.items[0].data.form);// <-- Обновляемый объект
+            preset = response.data.items[0].data.preset;
 
             me.openTab = me.form.tabs[0].id;
             Util.setLocalVar('open-tab-editor', me.openTab);
 
             for (let i in me.form.tabs) {
-                _destionation[me.form.tabs[i].id] = {
+                let id = me.form.tabs[i].id;
+
+                if (me.form.tabs[i].edit_fields) {
+                    me.form.tabs[i].fields = me.form.tabs[i].edit_fields;
+                }
+
+                _destionation[id] = (preset[id]) ? preset[id] : {
                     left: [],
                     right: [],
                     center: [],
@@ -250,6 +275,38 @@
                 }
             }
             me.$set(me, 'destination', _destionation);
+
+
+            let url: string = 'config/forms/' + response.data.items[0].id,
+                item = {
+                    form: me.form,
+                    preset: me.destination
+                };
+
+            me.$set(me, 'buttons', Util.buttons([
+                Util.buttonSave({
+                    me: me,
+                    url: url,
+                    item: item,
+                    callback: null,
+                    route_name: ''
+                }),
+                Util.buttonSaveAndClose({
+                    me: me,
+                    url: url,
+                    item: item,
+                    route_name: 'users'
+                }),
+                Util.buttonUpdate({
+                    callback: function () {
+                        me.$store.dispatch('setBreadcrumbs', {
+                            items: []
+                        });
+                        me.load();
+                    }
+                }),
+                Util.buttonDelete('users/update', me.form)
+            ]));
         }
 
 

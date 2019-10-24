@@ -42,49 +42,87 @@
                   </ul>
                   <form method="get" class="form-horizontal">
                     <div class="tab-content" v-if="item">
-                      <div :id="tab.id" v-for="(tab,idx) in $store.getters.getForm.content.tabs"
-                           v-if="checkTabExpression(tab)"
-                           class="tab-pane" :class="{'active': getActiveTab(tab.id, tab.active) == true}">
-                        <div class="panel-body">
-                          <div :class="{'col-sm-9': tab.side && tab.side.length > 0,
+                      <template v-if="$store.getters.getForm.is_preset === 'N'">
+                        <div :id="tab.id" v-for="(tab,idx) in $store.getters.getForm.content.tabs"
+                             v-if="checkTabExpression(tab)"
+                             class="tab-pane" :class="{'active': getActiveTab(tab.id, tab.active) == true}">
+                          <div class="panel-body">
+                            <div :class="{'col-sm-9': tab.side && tab.side.length > 0,
                                                 'col-sm-12': tab.side && tab.side.length == 0}">
-                            <div v-for="(field,idx) in tab.fields">
-                              <template v-if="field.type === 'tabs'">
-                                <div class="form-group">
-                                  <div class="col-sm-12">
-                                    <div class="tabs-container">
-                                      <ul class="nav nav-tabs">
-                                        <li v-for="(subTab,subIdx) in  field.tabs"
-                                            :class="{'active': subTab.active}">
-                                          <a data-toggle="tab" :href="'#' + subTab.id">
-                                            {{subTab.name|_}}
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <div class="tab-content">
-                                        <div :id="subTab.id" v-for="(subTab,subIdx) in  field.tabs"
-                                             class="tab-pane" :class="{'active': subTab.active}">
-                                          <div class="panel-body">
-                                            <template v-for="(subField,idx) in subTab.fields">
-                                              <form-fields :field="subField" :model="item"></form-fields>
-                                            </template>
+                              <div v-for="(field,idx) in tab.fields">
+                                <template v-if="field.type === 'tabs'">
+                                  <div class="form-group">
+                                    <div class="col-sm-12">
+                                      <div class="tabs-container">
+                                        <ul class="nav nav-tabs">
+                                          <li v-for="(subTab,subIdx) in  field.tabs"
+                                              :class="{'active': subTab.active}">
+                                            <a data-toggle="tab" :href="'#' + subTab.id">
+                                              {{subTab.name|_}}
+                                            </a>
+                                          </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                          <div :id="subTab.id" v-for="(subTab,subIdx) in  field.tabs"
+                                               class="tab-pane" :class="{'active': subTab.active}">
+                                            <div class="panel-body">
+                                              <template v-for="(subField,idx) in subTab.fields">
+                                                <form-fields :field="subField" :model="item"></form-fields>
+                                              </template>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              </template>
-                              <FormFields :field="field" :model="item"></FormFields>
+                                </template>
+                                <FormFields :field="field" :model="item"></FormFields>
+                              </div>
                             </div>
-                          </div>
-                          <div class="col-sm-3" v-if="tab.side && tab.side.length > 0">
-                            <div v-for="field in tab.side">
-                              <FormFields :field="field" :model="item"></FormFields>
+                            <div class="col-sm-3" v-if="tab.side && tab.side.length > 0">
+                              <div v-for="field in tab.side">
+                                <FormFields :field="field" :model="item"></FormFields>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </template>
+                      <template v-if="$store.getters.getForm.is_preset === 'Y'">
+                        <div :id="tab.id" v-for="(tab,idx) in $store.getters.getForm.content.tabs"
+                             v-if="checkTabExpression(tab)"
+                             class="tab-pane" :class="{'active': getActiveTab(tab.id, tab.active) == true}">
+                          <div class="panel-body">
+                            <div :class="{'col-sm-9': tab.side && tab.side.length > 0,
+                                                'col-sm-12': tab.side && tab.side.length == 0}">
+                              <div class="col-sm-6">
+                                <div v-for="field in tab.fields.left">
+                                  <FormFields :field="field" :model="item"></FormFields>
+                                </div>
+                              </div>
+                              <div class="col-sm-6">
+                                <div v-for="field in tab.fields.right">
+                                  <FormFields :field="field" :model="item"></FormFields>
+                                </div>
+                              </div>
+                              <div class="col-sm-12">
+                                <div v-for="field in tab.fields.center">
+                                  <FormFields :field="field" :model="item"></FormFields>
+                                </div>
+                              </div>
+                              <div class="col-sm-12">
+                                <div v-for="field in tab.fields.center_second">
+                                  <FormFields :field="field" :model="item"></FormFields>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-3" v-if="tab.side && tab.side.length > 0">
+                              <div v-for="field in tab.side">
+                                <FormFields :field="field" :model="item"></FormFields>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </template>
                     </div>
                   </form>
                 </div>
