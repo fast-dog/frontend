@@ -1,14 +1,14 @@
 <template>
-    <form-manager :model="item"></form-manager>
+  <form-manager :model="item"></form-manager>
 </template>
 
 <script lang="ts">
     import Vue from 'vue';
     import {Component, Provide, Watch} from 'vue-property-decorator'
     import FormBuilder from '@/components/form/FormBuilder.vue';
-    import {FdTranslator} from "@/FdTranslator";
-    import {Util} from "@/Util";
-    import {MenuService} from "@/services/MenuService";
+    import {FdTranslator} from '@/FdTranslator';
+    import {Util} from '@/Util';
+    import {MenuService} from '@/services/MenuService';
 
     declare let $: any;
 
@@ -130,7 +130,7 @@
                     type = moduleType[0];
                     let typeFieldData: any = me.$store.getters.getSelectDataById('template');
 
-                    if (n.templates) {
+                    if (n.templates && typeFieldData) {
                         let templates = [];
                         for (let key in n.templates) {
                             let tpm = [];
@@ -193,7 +193,8 @@
                 // me.$set(me, 'categories', response.data.categories);// <-- Доступные категории (Материалы, Каталог)
                 let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
 
-                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                    is_preset: (response.data.form.is_preset) ? response.data.form.is_preset : 'N',
                     form_builder: (response.data.form.form_builder) ? response.data.form.form_builder : false,
                     name: 'menu-item',
                     content: {

@@ -30,6 +30,7 @@ import PageItem from '@/components/menu/PageItem.vue';
 import FormItem from './components/config/FormItem.vue';
 import Media from '@/components/media/Media.vue';
 import MediaIndex from '@/components/media/MediaIndex.vue';
+import PageItems from '@/components/menu/PageItems.vue';
 
 declare let window: any;
 
@@ -264,6 +265,16 @@ export default new Router({
           path: 'page/:id',
           name: 'page_item',
           component: PageItem
+        },
+        {
+          path: 'pages',
+          name: 'page_items',
+          component: PageItems
+        },
+        {
+          path: 'pages/page/:page',
+          name: 'page_items_page',
+          component: PageItems
         },
       ]
     },

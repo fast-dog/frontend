@@ -50,9 +50,9 @@
                 let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
 
                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                    is_preset: (response.data.form.is_preset) ? response.data.form.is_preset : 'N',
                     form_builder: (response.data.form.form_builder) ? response.data.form.form_builder : false,
                     name: 'user-item',
-                    is_preset: (response.data.form.is_preset) ? response.data.form.is_preset : 'N',
                     content: {
                         buttons: Util.buttons([
                             Util.buttonSave({

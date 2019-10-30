@@ -261,7 +261,15 @@
                 let id = me.form.tabs[i].id;
 
                 if (me.form.tabs[i].edit_fields) {
-                    me.form.tabs[i].fields = me.form.tabs[i].edit_fields;
+                    me.form.tabs[i].fields = me.form.tabs[i].edit_fields.map(function (element) {
+                        element.css_class = 'col-sm-12';
+                        return element;
+                    });
+                }else{
+                    me.form.tabs[i].fields = me.form.tabs[i].fields.map(function (element) {
+                        element.css_class = 'col-sm-12';
+                        return element;
+                    });
                 }
 
                 _destionation[id] = (preset[id]) ? preset[id] : {

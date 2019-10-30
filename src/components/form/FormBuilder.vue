@@ -50,32 +50,6 @@
                             <div :class="{'col-sm-9': tab.side && tab.side.length > 0,
                                                 'col-sm-12': tab.side && tab.side.length == 0}">
                               <div v-for="(field,idx) in tab.fields">
-                                <template v-if="field.type === 'tabs'">
-                                  <div class="form-group">
-                                    <div class="col-sm-12">
-                                      <div class="tabs-container">
-                                        <ul class="nav nav-tabs">
-                                          <li v-for="(subTab,subIdx) in  field.tabs"
-                                              :class="{'active': subTab.active}">
-                                            <a data-toggle="tab" :href="'#' + subTab.id">
-                                              {{subTab.name|_}}
-                                            </a>
-                                          </li>
-                                        </ul>
-                                        <div class="tab-content">
-                                          <div :id="subTab.id" v-for="(subTab,subIdx) in  field.tabs"
-                                               class="tab-pane" :class="{'active': subTab.active}">
-                                            <div class="panel-body">
-                                              <template v-for="(subField,idx) in subTab.fields">
-                                                <form-fields :field="subField" :model="item"></form-fields>
-                                              </template>
-                                            </div>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </template>
                                 <FormFields :field="field" :model="item"></FormFields>
                               </div>
                             </div>

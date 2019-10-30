@@ -68,6 +68,7 @@
             }
 
              me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
+                    is_preset: (response.data.form.is_preset) ? response.data.form.is_preset : 'N',
                     form_builder: (response.data.form.form_builder) ? response.data.form.form_builder : false,
                 name: 'domain-item',
                 help: response.data.form.help,
