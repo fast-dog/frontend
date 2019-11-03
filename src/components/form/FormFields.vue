@@ -118,7 +118,7 @@
       :css_class="(field.css_class) ? field.css_class : 'col-sm-6'">
     </text-form-alias>
     <seo :item="model" v-if="checkFieldTypeWithExpression(field,'seo')"></seo>
-    <tabs-form-field :field="field" :model="model" v-if="checkFieldTypeWithExpression(field,'tabs')"></tabs-form-field>
+    <TabFormField :field="field" :model="model" v-if="checkFieldTypeWithExpression(field,'tabs')"></TabFormField>
   </div>
 </template>
 
@@ -170,7 +170,7 @@
             // 'translate-items': TranslateItems,
             // 'clock-field': ClockFormField,
             // 'calendar-times': CalendarTimesComponent,
-            'tabs-form-field': TabFormField,
+            'TabFormField': TabFormField,
 
         }
     })
@@ -178,7 +178,7 @@
     export default class FormFields extends Vue {
 
         @Prop({default: 'FormFields'})
-        name: any;
+        name: string = 'FormFields';
 
         @Prop({default: null})
         field: any;
