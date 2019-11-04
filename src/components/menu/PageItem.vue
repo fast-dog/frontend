@@ -59,8 +59,10 @@
                                 me: me,
                                 url: url,
                                 item: me.item,
-                                callback: null,
-                                route_name: ''
+                                callback: function (response) {
+                                    me.getPage();
+                                },
+                                route_name: 'page_item'
                             }),
                             Util.buttonSaveAndClose({
                                 me: me,
