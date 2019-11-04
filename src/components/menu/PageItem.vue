@@ -68,7 +68,7 @@
                                 me: me,
                                 url: url,
                                 item: me.item,
-                                route_name: 'users'
+                                route_name: 'page_items'
                             }),
                             Util.buttonUpdate({
                                 callback: function () {
@@ -80,7 +80,7 @@
                                     me.getPage();
                                 }
                             }),
-                            Util.buttonDelete('users/update', me.item)
+                            Util.buttonDelete('pages/update', me.item)
                         ]),
                         tabs: response.data.form.tabs
                     }
