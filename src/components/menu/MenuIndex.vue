@@ -1,115 +1,127 @@
 <template>
-    <div v-if="$store.getters.getSplashScreen === false">
-        <preview></preview>
-        <div class="col-md-4 col-sm-4 col-xs-12">
-            <div class="x_panel tile">
-                <div class="x_title">
-                    <h2>Ресурсы</h2>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-                    <!-- start accordion -->
-                    <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
-                        <div class="panel"
-                             v-for="(item, name, idx) in resource">
-                            <a class="panel-heading" role="tab" id="headingOne"
-                               data-toggle="collapse" data-parent="#accordion"
-                               :href="'#'+item.id"
-                               aria-expanded="true" aria-controls="collapseOne">
-                                <h4 class="panel-title">
-                                    {{item.name}}
-                                </h4>
-                            </a>
-                            <div :id="item.id"
-                                 :class="{'in':(idx === 0)}"
-                                 class="panel-collapse collapse"
-                                 role="tabpanel" aria-labelledby="headingOne">
-                                <div class="panel-body">
-                                    <div class="checkbox" v-for="type in item.items">
-                                        <label>
-                                            <input type="checkbox" v-on:change.prevent="changeType(type,$event)"/>
-                                            {{type.name}}
-                                        </label>
-                                    </div>
-                                    <button class="btn btn-responsive btn-sm animated fadeIn btn-primary btn-sm pull-right"
-                                            v-bind:disabled="(model.root=== null || model.root.id === 0)"
-                                            v-on:click.prevent="appendMenu()">
-                                        {{'Добавить в меню'|_}}
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- end of accordion -->
-                </div>
-            </div>
+  <div v-if="$store.getters.getSplashScreen === false">
+    <preview></preview>
+    <div class="col-md-4 col-sm-4 col-xs-12">
+      <div class="x_panel tile">
+        <div class="x_title">
+          <h2>Ресурсы</h2>
+          <div class="clearfix"></div>
         </div>
-        <div class="col-md-8 col-sm-8 col-xs-12" v-if="roots.length > 0">
-            <div class="x_panel tile">
-                <div class="x_title">
-                    <h2>Меню:</h2>
-                    <select-form-field
-                            :label="false"
-                            :model="model"
-                            :id="'root'"
-                            :required="false"
-                            :multiple="false"
-                            :readonly="false"
-                            :css_class="'col-sm-6'"
-                            :form_group="true"
-                            :option_group="false"
-                            :data="roots"
-                            :placeholder="'Выберите меню'"
-                            :field="'root'">
-                    </select-form-field>
-                    <button class="btn btn-success btn-sm"
-                            v-on:click.prevent="$router.push({name:  'menu_create', params: { id: '0'}})">
-                        <i class="fa fa-plus"></i>
-                        Добавить меню
-                    </button>
-                    <div class="clearfix"></div>
+        <div class="x_content">
+          <!-- start accordion -->
+          <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel"
+                 v-for="(item, name, idx) in resource">
+              <a class="panel-heading" role="tab" id="headingOne"
+                 data-toggle="collapse" data-parent="#accordion"
+                 :href="'#'+item.id"
+                 aria-expanded="true" aria-controls="collapseOne">
+                <h4 class="panel-title">
+                  {{item.name}}
+                </h4>
+              </a>
+              <div :id="item.id"
+                   :class="{'in':(idx === 0)}"
+                   class="panel-collapse collapse"
+                   role="tabpanel" aria-labelledby="headingOne">
+                <div class="panel-body">
+                  <div class="checkbox" v-for="type in item.items">
+                    <label>
+                      <input type="checkbox" v-on:change.prevent="changeType(type,$event)"/>
+                      {{type.name}}
+                    </label>
+                  </div>
+                  <button class="btn btn-responsive btn-sm animated fadeIn btn-primary btn-sm pull-right"
+                          v-bind:disabled="(model.root=== null || model.root.id === 0)"
+                          v-on:click.prevent="appendMenu()">
+                    {{'Добавить в меню'|_}}
+                  </button>
                 </div>
-                <div class="x_content _menu_">
-                    <p v-if="data.length === 0" class="alert alert-info text-center">
-                        {{'Не выбрано меню'|_}}
-                    </p>
-                    <div class="process" v-if="process">
-                        <i class="fa fa-paw" style="font-size: 25px"></i>
-                    </div>
-                    <DraggableTree :data="data" draggable crossTree ref="tree1"
-                                   @change="tree1Change">
-                        <div slot-scope="{data, store}" class="menu-item">
-                            <i v-if="data.children && data.children.length"
-                               class="fa"
-                               @click="store.toggleOpen(data)"
-                               :class="{'fa-plus-square':!data.open,'fa-minus-square':data.open}">
-                            </i>&nbsp;
-                            <span>{{data.text}}</span>
-                            &nbsp;
-                            <span class="label label-default">
+              </div>
+            </div>
+          </div>
+          <!-- end of accordion -->
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8 col-sm-8 col-xs-12" v-if="roots.length > 0">
+      <div class="x_panel tile">
+        <div class="x_title">
+          <h2>Меню:</h2>
+          <select-form-field
+            :label="false"
+            :model="model"
+            :id="'root'"
+            :required="false"
+            :multiple="false"
+            :readonly="false"
+            :css_class="'col-sm-6'"
+            :form_group="true"
+            :option_group="false"
+            :data="roots"
+            :placeholder="'Выберите меню'"
+            :field="'root'">
+          </select-form-field>
+          <button class="btn btn-success btn-sm"
+                  v-on:click.prevent="$router.push({name:  'menu_create', params: { id: '0'}})">
+            <i class="fa fa-plus"></i>
+            Добавить меню
+          </button>
+          <div class="clearfix"></div>
+        </div>
+        <div class="x_content _menu_">
+          <p v-if="data.length === 0" class="alert alert-info text-center">
+            {{'Не выбрано меню'|_}}
+          </p>
+          <div class="process" v-if="process">
+            <i class="fa fa-paw" style="font-size: 25px"></i>
+          </div>
+          <DraggableTree :data="data" draggable crossTree ref="tree1"
+                         @change="tree1Change">
+            <div slot-scope="{data, store}" class="menu-item">
+              <i v-if="data.children && data.children.length"
+                 class="fa"
+                 @click="store.toggleOpen(data)"
+                 :class="{'fa-plus-square':!data.open,'fa-minus-square':data.open}">
+              </i>&nbsp;
+              <span>{{data.text}}</span>
+              &nbsp;
+              <span class="label label-default">
                             <router-link :to="{name:'menu_item',params:{id:data.id}}">
                                 <i class="fa fa-edit"></i>
                                 {{'Редактировать'|_}}
                             </router-link>
                             </span>
-                        </div>
-                    </DraggableTree>
-                </div>
             </div>
+          </DraggableTree>
         </div>
+      </div>
     </div>
+    <div class="col-md-8 col-sm-8 col-xs-12" v-if="roots.length === 0">
+      <div class="well text-center">
+        <h1>Нет доступных  пунктов меню</h1>
+        <p style="padding: 100px 0">
+          <button class="btn btn-success btn-lg"
+                  v-on:click.prevent="$router.push({name:  'menu_create', params: { id: '0'}})">
+            <i class="fa fa-plus"></i>
+            Добавить
+          </button>
+        </p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
 
     import {Component, Prop, Provide, Vue, Watch} from 'vue-property-decorator'
-    import DataTable from "@/components/table/Table.vue";
+    import DataTable from '@/components/table/Table.vue';
     import {DraggableTree} from 'vue-draggable-nested-tree'
-    import {CrudService} from "@/services/CrudService";
-    import {Util} from "@/Util";
-    import DataPreview from "@/components/table/DataPreview.vue";
-    import {FdTranslator} from "@/FdTranslator";
-    import SelectFormField from "@/components/form/fields/SelectFormField.vue";
+    import {CrudService} from '@/services/CrudService';
+    import {Util} from '@/Util';
+    import DataPreview from '@/components/table/DataPreview.vue';
+    import {FdTranslator} from '@/FdTranslator';
+    import SelectFormField from '@/components/form/fields/SelectFormField.vue';
 
     declare let $: any;
 
@@ -300,32 +312,32 @@
 </script>
 
 <style scoped lang="scss">
-    ._menu_ {
-        position: relative;
+  ._menu_ {
+    position: relative;
 
-        .process {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            opacity: 0.8;
+    .process {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      opacity: 0.8;
 
-            i {
-                position: absolute;
-                left: 49%;
-                top: 45%;
-                color: #1c84c6;
-            }
-        }
+      i {
+        position: absolute;
+        left: 49%;
+        top: 45%;
+        color: #1c84c6;
+      }
     }
+  }
 
-    .menu-item {
+  .menu-item {
 
-    }
+  }
 
-    .menu-item:hover > ._action_block_ {
-        padding-top: 5px;
-        display: block !important;
-    }
+  .menu-item:hover > ._action_block_ {
+    padding-top: 5px;
+    display: block !important;
+  }
 </style>
