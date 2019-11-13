@@ -7,12 +7,14 @@
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <meta name="csrf-token" content="{csrf_token}">
     <title>frontend FastDog CMS</title>
-    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey=a3fdd73b-7b69-4e1c-8df9-123278d607cb" type="text/javascript"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&apikey={YMAP_KEY}"
+            type="text/javascript"></script>
     <script>
         var CKEDITOR_BASEPATH = 'http://' + window.location.hostname + '/ckeditor/',
             selectedFile = null,
             DOMAIN_CODE = '001',
             ADMIN_ACCESS = 'admin',
+            YMAP_KEY = '{YMAP_KEY}',
             language = [],//lang to interface
             translate_debug = false,//debug translate interface
             map = null,//ymap instance
