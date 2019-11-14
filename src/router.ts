@@ -225,6 +225,11 @@ export default new Router({
           component: MenuIndex
         },
         {
+          path: 'items/:root_id',
+          name: 'menu_items',
+          component: MenuItems
+        },
+        {
           path: 'new/:parent_id',
           name: 'menu_create_children',
           component: MenuItem

@@ -67,6 +67,11 @@
             <i class="fa fa-plus"></i>
             Добавить меню
           </button>
+          <button class="btn btn-primary btn-sm" v-if="model.root.id > 0"
+                  v-on:click.prevent="$router.push({name:  'menu_create', params: { id: model.root.id}})">
+            <i class="fa fa-pencil"></i>
+            Редактировать
+          </button>
           <div class="clearfix"></div>
         </div>
         <div class="x_content _menu_">
@@ -106,6 +111,7 @@
             <i class="fa fa-plus"></i>
             Добавить
           </button>
+
         </p>
       </div>
     </div>
@@ -176,25 +182,21 @@
         @Watch('model.root')
         onChangeRoot(n, o, t) {
             let me = this;
-            if (n === null) {
+            console.log('onChangeRoot: ', n)
+            if (n == null) {
                 me.$set(me, 'data', []);
             } else if (n.id) {
-                me.$set(me, 'process', true);
                 me.model.root.id = n.id;
-                CrudService.post(Util.httpRoot + 'menu/list/' + n.id, {}).then((response: any) => {
-                    if (response.data.success) {
-                        me.$set(me, 'data', response.data.items);
-                        Util.showSuccess('Команда выполнена успешно');
-                    }
-                    me.$set(me, 'process', false);
-                }).catch((response) => {
-
-                });
+                me.$store.dispatch('setMenuRoot', {root: {id: n.id, name: n.name}});
+                me.loadList();
             }
         }
 
         mounted(): void {
             let me = this;
+
+            // me.$set(me, 'roots', me.$store.getters.getMenuRoots);
+            // me.$set(me, 'resource', me.$store.getters.getMenuResource);
 
             CrudService.post(Util.httpRoot + 'menu/load', {}).then((response: any) => {
                 if (response.data.success) {
@@ -206,9 +208,26 @@
                     }
                     me.$set(me, 'resource', response.data.resource);
                     me.$set(me, 'roots', response.data.roots);
-                    // me.$set(me, 'data', response.data.items);
+
+                    if (me.$store.getters.getMenuRoot.root.id > 0)
+                        me.$set(me, 'model', me.$store.getters.getMenuRoot);
+
                     Util.showSuccess('Команда выполнена успешно');
                 }
+            }).catch((response) => {
+
+            });
+        }
+
+        loadList(): void {
+            let me = this;
+            me.$set(me, 'process', true);
+            CrudService.post(Util.httpRoot + 'menu/list/' + me.model.root.id, {}).then((response: any) => {
+                if (response.data.success) {
+                    me.$set(me, 'data', response.data.items);
+                    Util.showSuccess('Команда выполнена успешно');
+                }
+                me.$set(me, 'process', false);
             }).catch((response) => {
 
             });
@@ -282,7 +301,8 @@
                     id: type.id
                 },
                 name: type.name,
-                checked: target.checked
+                checked: target.checked,
+                data: (type.data == undefined) ? [] : type.data
             };
         }
 
@@ -295,12 +315,15 @@
                 }
             }
             CrudService.post(Util.httpRoot + 'menu/append', {
+                menu_id: me.model.root.id,
                 items: append,
                 append: 'Y'
             }).then((response: any) => {
                 if (response.data.success) {
                     Util.showSuccess('Команда выполнена успешно');
+                    me.loadList();
                 }
+
             }).catch((response) => {
 
             });

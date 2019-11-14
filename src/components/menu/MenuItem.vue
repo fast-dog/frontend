@@ -203,8 +203,10 @@
                                 me: me,
                                 url: url,
                                 item: me.item,
-                                callback: function () {
-                                    me.getItem();
+                                callback: function (response) {
+
+                                    console.log(response)
+                                    //me.getItem();
                                 },
                                 route_name: ''
                             }),
