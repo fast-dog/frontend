@@ -5,7 +5,7 @@
                 <div class="col-md-3 left_col">
                     <div class="left_col scroll-view">
                         <div class="navbar nav_title">
-                            <a href="/" class="site_title">
+                            <a href="/" id="menu_toggle" class="site_title">
                                 <img :src="getLogo()" alt="..." class="img-thumbnail logo">
                             </a>
                         </div>
@@ -20,9 +20,6 @@
 
                 <!-- top navigation -->
                 <div class="top_nav">
-                    <div class="nav toggle">
-                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-                    </div>
                     <div class="nav_menu" style="padding-left: 30px">
                         <div class="page-title animated fadeIn"
                              v-if="$store.getters.getBreadcrumbs.page_title.length > 0">
@@ -316,8 +313,6 @@
                 }],
                 page_title: 'FastDog CMS'
             });
-
-            document.body.classList.add('nav-md');
 
             $('.collapse-link').on('click', function () {
                 var $BOX_PANEL = $(this).closest('.x_panel'),

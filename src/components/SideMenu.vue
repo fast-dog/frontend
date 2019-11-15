@@ -31,6 +31,7 @@
 </template>
 <script lang="ts">
     import {Component, Provide, Vue, Watch} from 'vue-property-decorator'
+    import {Util} from '@/Util';
 
     declare let $: any;
 
@@ -54,17 +55,32 @@
             })
         }
 
+        @Watch('$route.path')
+        onChangeRouterPath(n, o) {
+            let me = this;
+            if ($('body').is('.nav-sm')) {
+                $('li.active').each(function () {
+                    $(this).removeClass('active')
+                    $('ul:first', this).slideUp(function () {
+                        me.setContentHeight();
+                    });
+                })
+            }
+
+        }
+
         mounted(): void {
             let me = this;
             me.$store.dispatch('setMainMenu');
             // /Sidebar
-            document.body.classList.add('nav-md');
+            document.body.classList.add(Util.getLocalVar('body-class', 'nav-md'));
 
         }
 
         // Sidebar
         init_sidebar() {
-            let CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
+            let me = this,
+                CURRENT_URL = window.location.href.split('#')[0].split('?')[0],
                 $BODY = $('body'),
                 $MENU_TOGGLE = $('#menu_toggle'),
                 $SIDEBAR_MENU = $('#sidebar-menu'),
@@ -74,20 +90,7 @@
                 $NAV_MENU = $('.nav_menu'),
                 $FOOTER = $('footer');
             // TODO: This is some kind of easy fix, maybe we can improve this
-            var setContentHeight = function () {
-                // reset height
-                $RIGHT_COL.css('min-height', $(window).height());
 
-                var bodyHeight = $BODY.outerHeight(),
-                    footerHeight = $BODY.hasClass('footer_fixed') ? -10 : $FOOTER.height(),
-                    leftColHeight = $LEFT_COL.eq(1).height() + $SIDEBAR_FOOTER.height(),
-                    contentHeight = bodyHeight < leftColHeight ? leftColHeight : bodyHeight;
-
-                // normalize content
-                contentHeight -= $NAV_MENU.height() + footerHeight;
-
-                $RIGHT_COL.css('min-height', contentHeight);
-            };
 
             $SIDEBAR_MENU.find('a').on('click', function (ev) {
                 console.log('clicked - sidebar_menu');
@@ -96,7 +99,7 @@
                 if ($li.is('.active')) {
                     $li.removeClass('active active-sm');
                     $('ul:first', $li).slideUp(function () {
-                        setContentHeight();
+                        me.setContentHeight();
                     });
                 } else {
                     // prevent closing menu if we are on child menu
@@ -112,30 +115,28 @@
                     $li.addClass('active');
 
                     $('ul:first', $li).slideDown(function () {
-                        setContentHeight();
+                        me.setContentHeight();
                     });
                 }
             });
 
             // toggle small or large menu
-            $MENU_TOGGLE.on('click', function () {
-                console.log('clicked - menu toggle');
-
+            $MENU_TOGGLE.on('click', function (e) {
+                e.preventDefault();
+                let setClass: string = '';
                 if ($BODY.hasClass('nav-md')) {
                     $SIDEBAR_MENU.find('li.active ul').hide();
                     $SIDEBAR_MENU.find('li.active').addClass('active-sm').removeClass('active');
+                    setClass = 'nav-sm'
                 } else {
                     $SIDEBAR_MENU.find('li.active-sm ul').show();
                     $SIDEBAR_MENU.find('li.active-sm').addClass('active').removeClass('active-sm');
+                    setClass = 'nav-md';
                 }
 
                 $BODY.toggleClass('nav-md nav-sm');
-
-                setContentHeight();
-
-                $('.dataTable').each(function () {
-                    $(this).dataTable().fnDraw();
-                });
+                Util.setLocalVar('body-class', setClass);
+                me.setContentHeight();
             });
 
             // check active menu
@@ -144,15 +145,15 @@
             $SIDEBAR_MENU.find('a').filter(function () {
                 return this.href == CURRENT_URL;
             }).parent('li').addClass('current-page').parents('ul').slideDown(function () {
-                setContentHeight();
+                me.setContentHeight();
             }).parent().addClass('active');
 
             // recompute content when resizing
             $(window).smartresize(function () {
-                setContentHeight();
+                me.setContentHeight();
             });
 
-            setContentHeight();
+            me.setContentHeight();
 
             // fixed sidebar
             if ($.fn.mCustomScrollbar) {
@@ -162,6 +163,28 @@
                     mouseWheel: {preventDefault: true}
                 });
             }
+        }
+
+        setContentHeight() {
+            let $BODY = $('body'),
+                $SIDEBAR_FOOTER = $('.sidebar-footer'),
+                $LEFT_COL = $('.left_col'),
+                $RIGHT_COL = $('.right_col'),
+                $NAV_MENU = $('.nav_menu'),
+                $FOOTER = $('footer');
+
+            // reset height
+            $RIGHT_COL.css('min-height', $(window).height());
+
+            var bodyHeight = $BODY.outerHeight(),
+                footerHeight = $BODY.hasClass('footer_fixed') ? -10 : $FOOTER.height(),
+                leftColHeight = $LEFT_COL.eq(1).height() + $SIDEBAR_FOOTER.height(),
+                contentHeight = bodyHeight < leftColHeight ? leftColHeight : bodyHeight;
+
+            // normalize content
+            contentHeight -= $NAV_MENU.height() + footerHeight;
+
+            $RIGHT_COL.css('min-height', contentHeight);
         }
 
         isActive(item, route): boolean {
