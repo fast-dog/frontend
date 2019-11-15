@@ -98,3 +98,47 @@ td:hover > ._action_block_ {
     }
   }
 }
+
+.nav-sm {
+  .nav_title {
+    height: 60px;
+    padding: 0;
+
+    .site_title {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+  }
+
+  .nav.side-menu li a {
+    word-wrap: break-word;
+  }
+
+  ul.nav.child_menu {
+    background: $bg-color;
+    box-shadow: $md-shadow-main;
+
+    li {
+      &:hover {
+        background: $light-gray;
+      }
+
+      a {
+        padding: 10px 5px;
+
+
+        i {
+          width: auto !important;
+          font-size: 20px !important;
+          margin: 0 5px 0 0;
+        }
+
+        &.router-link-exact-active {
+          i {
+
+          }
+        }
+      }
+    }
+  }
+}

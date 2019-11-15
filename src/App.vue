@@ -20,6 +20,9 @@
 
                 <!-- top navigation -->
                 <div class="top_nav">
+                    <div class="nav toggle">
+                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    </div>
                     <div class="nav_menu" style="padding-left: 30px">
                         <div class="page-title animated fadeIn"
                              v-if="$store.getters.getBreadcrumbs.page_title.length > 0">
