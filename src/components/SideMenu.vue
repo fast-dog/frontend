@@ -1,33 +1,33 @@
 <template>
-    <!-- sidebar menu -->
-    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-        <div class="menu_section">
-            <ul class="nav side-menu">
-                <li v-for="item in $store.getters.getMainMenu"
-                    :class="{'active': isActive(item,$route.fullPath)}">
-                    <a v-if="item.name">
-                        <i :class="'fa ' + item.icon"></i> {{item.name}}
-                        <span class="fa fa-chevron-down" v-if="item.children && item.children.length > 0"></span>
-                    </a>
-                    <ul class="nav child_menu" v-if="item.children && item.children.length > 0"
-                        :style="{'display': (isActive(item,$route.fullPath))?'block':''}">
-                        <li v-for="child in item.children"
-                            :class="{'active': ($route.fullPath === child.route)}">
-                            <router-link :to="child.route">
-                                <i :class="'fa ' + child.icon" v-if="child.icon"></i> {{child.name}}
-                            </router-link>
-                            <router-link v-if="child.new"
-                                         :to="child.new" :class="'new_object'">
-                                <i class="fa fa-plus-circle"></i>
-                            </router-link>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
-
+  <!-- sidebar menu -->
+  <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+      <ul class="nav side-menu">
+        <li v-for="item in $store.getters.getMainMenu"
+            :class="{'active': isActive(item,$route.fullPath)}">
+          <a v-if="item.name">
+            <i :class="'fa ' + item.icon"></i> {{item.name}}
+            <span class="fa fa-chevron-down" v-if="item.children && item.children.length > 0"></span>
+          </a>
+          <ul class="nav child_menu" v-if="item.children && item.children.length > 0"
+              :style="{'display': (isActive(item,$route.fullPath) && getBodyCls()!=='nav-sm')?'block':''}">
+            <li v-for="child in item.children"
+                :class="{'active': ($route.fullPath === child.route)}">
+              <router-link :to="child.route">
+                <i :class="'fa ' + child.icon" v-if="child.icon"></i> {{child.name}}
+              </router-link>
+              <router-link v-if="child.new"
+                           :to="child.new" :class="'new_object'">
+                <i class="fa fa-plus-circle"></i>
+              </router-link>
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
-    <!-- /sidebar menu -->
+
+  </div>
+  <!-- /sidebar menu -->
 </template>
 <script lang="ts">
     import {Component, Provide, Vue, Watch} from 'vue-property-decorator'
@@ -189,6 +189,10 @@
 
         isActive(item, route): boolean {
 
+            // if (Util.getLocalVar('body-class', 'nav-md') == 'nav-sm') {
+            //     return false;
+            // }
+
             for (let i in item.children) {
                 if (item.children[i].route === route) {
                     return true;
@@ -203,6 +207,10 @@
             }
 
             return false;
+        }
+
+        getBodyCls(): string {
+            return Util.getLocalVar('body-class', 'nav-md');
         }
     }
 

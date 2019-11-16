@@ -1,7 +1,7 @@
 <template>
   <div v-if="$store.getters.getSplashScreen === false">
     <preview></preview>
-    <div class="col-md-4 col-sm-4 col-xs-12">
+    <div class="col-sm-12 col-md-5 col-lg-4 col-xl-4">
       <div class="x_panel tile">
         <div class="x_title">
           <h2>Ресурсы</h2>
@@ -44,7 +44,7 @@
         </div>
       </div>
     </div>
-    <div class="col-md-8 col-sm-8 col-xs-12" v-if="roots.length > 0">
+    <div class="col-sm-12 col-md-7 col-lg-8 col-xl-4" v-if="roots.length > 0">
       <div class="x_panel tile">
         <div class="x_title">
           <h2>Меню:</h2>
