@@ -187,10 +187,6 @@
                 });
 
                 me.$set(me, 'item', response.data.item);// <-- Обновляемый объект
-                me.$set(me, 'menuItems', response.data.menu_items);// <-- Структура меню
-                me.$set(me, 'menuTypes', response.data.types);// <-- Типы меню
-                me.$set(me, 'modules', response.data.modules);// <-- Доступные модули
-                // me.$set(me, 'categories', response.data.categories);// <-- Доступные категории (Материалы, Каталог)
                 let url = me.item.id == 0 ? response.data.form.create_url : response.data.form.update_url;
 
                 me.$store.dispatch('setForm', {// <-- ставим форму в хранилище
@@ -204,11 +200,11 @@
                                 url: url,
                                 item: me.item,
                                 callback: function (response) {
-
-                                    console.log(response)
-                                    //me.getItem();
+                                    me.$set(me, 'item', {});
+                                    me.$store.dispatch('clearForm');
+                                    me.getItem();
                                 },
-                                route_name: ''
+                                route_name: 'menu_item'
                             }),
                             Util.buttonSaveAndClose({
                                 me: me,

@@ -68,7 +68,7 @@
             Добавить меню
           </button>
           <button class="btn btn-primary btn-sm" v-if="model.root.id > 0"
-                  v-on:click.prevent="$router.push({name:  'menu_create', params: { id: model.root.id}})">
+                  v-on:click.prevent="$router.push({name:  'menu_item', params: { id: model.root.id}})">
             <i class="fa fa-pencil"></i>
             Редактировать
           </button>
