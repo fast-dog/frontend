@@ -284,3 +284,22 @@ ul.tabs-left > li.active {
     margin-top: 10px;
   }
 }
+
+.stat-list li:first-child {
+  margin-top: 0;
+}
+
+.stat-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stat-percent {
+  float: right;
+}
+
+.stat-list li {
+  margin-top: 15px;
+  position: relative;
+}

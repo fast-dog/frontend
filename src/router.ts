@@ -31,6 +31,7 @@ import FormItem from './components/config/FormItem.vue';
 import Media from '@/components/media/Media.vue';
 import MediaIndex from '@/components/media/MediaIndex.vue';
 import PageItems from '@/components/menu/PageItems.vue';
+import MenuDiagnostic from "@/components/menu/MenuDiagnostic.vue";
 
 declare let window: any;
 
@@ -254,11 +255,11 @@ export default new Router({
           name: 'menu_items_child',
           component: MenuItems
         },
-        // {
-        //     path: 'diagnostic',
-        //     name: 'menu_diagnostic',
-        //     component: MenuDiagnostic
-        // },
+        {
+          path: 'diagnostic',
+          name: 'menu_diagnostic',
+          component: MenuDiagnostic
+        },
 
 
         // {

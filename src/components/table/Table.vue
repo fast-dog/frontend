@@ -1,118 +1,121 @@
 <template>
-    <div v-if="$store.getters.getSplashScreen === false">
-        <preview></preview>
-        <div class="x_panel">
-            <div v-if="option.title !== '' || option.tools === true">
-                <div class="control-btn">
-                    <button v-for="button in actionButtons" class="btn btn-responsive"
-                            v-bind:class="button.cls"
-                            v-bind:data-disabled_selection="button.disabled_selection"
-                            data-style="zoom-in"
-                            :title="button.text"
-                            data-placement="bottom"
-                            data-toggle="tooltip"
-                            v-if="button.visible == null || button.visible === true"
-                            v-on:click="button.action($event)">
-                        <i class="fa" v-bind:class="button.icon"></i>
-                        {{button.text}}
-                    </button>
-                    <button class="btn btn-sm btn-success pull-right btn-responsive" v-if="option.help === true"
-                            type="button"
-                            v-on:click="helpStatic()">
-                        <i class="fa fa-life-bouy"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="x_content" style="padding: 0 !important;">
-                <div class="table-responsive "
-                     :class="{'col-md-9':$store.getters.getExternalFilters}">
-                    <table class="table table-striped table-hover _table_"
-                           v-bind:class="{'opacity-03':process}">
-                        <slot name="thead">
-                            <thead>
-                            <tr v-if="message_help !== ''">
-                                <td v-bind:colspan="total_col">
-                                    <div class="alert alert-info" v-html="message_help"></div>
-                                </td>
-                            </tr>
-                            <tr v-if="search_active === true && 1 === 0">
-                                <td v-bind:colspan="total_col" style="padding: 0 !important;">
-                                    <div class="col-md-4 pull-right text-right"
-                                         v-if="$store.getters.getFilters.length > 1">
-                                        <a href="#"
-                                           v-on:click.prevent="closeExternalFilters"
-                                           class="open-filter">
-                                            <i class="fa"
-                                               :class="{'fa-caret-square-o-left':!$store.getters.getExternalFilters,
+  <div v-if="$store.getters.getSplashScreen === false" :class="option.cssClass">
+    <preview></preview>
+    <div class="x_panel">
+      <div class="x_title" v-if="option.title !== ''">
+        <h5>{{option.title}}</h5>
+      </div>
+      <div v-if="option.title !== '' || option.tools === true">
+        <div class="control-btn">
+          <button v-for="button in actionButtons" class="btn btn-responsive"
+                  v-bind:class="button.cls"
+                  v-bind:data-disabled_selection="button.disabled_selection"
+                  data-style="zoom-in"
+                  :title="button.text"
+                  data-placement="bottom"
+                  data-toggle="tooltip"
+                  v-if="button.visible == null || button.visible === true"
+                  v-on:click="button.action($event)">
+            <i class="fa" v-bind:class="button.icon"></i>
+            {{button.text}}
+          </button>
+          <button class="btn btn-sm btn-success pull-right btn-responsive" v-if="option.help === true"
+                  type="button"
+                  v-on:click="helpStatic()">
+            <i class="fa fa-life-bouy"></i>
+          </button>
+        </div>
+      </div>
+      <div class="x_content" style="padding: 0 !important;">
+        <div class="table-responsive "
+             :class="{'col-md-9':$store.getters.getExternalFilters}">
+          <table class="table table-striped table-hover _table_"
+                 v-bind:class="{'opacity-03':process}">
+            <slot name="thead">
+              <thead>
+              <tr v-if="message_help !== ''">
+                <td v-bind:colspan="total_col">
+                  <div class="alert alert-info" v-html="message_help"></div>
+                </td>
+              </tr>
+              <tr v-if="search_active === true && 1 === 0">
+                <td v-bind:colspan="total_col" style="padding: 0 !important;">
+                  <div class="col-md-4 pull-right text-right"
+                       v-if="$store.getters.getFilters.length > 1">
+                    <a href="#"
+                       v-on:click.prevent="closeExternalFilters"
+                       class="open-filter">
+                      <i class="fa"
+                         :class="{'fa-caret-square-o-left':!$store.getters.getExternalFilters,
                                             'fa-caret-square-o-right':$store.getters.getExternalFilters}"
-                                            ></i>
-                                        </a>
-                                    </div>
-                                    <filters></filters>
-                                </td>
-                            </tr>
-                            <tr class="fixed" style="display: none;">
-                                <th :style="{width:50+'px'}" class="text-center" v-if="checked === true">
-                                    <div class="form-check abc-checkbox">
-                                        <input class="form-check-input" id="check-all_hidden" type="checkbox"
-                                               v-on:change="checkAll($event)">
-                                        <label class="form-check-label" for="check-all_hidden"
-                                               style="cursor:default;"></label>
-                                    </div>
-                                </th>
-                                <th v-for="column in $store.getters.getTableCols"
-                                    :class="column.class"
-                                    v-on:click="sort($event,column)"
-                                    :style="{width: (column.width)?column.width+'px':'auto'}">
-                                    {{column.name}}
-                                </th>
-                            </tr>
-                            <tr>
-                                <th :style="{width:50+'px'}" class="text-center" v-if="checked === true">
-                                    <div class="form-check abc-checkbox">
-                                        <input class="form-check-input" id="check-all" type="checkbox"
-                                               v-on:change="checkAll($event)">
-                                        <label class="form-check-label" for="check-all"
-                                               style="cursor:default;"></label>
-                                    </div>
-                                </th>
-                                <th v-for="(column, index) in $store.getters.getTableCols"
-                                    :class="column.class"
-                                    v-on:click="sort($event,column)"
-                                    :style="{width: (column.width)?column.width+'px':'auto'}">
-                                    {{column.name}}
-                                </th>
-                            </tr>
-                            </thead>
-                        </slot>
-                        <slot name="tbody">
-                            <tbody>
-                            <slot name="tr-empty" v-if="$store.getters.getTableItems.length == 0">
-                                <tr>
-                                    <td v-bind:colspan="total_col">
-                                        <div class="alert alert-info text-center">
-                                            {{'Нет данных для отображения'|_}}
-                                        </div>
-                                    </td>
-                                </tr>
-                            </slot>
-                            <slot name="tr" v-for="(item, index) in $store.getters.getTableItems">
-                                <tr>
-                                    <td class="text-center" v-if="checked === true">
-                                        <div class="form-check abc-checkbox">
-                                            <input class="form-check-input" type="checkbox"
-                                                   :checked="item.checked" :id="'record-'+item.id"
-                                                   v-on:change="checkItem(item,$event)">
-                                            <label class="form-check-label" style="cursor:default;"
-                                                   :for="'record-'+item.id"></label>
-                                        </div>
-                                    </td>
-                                    <td v-for="(column,index) in $store.getters.getTableCols"
-                                        :class="column.class"
-                                        :style="{width: (column.width) ? column.width + 'px' : 'auto'}">
+                      ></i>
+                    </a>
+                  </div>
+                  <filters></filters>
+                </td>
+              </tr>
+              <tr class="fixed" style="display: none;">
+                <th :style="{width:50+'px'}" class="text-center" v-if="checked === true">
+                  <div class="form-check abc-checkbox">
+                    <input class="form-check-input" id="check-all_hidden" type="checkbox"
+                           v-on:change="checkAll($event)">
+                    <label class="form-check-label" for="check-all_hidden"
+                           style="cursor:default;"></label>
+                  </div>
+                </th>
+                <th v-for="column in $store.getters.getTableCols"
+                    :class="column.class"
+                    v-on:click="sort($event,column)"
+                    :style="{width: (column.width)?column.width+'px':'auto'}">
+                  {{column.name}}
+                </th>
+              </tr>
+              <tr>
+                <th :style="{width:50+'px'}" class="text-center" v-if="checked === true">
+                  <div class="form-check abc-checkbox">
+                    <input class="form-check-input" id="check-all" type="checkbox"
+                           v-on:change="checkAll($event)">
+                    <label class="form-check-label" for="check-all"
+                           style="cursor:default;"></label>
+                  </div>
+                </th>
+                <th v-for="(column, index) in $store.getters.getTableCols"
+                    :class="column.class"
+                    v-on:click="sort($event,column)"
+                    :style="{width: (column.width)?column.width+'px':'auto'}">
+                  {{column.name}}
+                </th>
+              </tr>
+              </thead>
+            </slot>
+            <slot name="tbody">
+              <tbody>
+              <slot name="tr-empty" v-if="$store.getters.getTableItems.length == 0">
+                <tr>
+                  <td v-bind:colspan="total_col">
+                    <div class="alert alert-info text-center">
+                      {{'Нет данных для отображения'|_}}
+                    </div>
+                  </td>
+                </tr>
+              </slot>
+              <slot name="tr" v-for="(item, index) in $store.getters.getTableItems">
+                <tr>
+                  <td class="text-center" v-if="checked === true">
+                    <div class="form-check abc-checkbox">
+                      <input class="form-check-input" type="checkbox"
+                             :checked="item.checked" :id="'record-'+item.id"
+                             v-on:change="checkItem(item,$event)">
+                      <label class="form-check-label" style="cursor:default;"
+                             :for="'record-'+item.id"></label>
+                    </div>
+                  </td>
+                  <td v-for="(column,index) in $store.getters.getTableCols"
+                      :class="column.class"
+                      :style="{width: (column.width) ? column.width + 'px' : 'auto'}">
                                         <span v-if="column.domain && item.suffix">
                                             &nbsp;
-                                            <i class="fa fa-globe" v-if="item.site_id == '000' && item.suffix == null"
+                                            <i class="fa fa-globe" v-if="item.site_id === '000' && item.suffix == null"
                                                data-toggle="tooltip"
                                                data-placement="top" title="Общий доступ"></i>
                                             <i class="fa fa-globe" v-if="item.suffix" data-toggle="tooltip"
@@ -121,15 +124,15 @@
                                                v-bind:style="{color: '#' + item.suffix.color }"></i>
                                             &nbsp;
                                         </span>
-                                        <span class="_link-block">
+                    <span class="_link-block">
                                           <router-link v-if="column.link != null"
-                                                  :to="{name:column.link,params:{id:item.id}}"
-                                                  v-html="getItemData(item,column.key)">
+                                                       :to="{name:column.link,params:{id:item.id}}"
+                                                       v-html="getItemData(item,column.key)">
                                           </router-link>
                                           <router-link
-                                                  v-if="(item.link != null && item.blank == null)"
-                                                  :to="{path:item.link,params:{id:item.id}}"
-                                                  v-html="getItemData(item,column.key)">
+                                            v-if="(item.link != null && item.blank == null)"
+                                            :to="{path:item.link,params:{id:item.id}}"
+                                            v-html="getItemData(item,column.key)">
                                           </router-link>
                                           <span v-if="(column.link == null && item.link  == null) && !column.modal"
                                                 v-html="getItemData(item,column.key)">
@@ -139,7 +142,7 @@
                                              v-on:click.prevent="showModal($event,item)">
                                           </a>
                                       </span>
-                                        <div class="hidden _action_block_" v-if="column.action">
+                    <div class="hidden _action_block_" v-if="column.action">
                                             <span class="label label-default" v-if="column.action.edit">
                                                <router-link v-if="column.link != null"
                                                             :to="{name: (column.edit_link) ? column.edit_link : column.link ,params:{id:item.id}}">
@@ -147,100 +150,100 @@
                                                    {{'Редактировать'|_}}
                                                </router-link>
                                             </span>
-                                            <span class="label label-default" v-if="column.action.replicate">
+                      <span class="label label-default" v-if="column.action.replicate">
                                                  <a href="#" v-on:click.prevent="replicateItem($event,item.id)">
                                                    <i class="fa fa-copy"></i> {{'Копировать'|_}}
                                                  </a>
                                             </span>
-                                            <span class="label label-danger"
-                                                  v-if="column.action.delete && access.delete">
+                      <span class="label label-danger"
+                            v-if="column.action.delete && access.delete">
                                               <a href="#" v-on:click.prevent="deleteItems($event,item.id)">
                                                   <i class="fa fa-trash"></i> {{'Удалить'|_}}
                                               </a>
                                             </span>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </slot>
-                            </tbody>
-                        </slot>
-                        <tfoot>
-                        <tr>
-                            <td :colspan="total_col">
-                                <div class="col-sm-12">
-                                    <div class="col-md-2">
-                                        <div class="form-group" style="margin-top: 20px;">
-                                            <select v-model="limit"
-                                                    name="limit" class="chosen-select-filter form-control"
-                                                    tabindex="2">
-                                                <option v-for="item in tableLimit"
-                                                        v-bind:value="item.id">
-                                                    {{item.name}}
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <ul class="pagination pull-right" v-if="pages > 1">
-                                        <li class="footable-page-arrow"
-                                            v-bind:class="{ 'disabled': (current_page === 1)}"
-                                            v-on:click="paginate($event,1)"
-                                            v-if="pages > 1">
-                                            <a href="#">«</a>
-                                        </li>
-                                        <li class="footable-page-arrow"
-                                            v-bind:class="{ 'disabled': (current_page === 1)}"
-                                            v-on:click="paginate($event,current_page-1)"
-                                            v-if="pages > 1">
-                                            <a href="#">‹</a>
-                                        </li>
-                                        <li class="footable-page" v-if="(current_page - 2) > 0">
-                                            <a href="#" v-on:click="paginate($event,current_page - 2)">
-                                                {{current_page - 2}}
-                                            </a>
-                                        </li>
-                                        <li class="footable-page" v-if="(current_page - 1) > 0">
-                                            <a href="#" v-on:click="paginate($event,current_page - 1)">
-                                                {{current_page - 1}}
-                                            </a>
-                                        </li>
-                                        <li class="active">
-                                            <span>{{current_page}}</span>
-                                        </li>
-                                        <li class="footable-page" v-if="(current_page + 1) <= pages">
-                                            <a href="#" v-on:click="paginate($event,current_page + 1)">
-                                                {{current_page + 1}}
-                                            </a>
-                                        </li>
-                                        <li class="footable-page" v-if="(current_page + 2) < pages">
-                                            <a href="#" v-on:click="paginate($event,current_page + 2)">
-                                                {{current_page + 2}}
-                                            </a>
-                                        </li>
-                                        <li class="footable-page-arrow"
-                                            v-bind:class="{ 'disabled': (current_page === pages)}"
-                                            v-if="pages > 1">
-                                            <a href="#" v-on:click="paginate($event,current_page+1)">›</a>
-                                        </li>
-                                        <li class="footable-page-arrow"
-                                            v-bind:class="{ 'disabled': (current_page === pages)}"
-                                            v-if="pages > 1">
-                                            <a href="#" v-on:click="paginate($event, pages)"
-                                               data-toggle="tooltip">»</a>
-                                        </li>
-                                    </ul>
-                                </div>
+                    </div>
+                  </td>
+                </tr>
+              </slot>
+              </tbody>
+            </slot>
+            <tfoot>
+            <tr>
+              <td :colspan="total_col">
+                <div class="col-sm-12">
+                  <div class="col-md-2">
+                    <div class="form-group" style="margin-top: 20px;">
+                      <select v-model="limit"
+                              name="limit" class="chosen-select-filter form-control"
+                              tabindex="2">
+                        <option v-for="item in tableLimit"
+                                v-bind:value="item.id">
+                          {{item.name}}
+                        </option>
+                      </select>
+                    </div>
+                  </div>
+                  <ul class="pagination pull-right" v-if="pages > 1">
+                    <li class="footable-page-arrow"
+                        v-bind:class="{ 'disabled': (current_page === 1)}"
+                        v-on:click="paginate($event,1)"
+                        v-if="pages > 1">
+                      <a href="#">«</a>
+                    </li>
+                    <li class="footable-page-arrow"
+                        v-bind:class="{ 'disabled': (current_page === 1)}"
+                        v-on:click="paginate($event,current_page-1)"
+                        v-if="pages > 1">
+                      <a href="#">‹</a>
+                    </li>
+                    <li class="footable-page" v-if="(current_page - 2) > 0">
+                      <a href="#" v-on:click="paginate($event,current_page - 2)">
+                        {{current_page - 2}}
+                      </a>
+                    </li>
+                    <li class="footable-page" v-if="(current_page - 1) > 0">
+                      <a href="#" v-on:click="paginate($event,current_page - 1)">
+                        {{current_page - 1}}
+                      </a>
+                    </li>
+                    <li class="active">
+                      <span>{{current_page}}</span>
+                    </li>
+                    <li class="footable-page" v-if="(current_page + 1) <= pages">
+                      <a href="#" v-on:click="paginate($event,current_page + 1)">
+                        {{current_page + 1}}
+                      </a>
+                    </li>
+                    <li class="footable-page" v-if="(current_page + 2) < pages">
+                      <a href="#" v-on:click="paginate($event,current_page + 2)">
+                        {{current_page + 2}}
+                      </a>
+                    </li>
+                    <li class="footable-page-arrow"
+                        v-bind:class="{ 'disabled': (current_page === pages)}"
+                        v-if="pages > 1">
+                      <a href="#" v-on:click="paginate($event,current_page+1)">›</a>
+                    </li>
+                    <li class="footable-page-arrow"
+                        v-bind:class="{ 'disabled': (current_page === pages)}"
+                        v-if="pages > 1">
+                      <a href="#" v-on:click="paginate($event, pages)"
+                         data-toggle="tooltip">»</a>
+                    </li>
+                  </ul>
+                </div>
 
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
-                </div>
-                <div class="col-md-3" v-if="$store.getters.getExternalFilters">
-                    <filters-side></filters-side>
-                </div>
-            </div>
+              </td>
+            </tr>
+            </tfoot>
+          </table>
         </div>
+        <div class="col-md-3" v-if="$store.getters.getExternalFilters">
+          <filters-side></filters-side>
+        </div>
+      </div>
     </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -318,8 +321,8 @@
         @Provide()
         process: boolean = true;
 
-        @Provide()
-        checked: boolean = true;
+        @Prop({default: true})
+        checked: boolean;
 
 
         @Provide()
@@ -947,11 +950,11 @@
 </script>
 
 <style scoped lang="scss">
-    .opacity-03 {
-        opacity: 0.3;
-    }
+  .opacity-03 {
+    opacity: 0.3;
+  }
 
-    .open-filter {
-        font-size: 20px;
-    }
+  .open-filter {
+    font-size: 20px;
+  }
 </style>
