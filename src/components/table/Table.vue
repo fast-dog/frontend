@@ -522,6 +522,7 @@
                         action: function ($event) {
                             me.$store.commit('setSplashScreen', true);
                             me.headerInit = false;
+                            $('._table_').remove();
                             me.loadPage(me.tableData, me.tableCallback);
                         }
                     },
@@ -945,6 +946,7 @@
         beforeDestroy(): void {
             let me = this;
             me.$store.dispatch('setPreview', null);
+            $('._table_').remove();
         }
     }
 </script>

@@ -32,6 +32,7 @@ import Media from '@/components/media/Media.vue';
 import MediaIndex from '@/components/media/MediaIndex.vue';
 import PageItems from '@/components/menu/PageItems.vue';
 import MenuDiagnostic from "@/components/menu/MenuDiagnostic.vue";
+import Sitemap from './components/menu/Sitemap.vue';
 
 declare let window: any;
 
@@ -262,11 +263,11 @@ export default new Router({
         },
 
 
-        // {
-        //     path: 'sitemap',
-        //     name: 'sitemap',
-        //     component: Sitemaps
-        // }
+        {
+          path: 'sitemap',
+          name: 'sitemap',
+          component: Sitemap
+        },
         {
           path: 'page/:id',
           name: 'page_item',
