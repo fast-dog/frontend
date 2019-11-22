@@ -300,6 +300,10 @@
                 type: {
                     id: type.id
                 },
+                state: {
+                    id: 1,
+                    name: FdTranslator._('Опубликовано')
+                },
                 name: type.name,
                 checked: target.checked,
                 data: (type.data == undefined) ? [] : type.data
