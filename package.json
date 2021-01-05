@@ -11,7 +11,7 @@
   "dependencies": {
     "animate.scss": "^0.0.6",
     "awesome-bootstrap-checkbox": "^1.0.1",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "bootstrap": "3.3.7",
     "bootstrap-3-typeahead": "^4.0.2",
     "bootstrap-datepicker": "^1.9.0",
